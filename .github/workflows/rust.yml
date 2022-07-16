@@ -1,4 +1,4 @@
-name: Build, test, & lint
+name: Lint, build, & test
 
 on:
   push:
@@ -16,7 +16,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: Lint
+      run: cargo clippy --verbose
     - name: Build
       run: cargo build --verbose
-    - name: Run tests
+    - name: Test
       run: cargo test --verbose
