@@ -10,14 +10,14 @@ env:
   CARGO_TERM_COLOR: always
 
 jobs:
-  build:
+  lint-build-and-test:
 
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v3
     - name: Lint
-      run: cargo clippy --verbose
+      run: cargo clippy --verbose --all-targets --all-features -- -D warnings
     - name: Build
       run: cargo build --verbose
     - name: Test
