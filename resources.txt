@@ -1,0 +1,5 @@
+Learning rust
+-------------
+Rustlings
+https://cheats.rs/
+https://betterprogramming.pub/how-to-structure-unit-tests-in-rust-cc4945536a32
