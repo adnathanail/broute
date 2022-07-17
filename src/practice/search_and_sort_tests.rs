@@ -40,4 +40,3 @@ fn binary_search_test() {
     let ind = binary_search(&l, 7, &i);
     assert_eq!(ind, Some(6));
 }
-}
