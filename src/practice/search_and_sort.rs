@@ -11,7 +11,7 @@ pub fn binary_search(list_to_search: &[i32], len: usize, value_to_find: &i32) ->
         let next_guess_value = &list_to_search[next_guess_index as usize];
 
         if next_guess_value == value_to_find {
-            return Some(next_guess_index as usize)
+            return Some(next_guess_index as usize);
         }
 
         if next_guess_value < value_to_find {

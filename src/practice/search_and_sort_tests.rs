@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod search_and_sort_tests {
-    use super::super::{*};
+    use super::super::*;
 
     #[test]
     fn binary_search_test() {
