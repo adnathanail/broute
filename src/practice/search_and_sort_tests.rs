@@ -6,25 +6,40 @@ mod search_and_sort_tests {
     fn binary_search_test() {
         let l: [i32; 7] = [1, 3, 4, 5, 6, 8, 9];
 
-        let ind: i32 = binary_search(&l, 1) as i32;
-        assert_eq!(ind, 0);
+        let i = 1;
+        let ind = binary_search(&l, 7, &i);
+        assert_eq!(ind, Some(0));
 
-        let ind: i32 = binary_search(&l, 3) as i32;
-        assert_eq!(ind, 1);
+        let i = 2;
+        let ind = binary_search(&l, 7, &i);
+        assert_eq!(ind, None);
 
-        let ind: i32 = binary_search(&l, 4) as i32;
-        assert_eq!(ind, 2);
+        let i = 3;
+        let ind = binary_search(&l, 7, &i);
+        assert_eq!(ind, Some(1));
 
-        let ind: i32 = binary_search(&l, 5) as i32;
-        assert_eq!(ind, 3);
+        let i = 4;
+        let ind = binary_search(&l, 7, &i);
+        assert_eq!(ind, Some(2));
 
-        let ind: i32 = binary_search(&l, 6) as i32;
-        assert_eq!(ind, 4);
+        let i = 5;
+        let ind = binary_search(&l, 7, &i);
+        assert_eq!(ind, Some(3));
 
-        let ind: i32 = binary_search(&l, 8) as i32;
-        assert_eq!(ind, 5);
+        let i = 6;
+        let ind = binary_search(&l, 7, &i);
+        assert_eq!(ind, Some(4));
 
-        let ind: i32 = binary_search(&l, 9) as i32;
-        assert_eq!(ind, 6);
+        let i = 7;
+        let ind = binary_search(&l, 7, &i);
+        assert_eq!(ind, None);
+
+        let i = 8;
+        let ind = binary_search(&l, 7, &i);
+        assert_eq!(ind, Some(5));
+
+        let i = 9;
+        let ind = binary_search(&l, 7, &i);
+        assert_eq!(ind, Some(6));
     }
 }

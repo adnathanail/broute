@@ -2,25 +2,26 @@
 #[path = "search_and_sort_tests.rs"]
 mod search_and_sort_tests;
 
-pub fn binary_search(list_to_search: &[i32], value_to_find: i32) -> usize {
-    let mut lower_bound: usize = 0;
-    let mut upper_bound: usize = list_to_search.len();
+pub fn binary_search(list_to_search: &[i32], len: usize, value_to_find: &i32) -> Option<usize> {
+    let mut lower_bound: i32 = 0;
+    let mut upper_bound: i32 = len as i32 - 1;
 
-    let mut next_guess: usize = ((upper_bound - lower_bound) / 2) + lower_bound;
+    while lower_bound <= upper_bound {
+        let next_guess_index = ((upper_bound - lower_bound) / 2) + lower_bound;
+        let next_guess_value = &list_to_search[next_guess_index as usize];
 
-    while list_to_search[next_guess] != value_to_find {
-        if lower_bound == upper_bound {
-            return usize::MAX;
+        if next_guess_value == value_to_find {
+            return Some(next_guess_index as usize)
         }
 
-        if list_to_search[next_guess] < value_to_find {
-            lower_bound = next_guess;
-        } else {
-            upper_bound = next_guess;
+        if next_guess_value < value_to_find {
+            lower_bound = next_guess_index + 1;
         }
 
-        next_guess = ((upper_bound - lower_bound) / 2) + lower_bound;
+        if next_guess_value > value_to_find {
+            upper_bound = next_guess_index - 1;
+        }
     }
 
-    next_guess
+    None
 }
