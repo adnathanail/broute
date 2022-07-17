@@ -1,1 +1,1 @@
-pub mod binary_search;
+pub mod search_and_sort;

@@ -1,5 +1,5 @@
 #[cfg(test)]
-mod binary_search_tests {
+mod search_and_sort_tests {
     use super::super::{*};
 
     #[test]

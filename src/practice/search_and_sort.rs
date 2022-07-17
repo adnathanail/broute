@@ -1,6 +1,6 @@
 #[cfg(test)]
-#[path = "binary_search_tests.rs"]
-mod binary_search_tests;
+#[path = "search_and_sort_tests.rs"]
+mod search_and_sort_tests;
 
 pub fn binary_search(list_to_search: &[i32], value_to_find: i32) -> usize {
     let mut lower_bound: usize = 0;
