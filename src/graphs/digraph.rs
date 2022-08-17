@@ -26,7 +26,7 @@ impl Digraph {
     }
 
     pub fn add_edge(&mut self, from: usize, to: usize, weight: f32) {
-        let e = DigraphEdge{to, weight};
+        let e = DigraphEdge { to, weight };
         self.adjacency_lists[from].push(e);
     }
 
