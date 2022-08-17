@@ -12,5 +12,10 @@ impl Graph {
         }
         return out;
     }
+
+    pub fn add_edge(&mut self, from: i32, to: i32) {
+        self.adjacency_lists[from as usize].push(to);
+        self.adjacency_lists[to as usize].push(from);
+    }
 }
 
