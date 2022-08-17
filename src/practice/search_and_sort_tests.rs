@@ -40,3 +40,14 @@ fn binary_search_test() {
     let ind = binary_search(&l, 7, &i);
     assert_eq!(ind, Some(6));
 }
+
+#[test]
+fn test_insertion_sort() {
+    let inp = vec![4, 2, 6, 8, 1, 6, 8];
+
+    let mut out = Vec::<i32>::new();
+    insertion_sort(&inp, &mut out);
+
+    println!("{:?} sorted is {:?}", inp, out);
+    assert_eq!(out, vec![1, 2, 4, 6, 6, 8, 8]);
+}
