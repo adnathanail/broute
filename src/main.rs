@@ -1,3 +1,4 @@
+// Stop the compiler warning about unused functions
 #![allow(dead_code)]
 
 mod graph;
@@ -5,8 +6,6 @@ mod practice;
 
 fn main() {
     let mut g = graph::Graph::new(13);
-
-    println!("{:?}", g);
 
     g.add_edge(0, 1);
     g.add_edge(0, 2);
@@ -26,5 +25,7 @@ fn main() {
 
     println!("{:?}", g);
 
-    g.dfs();
+    let mut out: Vec<Vec<i32>> = vec![];
+    g.connected_components(&mut out);
+    println!("{:?}", out);
 }
