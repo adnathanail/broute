@@ -15,7 +15,9 @@ impl Ord for PriorityQueueItem {
         // Notice that the we flip the ordering on costs.
         // In case of a tie we compare positions - this step is necessary
         // to make implementations of `PartialEq` and `Ord` consistent.
-        other.priority.cmp(&self.priority)
+        other
+            .priority
+            .cmp(&self.priority)
             .then_with(|| self.value.cmp(&other.value))
     }
 }
@@ -35,11 +37,16 @@ pub struct PriorityQueue {
 
 impl PriorityQueue {
     pub fn new() -> Self {
-        Self{heap: BinaryHeap::new()}
+        Self {
+            heap: BinaryHeap::new(),
+        }
     }
 
     pub fn push(&mut self, cost: usize, position: usize) {
-        self.heap.push(PriorityQueueItem { priority: cost, value: position })
+        self.heap.push(PriorityQueueItem {
+            priority: cost,
+            value: position,
+        })
     }
 
     pub fn force_pop(&mut self) -> Option<usize> {

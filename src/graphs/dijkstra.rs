@@ -1,5 +1,5 @@
-use std::collections::VecDeque;
 use super::digraph;
+use std::collections::VecDeque;
 
 #[cfg(test)]
 #[path = "dijkstra_tests.rs"]
@@ -22,7 +22,10 @@ pub fn dijkstra(g: digraph::Digraph) -> Vec<f32> {
                 node_with_min_distance = *i;
             }
         }
-        let min_index = queue.iter().position(|&r| r == node_with_min_distance).unwrap();
+        let min_index = queue
+            .iter()
+            .position(|&r| r == node_with_min_distance)
+            .unwrap();
         let v = queue.remove(min_index).unwrap();
         for u in g.adj(v) {
             let alt = dist_to[v] + u.weight;
