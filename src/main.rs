@@ -1,13 +1,11 @@
 // Stop the compiler warning about unused functions
 #![allow(dead_code)]
 
-mod digraph;
+mod graphs;
 mod practice;
-mod dijkstra;
-mod priority_queue;
 
 fn main() {
-    let mut g = digraph::Digraph::new(8);
+    let mut g = graphs::digraph::Digraph::new(8);
 
     g.add_edge(0, 2, 0.26);
     g.add_edge(0, 4, 0.38);
@@ -27,5 +25,5 @@ fn main() {
 
     println!("{:?}", g);
 
-    dijkstra::dijkstra(g);
+    graphs::dijkstra::dijkstra(g);
 }

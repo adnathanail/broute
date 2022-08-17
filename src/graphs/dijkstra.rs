@@ -1,7 +1,7 @@
 use std::collections::VecDeque;
-use crate::digraph::Digraph;
+use super::digraph;
 
-pub fn dijkstra(g: Digraph) {
+pub fn dijkstra(g: digraph::Digraph) {
     let mut dist_to = vec![f32::INFINITY; g.num_vertices as usize];
     dist_to[0] = 0.0;
     let mut queue = VecDeque::new();
