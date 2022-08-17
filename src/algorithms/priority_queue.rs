@@ -43,10 +43,7 @@ impl PriorityQueue {
     }
 
     pub fn force_pop(&mut self) -> Option<usize> {
-        match self.heap.pop() {
-            Some(val) => return Some(val.value),
-            None => None
-        }
+        self.heap.pop().map(|val| val.value)
     }
 
     pub fn is_empty(&self) -> bool {
