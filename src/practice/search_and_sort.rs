@@ -25,3 +25,17 @@ pub fn binary_search(list_to_search: &[i32], len: usize, value_to_find: &i32) ->
 
     None
 }
+
+pub fn insertion_sort(vector_to_sort: &Vec<i32>, out: &mut Vec<i32>) {
+    if vector_to_sort.len() == 0 {
+        return;
+    }
+    out.push(vector_to_sort[0]);
+    for i in 1..vector_to_sort.len() {
+        let mut j = 0;
+        while j < out.len() && vector_to_sort[i] >= out[j] {
+            j += 1;
+        }
+        out.insert(j, vector_to_sort[i]);
+    }
+}
