@@ -13,7 +13,7 @@ impl Graph {
         for _ in 0..num_vertices {
             out.adjacency_lists.push(vec![]);
         }
-        return out;
+        out
     }
 
     pub fn add_edge(&mut self, from: i32, to: i32) {
@@ -22,7 +22,7 @@ impl Graph {
     }
 
     fn adj(&self, node_number: i32) -> Vec<i32> {
-        return self.adjacency_lists[node_number as usize].clone();
+        self.adjacency_lists[node_number as usize].clone()
     }
 
     pub fn dfs(&mut self) {

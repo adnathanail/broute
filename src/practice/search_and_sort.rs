@@ -27,15 +27,15 @@ pub fn binary_search(list_to_search: &[i32], len: usize, value_to_find: &i32) ->
 }
 
 pub fn insertion_sort(vector_to_sort: &Vec<i32>, out: &mut Vec<i32>) {
-    if vector_to_sort.len() == 0 {
+    if vector_to_sort.is_empty() {
         return;
     }
     out.push(vector_to_sort[0]);
-    for i in 1..vector_to_sort.len() {
+    for i in vector_to_sort.iter().skip(1) {
         let mut j = 0;
-        while j < out.len() && vector_to_sort[i] >= out[j] {
+        while j < out.len() && *i >= out[j] {
             j += 1;
         }
-        out.insert(j, vector_to_sort[i]);
+        out.insert(j, *i);
     }
 }
