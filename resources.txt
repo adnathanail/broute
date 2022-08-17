@@ -3,3 +3,5 @@ Learning rust
 Rustlings
 https://cheats.rs/
 https://betterprogramming.pub/how-to-structure-unit-tests-in-rust-cc4945536a32
+
+Understanding mut and & https://stackoverflow.com/a/67674348/9261263
