@@ -2,7 +2,7 @@
 #![allow(dead_code)]
 
 mod graphs;
-mod practice;
+mod algorithms;
 
 fn main() {
     let mut g = graphs::digraph::Digraph::new(8);
