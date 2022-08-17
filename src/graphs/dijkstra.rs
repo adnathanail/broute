@@ -1,7 +1,11 @@
 use std::collections::VecDeque;
 use super::digraph;
 
-pub fn dijkstra(g: digraph::Digraph) {
+#[cfg(test)]
+#[path = "dijkstra_tests.rs"]
+mod dijkstra_tests;
+
+pub fn dijkstra(g: digraph::Digraph) -> Vec<f32> {
     let mut dist_to = vec![f32::INFINITY; g.num_vertices as usize];
     dist_to[0] = 0.0;
     let mut queue = VecDeque::new();
@@ -19,19 +23,13 @@ pub fn dijkstra(g: digraph::Digraph) {
             }
         }
         let min_index = queue.iter().position(|&r| r == node_with_min_distance).unwrap();
-        println!("{} {}", min_index, min_distance);
         let v = queue.remove(min_index).unwrap();
-        println!("{}", v);
-        println!("{:?}", queue);
-        println!("{:?}", dist_to);
         for u in g.adj(v) {
             let alt = dist_to[v] + u.weight;
             if alt < dist_to[u.to] {
                 dist_to[u.to] = alt;
             }
         }
-        println!("{:?}", dist_to);
-        println!();
     }
-    println!("{:?}", dist_to);
+    dist_to
 }
