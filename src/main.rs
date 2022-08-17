@@ -1,7 +1,7 @@
 #![allow(dead_code)]
 
-mod practice;
 mod graph;
+mod practice;
 
 fn main() {
     let mut g = graph::Graph::new(13);
