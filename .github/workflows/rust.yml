@@ -19,6 +19,8 @@ jobs:
     - name: Lint
       run: cargo clippy --verbose --all-targets --all-features -- -D warnings
     - name: Build
+      if: ${{ always() }}
       run: cargo build --verbose
     - name: Test
+      if: ${{ always() }}
       run: cargo test --verbose
