@@ -22,7 +22,7 @@ fn main() {
     g.add_edge(7, 3, 0.39);
     g.add_edge(7, 5, 0.28);
 
-    println!("{:?}", g);
+    println!("{}", g);
 
     graphs::dijkstra::dijkstra(&g);
     graphs::dijkstra::dijkstra(&g);
