@@ -5,7 +5,7 @@ use std::collections::VecDeque;
 #[path = "dijkstra_tests.rs"]
 mod dijkstra_tests;
 
-pub fn dijkstra(g: digraph::Digraph) -> Vec<f32> {
+pub fn dijkstra(g: &digraph::Digraph) -> Vec<f32> {
     let mut dist_to = vec![f32::INFINITY; g.num_vertices as usize];
     dist_to[0] = 0.0;
     let mut queue = VecDeque::new();
