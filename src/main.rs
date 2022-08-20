@@ -25,5 +25,6 @@ fn main() {
 
     println!("{:?}", g);
 
-    graphs::dijkstra::dijkstra(g);
+    graphs::dijkstra::dijkstra(&g);
+    graphs::dijkstra::dijkstra(&g);
 }
