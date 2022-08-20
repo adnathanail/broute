@@ -1,8 +1,7 @@
 // Stop the compiler warning about unused functions
 #![allow(dead_code)]
 
-mod algorithms;
-mod graphs;
+use broute::graphs;
 
 fn main() {
     let mut g = graphs::digraph::Digraph::new(8);
