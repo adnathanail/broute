@@ -1,6 +1,5 @@
-use std::collections::VecDeque;
-
 use super::digraph;
+use std::collections::VecDeque;
 
 #[cfg(test)]
 #[path = "dijkstra_tests.rs"]

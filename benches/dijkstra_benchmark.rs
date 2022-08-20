@@ -1,4 +1,5 @@
-use criterion::{black_box, criterion_group, criterion_main, Criterion};
+use criterion::{BenchmarkId, Criterion, criterion_group, criterion_main};
+
 use broute::graphs;
 
 fn criterion_benchmark(c: &mut Criterion) {
@@ -21,7 +22,14 @@ fn criterion_benchmark(c: &mut Criterion) {
     g.add_edge(7, 2, 7.0);
     g.add_edge(7, 5, 6.0);
 
-    c.bench_function("Dijkstra", |b| b.iter(|| graphs::dijkstra::dijkstra(black_box(&g))));
+    let mut group = c.benchmark_group("Dijkstra");
+
+    group.bench_with_input(BenchmarkId::new("v1", &g), &g,
+                           |b, g| b.iter(|| graphs::dijkstra::dijkstra(&g)));
+    group.bench_with_input(BenchmarkId::new("v2", &g), &g,
+                           |b, g| b.iter(|| graphs::dijkstra2::dijkstra(&g)));
+
+    group.finish();
 }
 
 criterion_group!(benches, criterion_benchmark);
