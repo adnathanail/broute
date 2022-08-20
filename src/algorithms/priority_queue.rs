@@ -57,3 +57,9 @@ impl PriorityQueue {
         self.heap.is_empty()
     }
 }
+
+impl Default for PriorityQueue {
+    fn default() -> Self {
+        Self::new()
+    }
+}
