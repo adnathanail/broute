@@ -28,7 +28,7 @@ fn criterion_benchmark(c: &mut Criterion) {
         b.iter(|| graphs::dijkstra::dijkstra(g))
     });
     group.bench_with_input(BenchmarkId::new("v2", &g), &g, |b, g| {
-        b.iter(|| graphs::dijkstra2::dijkstra(g))
+        b.iter(|| graphs::dijkstra2::dijkstra2(g))
     });
 
     group.finish();
