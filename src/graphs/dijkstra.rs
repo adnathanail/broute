@@ -2,10 +2,6 @@ use std::collections::VecDeque;
 
 use super::digraph;
 
-#[cfg(test)]
-#[path = "dijkstra_tests.rs"]
-mod dijkstra_tests;
-
 pub fn dijkstra(g: &digraph::Digraph) -> Vec<f32> {
     // Initialise all distances to infinity
     let mut dist_to = vec![f32::INFINITY; g.num_vertices as usize];

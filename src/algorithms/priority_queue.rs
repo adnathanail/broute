@@ -1,11 +1,14 @@
 use std::cmp::Ordering;
+use std::cmp::Ordering::Equal;
 use std::collections::BinaryHeap;
 
-#[derive(Debug, Copy, Clone, Eq, PartialEq)]
+#[derive(Debug, Copy, Clone, PartialEq)]
 struct PriorityQueueItem {
-    priority: usize,
+    priority: f32,
     value: usize,
 }
+
+impl Eq for PriorityQueueItem {}
 
 // The priority queue depends on `Ord`.
 // Explicitly implement the trait so the queue becomes a min-heap
@@ -15,9 +18,7 @@ impl Ord for PriorityQueueItem {
         // Notice that the we flip the ordering on costs.
         // In case of a tie we compare positions - this step is necessary
         // to make implementations of `PartialEq` and `Ord` consistent.
-        other
-            .priority
-            .cmp(&self.priority)
+        other.priority.partial_cmp(&self.priority).unwrap_or(Equal)
             .then_with(|| self.value.cmp(&other.value))
     }
 }
@@ -41,20 +42,11 @@ impl PriorityQueue {
             heap: BinaryHeap::new(),
         }
     }
-
-    pub fn push(&mut self, cost: usize, position: usize) {
-        self.heap.push(PriorityQueueItem {
-            priority: cost,
-            value: position,
-        })
+    pub fn push(&mut self, cost: f32, position: usize) {
+        self.heap.push(PriorityQueueItem { priority: cost, value: position })
     }
-
-    pub fn force_pop(&mut self) -> Option<usize> {
-        self.heap.pop().map(|val| val.value)
-    }
-
-    pub fn is_empty(&self) -> bool {
-        self.heap.is_empty()
+    pub fn pop(&mut self) -> Option<usize> {
+        self.heap.pop().map(|s| s.value)
     }
 }
 

@@ -21,5 +21,5 @@ fn dijkstra_test() {
     g.add_edge(7, 2, 7.0);
     g.add_edge(7, 5, 6.0);
 
-    assert_eq!(dijkstra(&g), [0.0, 5.0, 14.0, 17.0, 9.0, 13.0, 25.0, 8.0]);
+    assert_eq!(dijkstra2(&g), [0.0, 5.0, 14.0, 17.0, 9.0, 13.0, 25.0, 8.0]);
 }
