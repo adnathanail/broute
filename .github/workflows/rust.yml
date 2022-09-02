@@ -24,3 +24,6 @@ jobs:
     - name: Test
       if: ${{ always() }}
       run: cargo test --verbose
+    - name: Benchmark
+      if: ${{ always() }}
+      run: cargo bench
