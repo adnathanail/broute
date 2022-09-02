@@ -13,18 +13,19 @@ impl fmt::Display for Digraph {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         // Write strictly the first element into the supplied output stream: `f`
         // Returns `fmt::Result` which indicates whether the operation succeeded or failed
-        writeln!(f, "{} nodes", self.num_vertices)?;
-        self.adjacency_lists.iter().enumerate().fold(
-            Ok(()),
-            |result, (from_node, adjacency_list)| {
-                result.and_then(|_| {
-                    writeln!(f, "\t{}", from_node)?;
-                    adjacency_list.iter().fold(Ok(()), |result, edge| {
-                        result.and_then(|_| writeln!(f, "\t\t{}", edge))
-                    })
-                })
-            },
-        )
+        writeln!(f, "{} nodes", self.num_vertices)
+        // writeln!(f, "{} nodes", self.num_vertices)?;
+        // self.adjacency_lists.iter().enumerate().fold(
+        //     Ok(()),
+        //     |result, (from_node, adjacency_list)| {
+        //         result.and_then(|_| {
+        //             writeln!(f, "\t{}", from_node)?;
+        //             adjacency_list.iter().fold(Ok(()), |result, edge| {
+        //                 result.and_then(|_| writeln!(f, "\t\t{}", edge))
+        //             })
+        //         })
+        //     },
+        // )
     }
 }
 
