@@ -15,7 +15,10 @@ pub fn dijkstra2(g: &digraph::Digraph) -> Vec<f32> {
     queue.push(0.0, 0);
 
     // Take next closest node from the heap
-    while let Some(v) = queue.pop() {
+    while let Some((v, cost)) = queue.pop() {
+        // Short circuit
+        if cost > dist_to[v] { continue; }
+
         // Check every node, u, reachable from v
         //   to see if a route via v is shorter than the current shortest path
         for u in g.adj(v) {

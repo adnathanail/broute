@@ -45,8 +45,8 @@ impl PriorityQueue {
     pub fn push(&mut self, cost: f32, position: usize) {
         self.heap.push(PriorityQueueItem { priority: cost, value: position })
     }
-    pub fn pop(&mut self) -> Option<usize> {
-        self.heap.pop().map(|s| s.value)
+    pub fn pop(&mut self) -> Option<(usize, f32)> {
+        self.heap.pop().map(|s| (s.value, s.priority))
     }
 }
 

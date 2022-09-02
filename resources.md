@@ -27,6 +27,7 @@ https://docs.rs/petgraph/latest/petgraph/
 https://stackoverflow.com/questions/20171901/how-to-generate-random-graphs
 https://en.wikipedia.org/wiki/Erd%C5%91s%E2%80%93R%C3%A9nyi_model
 https://jeremykun.com/2013/08/22/the-erdos-renyi-random-graph/
+https://iopscience.iop.org/article/10.1088/1367-2630/11/7/073005/pdf
 
 ## Routing algorithms 
 

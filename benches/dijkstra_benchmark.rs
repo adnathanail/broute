@@ -3,7 +3,7 @@ use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion};
 use broute::graphs;
 
 fn criterion_benchmark(c: &mut Criterion) {
-    let g = graphs::random_graph::get_random_graph();
+    let g = graphs::random_graph::get_random_graph(100, 0.5, 4.0, 1.0);
 
     let mut group = c.benchmark_group("Dijkstra");
 

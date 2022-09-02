@@ -1,24 +1,25 @@
+use rand::Rng;
+use rand_distr::{Normal, Distribution};
+
 use super::digraph;
 
-pub fn get_random_graph() -> digraph::Digraph {
-    let mut g = digraph::Digraph::new(8);
+pub fn get_random_graph(num_nodes: usize, conn_prob: f32, weight_mean: f32, weight_sd: f32) -> digraph::Digraph {
+    let mut rng = rand::thread_rng();
+    let normal = Normal::new(weight_mean, weight_sd).unwrap();
 
-    g.add_edge(0, 1, 5.0);
-    g.add_edge(0, 4, 9.0);
-    g.add_edge(0, 7, 8.0);
-    g.add_edge(1, 2, 12.0);
-    g.add_edge(1, 3, 15.0);
-    g.add_edge(1, 7, 4.0);
-    g.add_edge(2, 3, 3.0);
-    g.add_edge(2, 6, 11.0);
-    g.add_edge(3, 6, 9.0);
-    g.add_edge(4, 5, 4.0);
-    g.add_edge(4, 6, 20.0);
-    g.add_edge(4, 7, 5.0);
-    g.add_edge(5, 2, 1.0);
-    g.add_edge(5, 6, 13.0);
-    g.add_edge(7, 2, 7.0);
-    g.add_edge(7, 5, 6.0);
+    let mut g = digraph::Digraph::new(num_nodes);
+
+    for i in 0..num_nodes {
+        for j in 0..num_nodes {
+            if i != j {
+                if (&mut rng).gen::<f32>() > conn_prob {
+                    let raw_weight = normal.sample(&mut rng);
+                    let rounded_weight = (raw_weight * 100.0).round() / 100.0;
+                    g.add_edge(i, j, rounded_weight);
+                }
+            }
+        }
+    }
 
     return g;
 }
