@@ -18,7 +18,10 @@ impl Ord for PriorityQueueItem {
         // Notice that the we flip the ordering on costs.
         // In case of a tie we compare positions - this step is necessary
         // to make implementations of `PartialEq` and `Ord` consistent.
-        other.priority.partial_cmp(&self.priority).unwrap_or(Equal)
+        other
+            .priority
+            .partial_cmp(&self.priority)
+            .unwrap_or(Equal)
             .then_with(|| self.value.cmp(&other.value))
     }
 }
@@ -43,7 +46,10 @@ impl PriorityQueue {
         }
     }
     pub fn push(&mut self, cost: f32, position: usize) {
-        self.heap.push(PriorityQueueItem { priority: cost, value: position })
+        self.heap.push(PriorityQueueItem {
+            priority: cost,
+            value: position,
+        })
     }
     pub fn pop(&mut self) -> Option<(usize, f32)> {
         self.heap.pop().map(|s| (s.value, s.priority))
