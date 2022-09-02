@@ -1,9 +1,14 @@
 use rand::Rng;
-use rand_distr::{Normal, Distribution};
+use rand_distr::{Distribution, Normal};
 
 use super::digraph;
 
-pub fn get_random_graph(num_nodes: usize, conn_prob: f32, weight_mean: f32, weight_sd: f32) -> digraph::Digraph {
+pub fn get_random_graph(
+    num_nodes: usize,
+    conn_prob: f32,
+    weight_mean: f32,
+    weight_sd: f32,
+) -> digraph::Digraph {
     let mut rng = rand::thread_rng();
     let normal = Normal::new(weight_mean, weight_sd).unwrap();
 
