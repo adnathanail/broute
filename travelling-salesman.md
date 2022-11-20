@@ -65,3 +65,9 @@ AWS deep learning https://aws.amazon.com/blogs/opensource/solving-the-traveling-
 ## Bibliography
 - Traveling Salesperson Problem. Brilliant.org. Retrieved 02:18, October 21, 2022, from https://brilliant.org/wiki/traveling-salesperson-problem/
 - UK government benefits of DRT https://www.gov.uk/government/publications/demand-responsive-transport-local-authority-toolkit/demand-responsive-transport-local-authority-toolkit
+
+
+It's not really a metric graph because of traffic jams etc.
+
+
+https://stackoverflow.com/questions/49837125/confusion-about-np-hard-and-np-complete-in-traveling-salesman-problems
