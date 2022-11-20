@@ -55,6 +55,7 @@ dependencies = [
  "osmpbf",
  "rand",
  "rand_distr",
+ "tsplib",
 ]
 
 [[package]]
@@ -881,6 +882,12 @@ dependencies = [
  "serde",
  "serde_json",
 ]
+
+[[package]]
+name = "tsplib"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fd1ee98b4a4082bf235d5f75b1d70e91c422894c024022742345eb75e1f675be"
 
 [[package]]
 name = "typenum"

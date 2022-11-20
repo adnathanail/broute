@@ -5,7 +5,19 @@ use broute::graphs::{self, output::output_graph_to_file};
 //use osmpbf::{Element, ElementReader};
 
 fn main() {
-    let g = graphs::random_graph::get_random_graph(5, 0.5, 4.0, 1.0);
+    let g = graphs::tsplib::load_tsplib_file(br#"
+    NAME : example
+    COMMENT : this is
+    COMMENT : a simple example
+    TYPE : TSP
+    DIMENSION : 3
+    EDGE_WEIGHT_TYPE: EUC_2D
+    NODE_COORD_SECTION
+    1 1.2 3.4
+    2 5.6 7.8
+    3 9.0 1.2
+    EOF
+    "#);
 
     output_graph_to_file(g, "out/graph.png".to_string());
 
