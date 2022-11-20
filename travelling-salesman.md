@@ -1,10 +1,3 @@
-## Problem definition and info
-- Eulerian path (traverse a graph passing through every edge once)
-- Hamiltonian path (traverse a graph visiting every node once)
-- Hamiltonian cycle, same as a Hamiltonian path but starting and ending at the same point
-- Travelling salesman problem, find the Hamiltonian path/cycle with the lowest cost on a weighted directed graph
-- TSP is NP-complete
-
 ## Time complexity
 - The greedy algorithm has a complexity of O(n!)
 - The Held-Karp algorithm uses dynamic programming to reach O(n^{2}2^{n})
