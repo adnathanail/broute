@@ -3,3 +3,5 @@
 
 *.osm
 *.osm.pbf
+
+out/*
