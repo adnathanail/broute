@@ -1,15 +1,18 @@
 // Stop the compiler warning about unused functions
 #![allow(dead_code)]
 
-use broute::graphs;
+use broute::graphs::{self, output::output_graph_to_file};
 //use osmpbf::{Element, ElementReader};
 
 fn main() {
     let g = graphs::random_graph::get_random_graph(5, 0.5, 4.0, 1.0);
 
-    println!("{}", g);
+    output_graph_to_file(g, "out/graph.png".to_string());
 
-    println!("{:?}", graphs::dijkstra::dijkstra(&g));
+//    println!("{}", g.get_graphviz_string());
+//    println!("{}", g);
+
+//    println!("{:?}", graphs::dijkstra::dijkstra(&g));
 
 //    let reader = ElementReader::from_path("theoffice-latest.osm.pbf").unwrap();
 //    let mut nodes = 0_u64;
