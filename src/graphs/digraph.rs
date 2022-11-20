@@ -63,6 +63,10 @@ impl Digraph {
     }
 
     pub fn get_graphviz_string(&self) -> String {
+        let all_node_list: Vec<String> = (0..self.num_vertices).map(|i| {
+            format!("{}", i)
+        }).collect();
+        let all_node_string = all_node_list.join("\n");
         let all_node_edges_list: Vec<String> = self.adjacency_lists.iter().enumerate().map(|(i, list)| {
             let edges_this_node_list: Vec<String> = list.iter().map(|edge| {
                 format!("{} -> {}[label=\"{}\"]", i, edge.to, edge.weight)
@@ -71,6 +75,6 @@ impl Digraph {
             edges_this_node_string
         }).collect();
         let all_node_edges_string = all_node_edges_list.join("\n");
-        format!("digraph G {{\n{}\n}}", all_node_edges_string)
+        format!("digraph G {{\n{}\n{}\n}}", all_node_string, all_node_edges_string)
     }
 }
