@@ -74,8 +74,7 @@ impl Digraph {
                     .iter()
                     .map(|edge| format!("{} -> {}[label=\"{}\"]", i, edge.to, edge.weight))
                     .collect();
-                let edges_this_node_string = edges_this_node_list.join("\n");
-                edges_this_node_string
+                edges_this_node_list.join("\n")
             })
             .collect();
         let all_node_edges_string = all_node_edges_list.join("\n");

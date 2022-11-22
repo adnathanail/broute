@@ -19,7 +19,7 @@ pub fn output_graph_to_file(g: &Digraph, output_path: String) {
         &mut PrinterContext::default(),
         vec![
             CommandArg::Format(Format::Svg),
-            CommandArg::Output(output_path.to_string()),
+            CommandArg::Output(output_path),
             CommandArg::Custom("-Ksfdp".to_string()),
         ],
     )
