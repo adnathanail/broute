@@ -14,18 +14,19 @@ impl fmt::Display for Digraph {
         // Write strictly the first element into the supplied output stream: `f`
         // Returns `fmt::Result` which indicates whether the operation succeeded or failed
         writeln!(f, "{} nodes", self.num_vertices)
-        // writeln!(f, "{} nodes", self.num_vertices)?;
-        // self.adjacency_lists.iter().enumerate().fold(
-        //     Ok(()),
-        //     |result, (from_node, adjacency_list)| {
-        //         result.and_then(|_| {
-        //             writeln!(f, "\t{}", from_node)?;
-        //             adjacency_list.iter().fold(Ok(()), |result, edge| {
-        //                 result.and_then(|_| writeln!(f, "\t\t{}", edge))
-        //             })
-        //         })
-        //     },
-        // )
+        // Replace the above with the below for full output
+//        writeln!(f, "{} nodes", self.num_vertices)?;
+//         self.adjacency_lists.iter().enumerate().fold(
+//             Ok(()),
+//             |result, (from_node, adjacency_list)| {
+//                 result.and_then(|_| {
+//                     writeln!(f, "\t{}", from_node)?;
+//                     adjacency_list.iter().fold(Ok(()), |result, edge| {
+//                         result.and_then(|_| writeln!(f, "\t\t{}", edge))
+//                     })
+//                 })
+//             },
+//         )
     }
 }
 
@@ -62,25 +63,12 @@ impl Digraph {
         &self.adjacency_lists[node_number]
     }
 
-    pub fn get_graphviz_string(&self) -> String {
-        let all_node_list: Vec<String> = (0..self.num_vertices).map(|i| format!("{}", i)).collect();
-        let all_node_string = all_node_list.join("\n");
-        let all_node_edges_list: Vec<String> = self
-            .adjacency_lists
-            .iter()
-            .enumerate()
-            .map(|(i, list)| {
-                let edges_this_node_list: Vec<String> = list
-                    .iter()
-                    .map(|edge| format!("{} -> {}[label=\"{}\"]", i, edge.to, edge.weight))
-                    .collect();
-                edges_this_node_list.join("\n")
-            })
-            .collect();
-        let all_node_edges_string = all_node_edges_list.join("\n");
-        format!(
-            "digraph G {{\n{}\n{}\n}}",
-            all_node_string, all_node_edges_string
-        )
+    pub fn dist(&self, from_node: usize, to_node: usize) -> f32 {
+        for u in self.adj(from_node) {
+            if u.to == to_node {
+                return u.weight;
+            }
+        }
+        panic!("Node not connected!")
     }
 }
