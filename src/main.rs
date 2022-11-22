@@ -20,7 +20,5 @@ fn main() {
 
     println!("{:?}", graphs::dijkstra::dijkstra(&g));
 
-
     println!("Done!");
-
 }
