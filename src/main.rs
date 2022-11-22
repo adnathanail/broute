@@ -6,15 +6,15 @@ use std::fs;
 use broute::graphs::{self, output::output_graph_to_file};
 
 fn main() {
-    let tsp_string = fs::read_to_string("test_data/dimacs_tsp/test.tsp").unwrap();
+    let tsp_string = fs::read_to_string("test_data/dimacs_tsp/d1291.tsp").unwrap();
 
     println!("Reading file");
 
-    let g = graphs::tsplib::load_tsplib_file(tsp_string);
+    let g = graphs::tsplib::load_tsplib_file(tsp_string, 10);
 
     println!("Generating visual graph");
 
-    output_graph_to_file(&g, "out/graph.png".to_string());
+    output_graph_to_file(&g, "out/graph.svg".to_string());
 
     println!("Running Dijkstra");
 
