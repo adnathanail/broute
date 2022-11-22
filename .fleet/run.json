@@ -1,9 +1,19 @@
 {
     "configurations": [
         {
+            "name": "Run",
             "type": "cargo",
-            "name": "run",
+            "cargoArgs": ["run"],
         },
-
+        {
+            "name": "Test",
+            "type": "cargo",
+            "cargoArgs": ["test"],
+        },
+        {
+            "name": "Benchmark",
+            "type": "cargo",
+            "cargoArgs": ["bench"],
+        },
     ]
 }

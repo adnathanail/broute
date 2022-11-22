@@ -10,7 +10,8 @@ pub fn output_graph_to_file(g: &Digraph, output_path: String) {
     // You need to install the graphviz package
     // https://graphviz.org/download/
     exec(g, &mut PrinterContext::default(), vec![
-    CommandArg::Format(Format::Png),
-    CommandArg::Output(output_path.to_string())
+    CommandArg::Format(Format::Svg),
+    CommandArg::Output(output_path.to_string()),
+    CommandArg::Custom("-Ksfdp".to_string())
     ]).unwrap();
 }
