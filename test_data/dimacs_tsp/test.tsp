@@ -1,0 +1,11 @@
+NAME : example
+COMMENT : this is
+COMMENT : a simple example
+TYPE : TSP
+DIMENSION : 3
+EDGE_WEIGHT_TYPE: EUC_2D
+NODE_COORD_SECTION
+1 1.2 3.4
+2 5.6 7.8
+3 9.0 1.2
+EOF

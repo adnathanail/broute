@@ -2,7 +2,7 @@ use graphviz_rust::{parse, dot_structures::Graph, printer::PrinterContext, exec,
 
 use super::digraph::Digraph;
 
-pub fn output_graph_to_file(g: Digraph, output_path: String) {
+pub fn output_graph_to_file(g: &Digraph, output_path: String) {
     let g: Graph = parse(&g.get_graphviz_string()).unwrap();
 
     // If you see an error like this
