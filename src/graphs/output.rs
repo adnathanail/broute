@@ -7,12 +7,18 @@ struct GraphStringBody {
     graph_string: String,
 }
 
-fn graph_to_graphviz_body(g: &Digraph) -> GraphStringBody {
+fn graph_to_graphviz_body(g: &Digraph, color: String, with_label: bool) -> GraphStringBody {
     let all_node_list: Vec<String> = (0..g.num_vertices).map(|i| format!("{}", i)).collect();
     let all_node_string = all_node_list.join("\n");
     let all_node_edges_list: Vec<String> = (0..g.num_vertices).map(|i| {
         let edges_this_node_list: Vec<String> = g.adj(i).iter().map(|edge| {
-            format!("{} -> {}[headlabel=\"{}\"]", i, edge.to, edge.weight)
+            let label_str =
+            if with_label {
+                format!(",headlabel=\"{}\"", edge.weight)
+            } else {
+                "".to_string()
+            };
+            format!("{} -> {}[color=\"{}\"{}]", i, edge.to, color, label_str)
         }).collect();
         edges_this_node_list.join("\n")
     }).collect();
@@ -20,9 +26,9 @@ fn graph_to_graphviz_body(g: &Digraph) -> GraphStringBody {
     GraphStringBody{ graph_string: format!("{}\n{}", all_node_string, all_node_edges_string)}
 }
 
-fn path_to_graphviz_body(path: &GraphPath) -> GraphStringBody {
+fn path_to_graphviz_body(g: &Digraph, path: &GraphPath) -> GraphStringBody {
     let path_nodes_list: Vec<String> = (0..(path.path.len() -1)).map(|i| {
-        format!("{} -> {}[color=\"red\"]", path.path[i], path.path[i+1])
+        format!("{} -> {}[headlabel=\"{}\", color=\"red\"]", path.path[i], path.path[i+1], g.dist(path.path[i], path.path[i+1]))
     }).collect();
     GraphStringBody{ graph_string: path_nodes_list.join("\n")}
 }
@@ -47,12 +53,12 @@ fn graph_string_to_file(graph_string_body: GraphStringBody, output_path: String)
 }
 
 pub fn output_graph_to_file(g: &Digraph, output_path: String) {
-    graph_string_to_file(graph_to_graphviz_body(g), output_path);
+    graph_string_to_file(graph_to_graphviz_body(g, "black".to_string(), true), output_path);
 }
 
 pub fn output_graph_to_file_with_path(g: &Digraph, path: &GraphPath, output_path: String) {
     let graph_string_body = GraphStringBody{
-        graph_string: format!("{}\n{}", graph_to_graphviz_body(g).graph_string, path_to_graphviz_body(path).graph_string)
+        graph_string: format!("{}\n{}", graph_to_graphviz_body(g, "aliceblue".to_string(), false).graph_string, path_to_graphviz_body(g, path).graph_string)
     };
     graph_string_to_file(graph_string_body, output_path);
 }

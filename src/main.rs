@@ -3,7 +3,7 @@
 
 use std::fs;
 
-use broute::graphs::{tsplib::load_tsplib_file, output::{output_graph_to_file, output_graph_to_file_with_path}, dijkstra::dijkstra, travelling_salesman::{travelling_salesman}};
+use broute::graphs::{tsplib::load_tsplib_file, output::{output_graph_to_file, output_graph_to_file_with_path}, dijkstra::dijkstra, travelling_salesman::{travelling_salesman, get_path_length}};
 
 fn main() {
     let tsp_string = fs::read_to_string("test_data/dimacs_tsp/d1291.tsp").unwrap();
@@ -23,6 +23,10 @@ fn main() {
     let path = travelling_salesman(&g);
 
     println!("{:?}", path);
+
+    println!("Getting path length");
+
+    println!("{}", get_path_length(&g, &path));
 
     println!("Visualising path");
 
