@@ -10,7 +10,7 @@ use broute::graphs::{
 };
 
 fn main() {
-    let tsp_string = fs::read_to_string("test_data/dimacs_tsp/test.tsp").unwrap();
+    let tsp_string = fs::read_to_string("test_data/dimacs_tsp/d1291.tsp").unwrap();
 
     println!("Reading file");
 

@@ -26,11 +26,12 @@ pub fn travelling_salesman(g: &Digraph) -> GraphPath {
     println!("Initial state");
 
     println!("\t{:?}", path.path);
-    println!("\t{}", get_path_length(&g, &path));
+    println!("\t{}", get_path_length(g, &path));
 
     let mut temp = f32::sqrt(g.num_vertices as f32);
     let mut iterations = 0;
     while temp > 1e-8_f32 && iterations < (100 * g.num_vertices) {
+        println!("{}", temp);
         let mut potential_new_path = path.clone();
 
         let node_index_to_mutate = rng.gen_range(0..(g.num_vertices - 1));
@@ -43,11 +44,9 @@ pub fn travelling_salesman(g: &Digraph) -> GraphPath {
             } else {
                 0
             };
-            let swap = potential_new_path.path[node_index_to_mutate];
-            potential_new_path.path[node_index_to_mutate] =
-                potential_new_path.path[node_index_to_swap_with];
-            potential_new_path.path[node_index_to_swap_with] = swap;
+            potential_new_path.path.swap(node_index_to_mutate, node_index_to_swap_with);
         } else {
+            // Cyclic permutation
             let node_to_move = potential_new_path.path[node_index_to_mutate];
             // -2 because we are looking for new position with 1 node missing
             let new_node_position = rng.gen_range(0..(g.num_vertices - 2));
@@ -61,6 +60,7 @@ pub fn travelling_salesman(g: &Digraph) -> GraphPath {
             path = potential_new_path;
             path_length = new_path_length;
         } else {
+            // TODO: Is this between 0 and 1?
             if f32::exp(-f32::abs(new_path_length - path_length) / temp) > rng.gen::<f32>() {
                 path = potential_new_path;
                 path_length = new_path_length;
