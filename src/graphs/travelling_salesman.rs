@@ -1,7 +1,9 @@
+use plotlib::page::Page;
+use plotlib::repr::Plot;
+use plotlib::style::LineStyle;
+use plotlib::view::ContinuousView;
 use rand::seq::SliceRandom;
 use rand::{thread_rng, Rng};
-
-use crate::graphs::output::output_graph_to_file_with_path;
 
 use super::digraph::Digraph;
 
@@ -11,6 +13,8 @@ pub struct GraphPath {
 }
 
 pub fn travelling_salesman(g: &Digraph) -> GraphPath {
+    let mut result_data: Vec<(f64, f64)> = vec![];
+
     let mut rng = thread_rng();
 
     let mut path = GraphPath {
@@ -26,7 +30,7 @@ pub fn travelling_salesman(g: &Digraph) -> GraphPath {
 
     let mut temp = f32::sqrt(g.num_vertices as f32);
     let mut iterations = 0;
-    while temp > 1e-8_f32 && iterations < (100 * g.num_vertices){
+    while temp > 1e-8_f32 && iterations < (100 * g.num_vertices) {
         let mut potential_new_path = path.clone();
 
         let node_index_to_mutate = rng.gen_range(0..(g.num_vertices - 1));
@@ -57,7 +61,7 @@ pub fn travelling_salesman(g: &Digraph) -> GraphPath {
             path = potential_new_path;
             path_length = new_path_length;
         } else {
-            if f32::exp(- f32::abs(new_path_length - path_length) / temp) > rng.gen::<f32>() {
+            if f32::exp(-f32::abs(new_path_length - path_length) / temp) > rng.gen::<f32>() {
                 path = potential_new_path;
                 path_length = new_path_length;
             }
@@ -65,7 +69,22 @@ pub fn travelling_salesman(g: &Digraph) -> GraphPath {
 
         temp *= 0.995;
         iterations += 1;
+        result_data.push((temp as f64, path_length as f64));
     }
+
+    // We create our scatter plot from the data
+    let s1: Plot = Plot::new(result_data.clone()).line_style(LineStyle::new().colour("#DD3355"));
+
+    // The 'view' describes what set of data is drawn
+    let v = ContinuousView::new()
+        .add(s1)
+        .x_label("Temperature")
+        .y_label("Path length")
+        .y_range(0.0, (result_data[0].1 as f64) + 100.0);
+
+    // A page with a single view is then saved to an SVG file
+    Page::single(&v).save("out/temp_vs_cost.svg").unwrap();
+
     path
 }
 

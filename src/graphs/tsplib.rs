@@ -18,7 +18,12 @@ pub fn generate_random_tsplib_file(num_nodes: usize) -> String {
 
     let grid_size = num_nodes * 10;
     for i in 0..num_nodes {
-        lines.push(format!("{} {} {}", i, rng.gen::<f32>() * (grid_size as f32), rng.gen::<f32>() * (grid_size as f32)))
+        lines.push(format!(
+            "{} {} {}",
+            i,
+            rng.gen::<f32>() * (grid_size as f32),
+            rng.gen::<f32>() * (grid_size as f32)
+        ))
     }
 
     lines.push("EOF".to_string());
