@@ -16,7 +16,7 @@ pub fn get_random_graph(
 
     for i in 0..num_nodes {
         for j in 0..num_nodes {
-            if i != j && (&mut rng).gen::<f32>() > conn_prob {
+            if i != j && rng.gen::<f32>() > conn_prob {
                 let raw_weight = normal.sample(&mut rng);
                 let rounded_weight = (raw_weight * 100.0).round() / 100.0;
                 g.add_edge(i, j, rounded_weight);
