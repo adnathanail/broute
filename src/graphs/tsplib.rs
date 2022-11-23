@@ -1,7 +1,30 @@
+use rand::seq::SliceRandom;
+use rand::{thread_rng, Rng};
 use std::{cmp, io::Cursor};
 use tsplib::NodeCoord;
 
 use super::digraph::Digraph;
+
+pub fn generate_random_tsplib_file(num_nodes: usize) -> String {
+    let mut rng = thread_rng();
+
+    let mut lines: Vec<String> = Vec::with_capacity(num_nodes);
+
+    lines.push("NAME : example".to_string());
+    lines.push("TYPE : TSP".to_string());
+    lines.push(format!("DIMENSION : {}", num_nodes + 1).to_string());
+    lines.push("EDGE_WEIGHT_TYPE: EUC_2D".to_string());
+    lines.push("NODE_COORD_SECTION".to_string());
+
+    let grid_size = num_nodes * 10;
+    for i in 0..num_nodes {
+        lines.push(format!("{} {} {}", i, rng.gen::<f32>() * (grid_size as f32), rng.gen::<f32>() * (grid_size as f32)))
+    }
+
+    lines.push("EOF".to_string());
+
+    lines.join("\n")
+}
 
 pub fn load_tsplib_file(input_data: String, num_nodes: usize) -> Digraph {
     let instance = tsplib::parse(Cursor::new(&input_data[..])).unwrap();
