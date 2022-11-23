@@ -1,4 +1,3 @@
-use rand::seq::SliceRandom;
 use rand::{thread_rng, Rng};
 use std::{cmp, io::Cursor};
 use tsplib::NodeCoord;
@@ -12,7 +11,7 @@ pub fn generate_random_tsplib_file(num_nodes: usize) -> String {
 
     lines.push("NAME : example".to_string());
     lines.push("TYPE : TSP".to_string());
-    lines.push(format!("DIMENSION : {}", num_nodes + 1).to_string());
+    lines.push(format!("DIMENSION : {}", num_nodes + 1));
     lines.push("EDGE_WEIGHT_TYPE: EUC_2D".to_string());
     lines.push("NODE_COORD_SECTION".to_string());
 
