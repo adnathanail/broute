@@ -44,7 +44,9 @@ pub fn travelling_salesman(g: &Digraph) -> GraphPath {
             } else {
                 0
             };
-            potential_new_path.path.swap(node_index_to_mutate, node_index_to_swap_with);
+            potential_new_path
+                .path
+                .swap(node_index_to_mutate, node_index_to_swap_with);
         } else {
             // Cyclic permutation
             let node_to_move = potential_new_path.path[node_index_to_mutate];
