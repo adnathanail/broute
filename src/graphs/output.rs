@@ -1,6 +1,6 @@
 use graphviz_rust::{cmd::{CommandArg, Format}, exec, printer::PrinterContext, parse, dot_structures::Graph};
 
-use super::digraph::Digraph;
+use super::{digraph::Digraph, travelling_salesman::GraphPath};
 
 #[derive(Debug)]
 struct GraphStringBody {
@@ -20,9 +20,9 @@ fn graph_to_graphviz_body(g: &Digraph) -> GraphStringBody {
     GraphStringBody{ graph_string: format!("{}\n{}", all_node_string, all_node_edges_string)}
 }
 
-fn path_to_graphviz_body(path: &Vec<usize>) -> GraphStringBody {
-    let path_nodes_list: Vec<String> = (0..(path.len() -1)).map(|i| {
-        format!("{} -> {}[color=\"red\"]", path[i], path[i+1])
+fn path_to_graphviz_body(path: &GraphPath) -> GraphStringBody {
+    let path_nodes_list: Vec<String> = (0..(path.path.len() -1)).map(|i| {
+        format!("{} -> {}[color=\"red\"]", path.path[i], path.path[i+1])
     }).collect();
     GraphStringBody{ graph_string: path_nodes_list.join("\n")}
 }
@@ -50,7 +50,7 @@ pub fn output_graph_to_file(g: &Digraph, output_path: String) {
     graph_string_to_file(graph_to_graphviz_body(g), output_path);
 }
 
-pub fn output_graph_to_file_with_path(g: &Digraph, path: &Vec<usize>, output_path: String) {
+pub fn output_graph_to_file_with_path(g: &Digraph, path: &GraphPath, output_path: String) {
     let graph_string_body = GraphStringBody{
         graph_string: format!("{}\n{}", graph_to_graphviz_body(g).graph_string, path_to_graphviz_body(path).graph_string)
     };
