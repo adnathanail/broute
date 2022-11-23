@@ -10,11 +10,11 @@ use broute::graphs::{
 };
 
 fn main() {
-    let tsp_string = fs::read_to_string("test_data/dimacs_tsp/d1291.tsp").unwrap();
+    let tsp_string = fs::read_to_string("test_data/dimacs_tsp/test.tsp").unwrap();
 
     println!("Reading file");
 
-    let g = load_tsplib_file(tsp_string, 10);
+    let g = load_tsplib_file(tsp_string, usize::max_value());
 
     println!("Solving travelling salesman");
 
