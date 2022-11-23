@@ -58,7 +58,7 @@ pub fn output_graph_to_file(g: &Digraph, output_path: String) {
 
 pub fn output_graph_to_file_with_path(g: &Digraph, path: &GraphPath, output_path: String) {
     let graph_string_body = GraphStringBody{
-        graph_string: format!("{}\n{}", graph_to_graphviz_body(g, "aliceblue".to_string(), false).graph_string, path_to_graphviz_body(g, path).graph_string)
+        graph_string: format!("{}\n{}", graph_to_graphviz_body(g, "transparent".to_string(), false).graph_string, path_to_graphviz_body(g, path).graph_string)
     };
     graph_string_to_file(graph_string_body, output_path);
 }
