@@ -9,7 +9,7 @@ mod dijkstra_tests;
 
 pub fn dijkstra(g: &digraph::Digraph) -> Vec<f64> {
     // Initialise all distances to infinity
-    let mut dist_to = vec![f64::INFINITY; g.num_vertices as usize];
+    let mut dist_to = vec![f64::INFINITY; g.num_vertices];
     dist_to[0] = 0.0;
     // Add all vertices to queue
     let mut queue = VecDeque::new();
@@ -47,7 +47,7 @@ pub fn dijkstra(g: &digraph::Digraph) -> Vec<f64> {
 
 pub fn dijkstra2(g: &digraph::Digraph) -> Vec<f64> {
     // Initialise all distances to infinity
-    let mut dist_to = vec![f64::INFINITY; g.num_vertices as usize];
+    let mut dist_to = vec![f64::INFINITY; g.num_vertices];
     dist_to[0] = 0.0;
     // Add first vertex to queue
     let mut queue = PriorityQueue::new();
