@@ -71,7 +71,7 @@ pub fn travelling_salesman(g: &Digraph) -> GraphPath {
 
         temp *= 0.995;
         iterations += 1;
-        result_data.push((temp as f64, path_length as f64));
+        result_data.push((temp, path_length));
     }
 
     // We create our scatter plot from the data
@@ -82,7 +82,7 @@ pub fn travelling_salesman(g: &Digraph) -> GraphPath {
         .add(s1)
         .x_label("Temperature")
         .y_label("Path length")
-        .y_range(0.0, (result_data[0].1 as f64) + 100.0);
+        .y_range(0.0, result_data[0].1 + 100.0);
 
     // A page with a single view is then saved to an SVG file
     Page::single(&v).save("out/temp_vs_cost.svg").unwrap();
