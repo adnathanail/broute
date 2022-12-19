@@ -16,6 +16,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
+    - name: Install rust
+      run: rustup toolchain install stable --profile minimal
+    - uses: Swatinem/rust-cache@v2
     - name: Lint
       run: cargo clippy --verbose --all-targets --all-features -- -D warnings
     - name: Build
