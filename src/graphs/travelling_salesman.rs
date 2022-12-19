@@ -28,9 +28,9 @@ pub fn travelling_salesman(g: &Digraph) -> GraphPath {
     println!("\t{:?}", path.path);
     println!("\t{}", get_path_length(g, &path));
 
-    let mut temp = f32::sqrt(g.num_vertices as f32);
+    let mut temp = f64::sqrt(g.num_vertices as f64);
     let mut iterations = 0;
-    while temp > 1e-8_f32 && iterations < (100 * g.num_vertices) {
+    while temp > 1e-8_f64 && iterations < (100 * g.num_vertices) {
         println!("{}", temp);
         let mut potential_new_path = path.clone();
 
@@ -61,7 +61,7 @@ pub fn travelling_salesman(g: &Digraph) -> GraphPath {
             path_length = new_path_length;
         } else {
             // TODO: Is this between 0 and 1?
-            if f32::exp(-f32::abs(new_path_length - path_length) / temp) > rng.gen::<f32>() {
+            if f64::exp(-f64::abs(new_path_length - path_length) / temp) > rng.gen::<f64>() {
                 path = potential_new_path;
                 path_length = new_path_length;
             }
@@ -88,8 +88,8 @@ pub fn travelling_salesman(g: &Digraph) -> GraphPath {
     path
 }
 
-pub fn get_path_length(g: &Digraph, path: &GraphPath) -> f32 {
-    (0..(path.path.len() - 1)).fold(0f32, |total, i| {
+pub fn get_path_length(g: &Digraph, path: &GraphPath) -> f64 {
+    (0..(path.path.len() - 1)).fold(0f64, |total, i| {
         total + g.dist(path.path[i], path.path[i + 1])
     })
 }

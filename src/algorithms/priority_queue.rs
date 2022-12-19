@@ -4,7 +4,7 @@ use std::collections::BinaryHeap;
 
 #[derive(Debug, Copy, Clone, PartialEq)]
 struct PriorityQueueItem {
-    priority: f32,
+    priority: f64,
     value: usize,
 }
 
@@ -45,13 +45,13 @@ impl PriorityQueue {
             heap: BinaryHeap::new(),
         }
     }
-    pub fn push(&mut self, cost: f32, position: usize) {
+    pub fn push(&mut self, cost: f64, position: usize) {
         self.heap.push(PriorityQueueItem {
             priority: cost,
             value: position,
         })
     }
-    pub fn pop(&mut self) -> Option<(usize, f32)> {
+    pub fn pop(&mut self) -> Option<(usize, f64)> {
         self.heap.pop().map(|s| (s.value, s.priority))
     }
 }
