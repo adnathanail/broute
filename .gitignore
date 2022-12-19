@@ -5,3 +5,5 @@
 *.osm.pbf
 
 out/*
+.idea/*
+.fleet/*
