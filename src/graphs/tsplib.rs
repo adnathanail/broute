@@ -47,7 +47,7 @@ pub fn load_tsplib_file(input_data: String, num_nodes: usize) -> Digraph {
             if coords[i].0 != coords[j].0 {
                 let dx = coords[j].1 - coords[i].1;
                 let dy = coords[j].2 - coords[i].2;
-                let weight = (f32::powf(dx, 2.0) + f32::powf(dy, 2.0)).sqrt();
+                let weight = (f64::powf(dx as f64, 2.0) + f64::powf(dy as f64, 2.0)).sqrt();
                 g.add_edge(coords[i].0 - 1, coords[j].0 - 1, weight) // -1 because TSPLIB is 1 indexed
             }
         }

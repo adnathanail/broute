@@ -6,7 +6,7 @@ pub struct Digraph {
     //   be initialised by anything outside of this module
     // The only way to create a Graph object, is using the constructor defined below
     pub num_vertices: usize,
-    adjacency_lists: Vec<Vec<DigraphEdge>>,
+    distance_matrix: Vec<Vec<f64>>,
 }
 
 impl fmt::Display for Digraph {
@@ -30,45 +30,23 @@ impl fmt::Display for Digraph {
     }
 }
 
-#[derive(Clone, Debug)]
-pub struct DigraphEdge {
-    pub to: usize,
-    pub weight: f32,
-}
-
-impl fmt::Display for DigraphEdge {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "to {} (weight {})", self.to, self.weight)
-    }
-}
-
 impl Digraph {
     pub fn new(num_vertices: usize) -> Self {
-        let mut out = Self {
+        Self {
             num_vertices,
-            adjacency_lists: vec![],
-        };
-        for _ in 0..num_vertices {
-            out.adjacency_lists.push(vec![]);
+            distance_matrix: vec![vec![f64::MAX; num_vertices]; num_vertices],
         }
-        out
     }
 
-    pub fn add_edge(&mut self, from: usize, to: usize, weight: f32) {
-        let e = DigraphEdge { to, weight };
-        self.adjacency_lists[from].push(e);
+    pub fn add_edge(&mut self, from: usize, to: usize, weight: f64) {
+        self.distance_matrix[from][to] = weight;
     }
 
-    pub fn adj(&self, node_number: usize) -> &Vec<DigraphEdge> {
-        &self.adjacency_lists[node_number]
+    pub fn adj(&self, node_number: usize) -> &Vec<f64> {
+        &self.distance_matrix[node_number]
     }
 
-    pub fn dist(&self, from_node: usize, to_node: usize) -> f32 {
-        for u in self.adj(from_node) {
-            if u.to == to_node {
-                return u.weight;
-            }
-        }
-        panic!("Node not connected!")
+    pub fn dist(&self, from_node: usize, to_node: usize) -> f64 {
+        self.distance_matrix[from_node][to_node]
     }
 }

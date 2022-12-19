@@ -20,13 +20,14 @@ fn graph_to_graphviz_body(g: &Digraph, color: String, with_label: bool) -> Graph
             let edges_this_node_list: Vec<String> = g
                 .adj(i)
                 .iter()
-                .map(|edge| {
+                .enumerate()
+                .map(|(to, weight)| {
                     let label_str = if with_label {
-                        format!(",headlabel=\"{}\"", edge.weight)
+                        format!(",headlabel=\"{}\"", weight)
                     } else {
                         "".to_string()
                     };
-                    format!("{} -> {}[color=\"{}\"{}]", i, edge.to, color, label_str)
+                    format!("{} -> {}[color=\"{}\"{}]", i, to, color, label_str)
                 })
                 .collect();
             edges_this_node_list.join("\n")

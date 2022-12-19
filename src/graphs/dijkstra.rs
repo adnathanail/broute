@@ -7,9 +7,9 @@ use super::digraph;
 #[path = "dijkstra_tests.rs"]
 mod dijkstra_tests;
 
-pub fn dijkstra(g: &digraph::Digraph) -> Vec<f32> {
+pub fn dijkstra(g: &digraph::Digraph) -> Vec<f64> {
     // Initialise all distances to infinity
-    let mut dist_to = vec![f32::INFINITY; g.num_vertices as usize];
+    let mut dist_to = vec![f64::INFINITY; g.num_vertices as usize];
     dist_to[0] = 0.0;
     // Add all vertices to queue
     let mut queue = VecDeque::new();
@@ -20,7 +20,7 @@ pub fn dijkstra(g: &digraph::Digraph) -> Vec<f32> {
     while !queue.is_empty() {
         // Find next closest node to the start
         let mut node_with_min_distance: usize = usize::MAX;
-        let mut min_distance: f32 = f32::INFINITY;
+        let mut min_distance: f64 = f64::INFINITY;
         for i in &queue {
             if dist_to[*i] < min_distance {
                 min_distance = dist_to[*i];
@@ -35,19 +35,19 @@ pub fn dijkstra(g: &digraph::Digraph) -> Vec<f32> {
         let v = queue.remove(min_index).unwrap();
         // Check every node, u, reachable from v
         //   to see if a route via v is shorter than the current shortest path
-        for u in g.adj(v) {
-            let alt = dist_to[v] + u.weight;
-            if alt < dist_to[u.to] {
-                dist_to[u.to] = alt;
+        for (to, weight) in g.adj(v).iter().enumerate() {
+            let alt = dist_to[v] + weight;
+            if alt < dist_to[to] {
+                dist_to[to] = alt;
             }
         }
     }
     dist_to
 }
 
-pub fn dijkstra2(g: &digraph::Digraph) -> Vec<f32> {
+pub fn dijkstra2(g: &digraph::Digraph) -> Vec<f64> {
     // Initialise all distances to infinity
-    let mut dist_to = vec![f32::INFINITY; g.num_vertices as usize];
+    let mut dist_to = vec![f64::INFINITY; g.num_vertices as usize];
     dist_to[0] = 0.0;
     // Add first vertex to queue
     let mut queue = PriorityQueue::new();
@@ -62,12 +62,12 @@ pub fn dijkstra2(g: &digraph::Digraph) -> Vec<f32> {
 
         // Check every node, u, reachable from v
         //   to see if a route via v is shorter than the current shortest path
-        for u in g.adj(v) {
-            let alt = dist_to[v] + u.weight;
-            if alt < dist_to[u.to] {
+        for (to, weight) in g.adj(v).iter().enumerate() {
+            let alt = dist_to[v] + weight;
+            if alt < dist_to[to] {
                 // Add adjacent node to queue
-                queue.push(alt, u.to);
-                dist_to[u.to] = alt;
+                queue.push(alt, to);
+                dist_to[to] = alt;
             }
         }
     }
