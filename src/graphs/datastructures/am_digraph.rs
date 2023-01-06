@@ -1,5 +1,5 @@
-use std::fmt;
 use crate::graphs::datastructures::digraph::Digraph;
+use std::fmt;
 
 #[derive(Debug)]
 pub struct AMDigraph {
@@ -32,19 +32,17 @@ impl fmt::Display for AMDigraph {
 }
 
 impl AMDigraph {
-
     pub fn new(num_vertices: usize) -> Self {
         Self {
             num_vertices,
             distance_matrix: vec![vec![f64::MAX; num_vertices]; num_vertices],
         }
     }
-
 }
 
 impl Digraph for AMDigraph {
     fn num_vertices(&self) -> usize {
-        return self.num_vertices
+        return self.num_vertices;
     }
 
     fn add_edge(&mut self, from: usize, to: usize, weight: f64) {
