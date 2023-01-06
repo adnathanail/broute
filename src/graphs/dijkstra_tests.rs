@@ -1,5 +1,5 @@
-use crate::graphs::datastructures;
 use super::*;
+use crate::graphs::datastructures;
 
 #[test]
 fn dijkstra_test() {
