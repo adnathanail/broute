@@ -1,5 +1,5 @@
-use std::fmt;
 use crate::graphs::datastructures::digraph::{Digraph, DigraphAdjacency};
+use std::fmt;
 
 #[derive(Clone, Debug)]
 struct ALDigraphEdge {
@@ -35,7 +35,6 @@ impl fmt::Display for ALDigraph {
 }
 
 impl ALDigraph {
-
     pub fn new(num_vertices: usize) -> Self {
         let mut out = Self {
             num_vertices,
@@ -46,12 +45,11 @@ impl ALDigraph {
         }
         out
     }
-
 }
 
 impl Digraph for ALDigraph {
     fn num_vertices(&self) -> usize {
-        return self.num_vertices
+        return self.num_vertices;
     }
 
     fn add_edge(&mut self, from: usize, to: usize, weight: f64) {
@@ -60,12 +58,13 @@ impl Digraph for ALDigraph {
     }
 
     fn adj(&self, node_number: usize) -> Vec<DigraphAdjacency> {
-        self.adjacency_lists[node_number].iter().map(|edge| {
-            DigraphAdjacency {
+        self.adjacency_lists[node_number]
+            .iter()
+            .map(|edge| DigraphAdjacency {
                 to: edge.to,
                 weight: edge.weight,
-            }
-        }).collect()
+            })
+            .collect()
     }
 
     fn dist(&self, from_node: usize, to_node: usize) -> f64 {
