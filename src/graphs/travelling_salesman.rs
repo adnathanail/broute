@@ -13,7 +13,11 @@ pub struct GraphPath {
     pub path: Vec<usize>,
 }
 
-fn get_potential_new_path(rng: &mut ThreadRng, g: &dyn Digraph, current_path: & GraphPath) -> GraphPath {
+fn get_potential_new_path(
+    rng: &mut ThreadRng,
+    g: &dyn Digraph,
+    current_path: &GraphPath,
+) -> GraphPath {
     let mut potential_new_path = current_path.clone();
 
     let node_index_to_mutate = rng.gen_range(0..(g.num_vertices() - 1));
