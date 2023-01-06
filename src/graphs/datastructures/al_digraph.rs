@@ -1,16 +1,19 @@
-use crate::graphs::datastructures::digraph::{Digraph, DigraphAdjacency};
 use std::fmt;
+use crate::graphs::datastructures::digraph::{Digraph, DigraphAdjacency};
 
-#[derive(Debug)]
-pub struct AMDigraph {
-    // Because this struct has at least one private field, whilst it itself is pub(lic), it cannot
-    //   be initialised by anything outside of this module
-    // The only way to create a Graph object, is using the constructor defined below
-    num_vertices: usize,
-    distance_matrix: Vec<Vec<f64>>,
+#[derive(Clone, Debug)]
+struct ALDigraphEdge {
+    to: usize,
+    weight: f64,
 }
 
-impl fmt::Display for AMDigraph {
+#[derive(Debug)]
+pub struct ALDigraph {
+    num_vertices: usize,
+    adjacency_lists: Vec<Vec<ALDigraphEdge>>,
+}
+
+impl fmt::Display for ALDigraph {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         // Write strictly the first element into the supplied output stream: `f`
         // Returns `fmt::Result` which indicates whether the operation succeeded or failed
@@ -31,31 +34,46 @@ impl fmt::Display for AMDigraph {
     }
 }
 
-impl AMDigraph {
+impl ALDigraph {
+
     pub fn new(num_vertices: usize) -> Self {
-        Self {
+        let mut out = Self {
             num_vertices,
-            distance_matrix: vec![vec![f64::MAX; num_vertices]; num_vertices],
+            adjacency_lists: vec![],
+        };
+        for _ in 0..num_vertices {
+            out.adjacency_lists.push(vec![]);
         }
+        out
     }
+
 }
 
-impl Digraph for AMDigraph {
+impl Digraph for ALDigraph {
     fn num_vertices(&self) -> usize {
-        return self.num_vertices;
+        return self.num_vertices
     }
 
     fn add_edge(&mut self, from: usize, to: usize, weight: f64) {
-        self.distance_matrix[from][to] = weight;
+        let e = ALDigraphEdge { to, weight };
+        self.adjacency_lists[from].push(e);
     }
 
     fn adj(&self, node_number: usize) -> Vec<DigraphAdjacency> {
-        self.distance_matrix[node_number].iter().enumerate().map(|(to, weight)| {
-            DigraphAdjacency::new(to, *weight)
+        self.adjacency_lists[node_number].iter().map(|edge| {
+            DigraphAdjacency {
+                to: edge.to,
+                weight: edge.weight,
+            }
         }).collect()
     }
 
     fn dist(&self, from_node: usize, to_node: usize) -> f64 {
-        self.distance_matrix[from_node][to_node]
+        for u in self.adj(from_node) {
+            if u.to == to_node {
+                return u.weight;
+            }
+        }
+        panic!("Node not connected!")
     }
 }
