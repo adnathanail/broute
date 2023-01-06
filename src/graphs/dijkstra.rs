@@ -1,19 +1,18 @@
 use super::super::algorithms::priority_queue::PriorityQueue;
 use std::collections::VecDeque;
-
-use super::digraph;
+use crate::graphs::datastructures::digraph::Digraph;
 
 #[cfg(test)]
 #[path = "dijkstra_tests.rs"]
 mod dijkstra_tests;
 
-pub fn dijkstra(g: &digraph::Digraph) -> Vec<f64> {
+pub fn dijkstra(g: &dyn Digraph) -> Vec<f64> {
     // Initialise all distances to infinity
-    let mut dist_to = vec![f64::INFINITY; g.num_vertices];
+    let mut dist_to = vec![f64::INFINITY; g.num_vertices()];
     dist_to[0] = 0.0;
     // Add all vertices to queue
     let mut queue = VecDeque::new();
-    for v in 0..g.num_vertices {
+    for v in 0..g.num_vertices() {
         queue.push_back(v);
     }
 
@@ -45,9 +44,9 @@ pub fn dijkstra(g: &digraph::Digraph) -> Vec<f64> {
     dist_to
 }
 
-pub fn dijkstra2(g: &digraph::Digraph) -> Vec<f64> {
+pub fn dijkstra2(g: &dyn Digraph) -> Vec<f64> {
     // Initialise all distances to infinity
-    let mut dist_to = vec![f64::INFINITY; g.num_vertices];
+    let mut dist_to = vec![f64::INFINITY; g.num_vertices()];
     dist_to[0] = 0.0;
     // Add first vertex to queue
     let mut queue = PriorityQueue::new();

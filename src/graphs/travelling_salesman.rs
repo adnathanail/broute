@@ -6,22 +6,22 @@ use rand::rngs::ThreadRng;
 use rand::seq::SliceRandom;
 use rand::{thread_rng, Rng};
 
-use super::digraph::Digraph;
+use super::datastructures::digraph::Digraph;
 
 #[derive(Debug, Clone)]
 pub struct GraphPath {
     pub path: Vec<usize>,
 }
 
-fn get_potential_new_path(rng: &mut ThreadRng, g: &Digraph, current_path: &GraphPath) -> GraphPath {
+fn get_potential_new_path(rng: &mut ThreadRng, g: &dyn Digraph, current_path: & GraphPath) -> GraphPath {
     let mut potential_new_path = current_path.clone();
 
-    let node_index_to_mutate = rng.gen_range(0..(g.num_vertices - 1));
+    let node_index_to_mutate = rng.gen_range(0..(g.num_vertices() - 1));
 
     let reverse_or_transport: bool = rng.gen();
 
     if reverse_or_transport {
-        let node_index_to_swap_with = if node_index_to_mutate < (g.num_vertices - 1) {
+        let node_index_to_swap_with = if node_index_to_mutate < (g.num_vertices() - 1) {
             node_index_to_mutate + 1
         } else {
             0
@@ -33,7 +33,7 @@ fn get_potential_new_path(rng: &mut ThreadRng, g: &Digraph, current_path: &Graph
         // Cyclic permutation
         let node_to_move = potential_new_path.path[node_index_to_mutate];
         // -2 because we are looking for new position with 1 node missing
-        let new_node_position = rng.gen_range(0..(g.num_vertices - 2));
+        let new_node_position = rng.gen_range(0..(g.num_vertices() - 2));
         potential_new_path.path.remove(node_index_to_mutate);
         potential_new_path
             .path
@@ -43,13 +43,13 @@ fn get_potential_new_path(rng: &mut ThreadRng, g: &Digraph, current_path: &Graph
     potential_new_path
 }
 
-pub fn travelling_salesman(g: &Digraph) -> GraphPath {
+pub fn travelling_salesman(g: &dyn Digraph) -> GraphPath {
     let mut result_data: Vec<(f64, f64)> = vec![];
 
     let mut rng = thread_rng();
 
     let mut best_path = GraphPath {
-        path: (0..g.num_vertices).collect(),
+        path: (0..g.num_vertices()).collect(),
     };
     best_path.path.shuffle(&mut rng);
     let mut path_length = get_path_length(g, &best_path);
@@ -59,9 +59,9 @@ pub fn travelling_salesman(g: &Digraph) -> GraphPath {
     println!("\t{:?}", best_path.path);
     println!("\t{}", path_length);
 
-    let mut temp = f64::sqrt(g.num_vertices as f64);
+    let mut temp = f64::sqrt(g.num_vertices() as f64);
     let mut iterations = 0;
-    while temp > 1e-8_f64 && iterations < (100 * g.num_vertices) {
+    while temp > 1e-8_f64 && iterations < (100 * g.num_vertices()) {
         println!("{}", temp);
         let potential_new_path = get_potential_new_path(&mut rng, g, &best_path);
 
@@ -98,7 +98,7 @@ pub fn travelling_salesman(g: &Digraph) -> GraphPath {
     best_path
 }
 
-pub fn get_path_length(g: &Digraph, path: &GraphPath) -> f64 {
+pub fn get_path_length(g: &dyn Digraph, path: &GraphPath) -> f64 {
     (0..(path.path.len() - 1)).fold(0f64, |total, i| {
         total + g.dist(path.path[i], path.path[i + 1])
     })
