@@ -5,7 +5,7 @@ use graphviz_rust::{
     printer::PrinterContext,
 };
 
-use super::{travelling_salesman::GraphPath, datastructures::digraph::Digraph};
+use super::{datastructures::digraph::Digraph, travelling_salesman::GraphPath};
 
 #[derive(Debug)]
 struct GraphStringBody {

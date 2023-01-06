@@ -1,6 +1,6 @@
 use super::super::algorithms::priority_queue::PriorityQueue;
-use std::collections::VecDeque;
 use crate::graphs::datastructures::digraph::Digraph;
+use std::collections::VecDeque;
 
 #[cfg(test)]
 #[path = "dijkstra_tests.rs"]
