@@ -5,17 +5,17 @@ use graphviz_rust::{
     printer::PrinterContext,
 };
 
-use super::{digraph::Digraph, travelling_salesman::GraphPath};
+use super::{travelling_salesman::GraphPath, datastructures::digraph::Digraph};
 
 #[derive(Debug)]
 struct GraphStringBody {
     graph_string: String,
 }
 
-fn graph_to_graphviz_body(g: &Digraph, color: String, with_label: bool) -> GraphStringBody {
-    let all_node_list: Vec<String> = (0..g.num_vertices).map(|i| format!("{}", i)).collect();
+fn graph_to_graphviz_body(g: &dyn Digraph, color: String, with_label: bool) -> GraphStringBody {
+    let all_node_list: Vec<String> = (0..g.num_vertices()).map(|i| format!("{}", i)).collect();
     let all_node_string = all_node_list.join("\n");
-    let all_node_edges_list: Vec<String> = (0..g.num_vertices)
+    let all_node_edges_list: Vec<String> = (0..g.num_vertices())
         .map(|i| {
             let edges_this_node_list: Vec<String> = g
                 .adj(i)
@@ -39,7 +39,7 @@ fn graph_to_graphviz_body(g: &Digraph, color: String, with_label: bool) -> Graph
     }
 }
 
-fn path_to_graphviz_body(g: &Digraph, path: &GraphPath) -> GraphStringBody {
+fn path_to_graphviz_body(g: &dyn Digraph, path: &GraphPath) -> GraphStringBody {
     let path_nodes_list: Vec<String> = (0..(path.path.len() - 1))
         .map(|i| {
             format!(
@@ -78,14 +78,14 @@ fn graph_string_to_file(graph_string_body: GraphStringBody, output_path: String)
     .unwrap();
 }
 
-pub fn output_graph_to_file(g: &Digraph, output_path: String) {
+pub fn output_graph_to_file(g: &dyn Digraph, output_path: String) {
     graph_string_to_file(
         graph_to_graphviz_body(g, "black".to_string(), true),
         output_path,
     );
 }
 
-pub fn output_graph_to_file_with_path(g: &Digraph, path: &GraphPath, output_path: String) {
+pub fn output_graph_to_file_with_path(g: &dyn Digraph, path: &GraphPath, output_path: String) {
     let graph_string_body = GraphStringBody {
         graph_string: format!(
             "{}\n{}",

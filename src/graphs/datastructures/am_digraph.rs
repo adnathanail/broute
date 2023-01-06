@@ -1,15 +1,16 @@
 use std::fmt;
+use crate::graphs::datastructures::digraph::Digraph;
 
 #[derive(Debug)]
-pub struct Digraph {
+pub struct AMDigraph {
     // Because this struct has at least one private field, whilst it itself is pub(lic), it cannot
     //   be initialised by anything outside of this module
     // The only way to create a Graph object, is using the constructor defined below
-    pub num_vertices: usize,
+    num_vertices: usize,
     distance_matrix: Vec<Vec<f64>>,
 }
 
-impl fmt::Display for Digraph {
+impl fmt::Display for AMDigraph {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         // Write strictly the first element into the supplied output stream: `f`
         // Returns `fmt::Result` which indicates whether the operation succeeded or failed
@@ -30,7 +31,8 @@ impl fmt::Display for Digraph {
     }
 }
 
-impl Digraph {
+impl AMDigraph {
+
     pub fn new(num_vertices: usize) -> Self {
         Self {
             num_vertices,
@@ -38,15 +40,22 @@ impl Digraph {
         }
     }
 
-    pub fn add_edge(&mut self, from: usize, to: usize, weight: f64) {
+}
+
+impl Digraph for AMDigraph {
+    fn num_vertices(&self) -> usize {
+        return self.num_vertices
+    }
+
+    fn add_edge(&mut self, from: usize, to: usize, weight: f64) {
         self.distance_matrix[from][to] = weight;
     }
 
-    pub fn adj(&self, node_number: usize) -> &Vec<f64> {
+    fn adj(&self, node_number: usize) -> &Vec<f64> {
         &self.distance_matrix[node_number]
     }
 
-    pub fn dist(&self, from_node: usize, to_node: usize) -> f64 {
+    fn dist(&self, from_node: usize, to_node: usize) -> f64 {
         self.distance_matrix[from_node][to_node]
     }
 }

@@ -1,18 +1,19 @@
 use rand::Rng;
 use rand_distr::{Distribution, Normal};
 
-use super::digraph;
+use super::datastructures::am_digraph::AMDigraph;
+use super::datastructures::digraph::Digraph;
 
 pub fn get_random_graph(
     num_nodes: usize,
     conn_prob: f64,
     weight_mean: f64,
     weight_sd: f64,
-) -> digraph::Digraph {
+) -> AMDigraph {
     let mut rng = rand::thread_rng();
     let normal = Normal::new(weight_mean, weight_sd).unwrap();
 
-    let mut g = digraph::Digraph::new(num_nodes);
+    let mut g = AMDigraph::new(num_nodes);
 
     for i in 0..num_nodes {
         for j in 0..num_nodes {
