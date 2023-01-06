@@ -42,7 +42,7 @@ impl AMDigraph {
 
 impl Digraph for AMDigraph {
     fn num_vertices(&self) -> usize {
-        return self.num_vertices;
+        self.num_vertices
     }
 
     fn add_edge(&mut self, from: usize, to: usize, weight: f64) {

@@ -49,7 +49,7 @@ impl ALDigraph {
 
 impl Digraph for ALDigraph {
     fn num_vertices(&self) -> usize {
-        return self.num_vertices;
+        self.num_vertices
     }
 
     fn add_edge(&mut self, from: usize, to: usize, weight: f64) {
