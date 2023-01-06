@@ -34,10 +34,10 @@ pub fn dijkstra(g: &dyn Digraph) -> Vec<f64> {
         let v = queue.remove(min_index).unwrap();
         // Check every node, u, reachable from v
         //   to see if a route via v is shorter than the current shortest path
-        for (to, weight) in g.adj(v).iter().enumerate() {
-            let alt = dist_to[v] + weight;
-            if alt < dist_to[to] {
-                dist_to[to] = alt;
+        for adjacency in g.adj(v).iter() {
+            let alt = dist_to[v] + adjacency.weight;
+            if alt < dist_to[adjacency.to] {
+                dist_to[adjacency.to] = alt;
             }
         }
     }
@@ -61,12 +61,12 @@ pub fn dijkstra2(g: &dyn Digraph) -> Vec<f64> {
 
         // Check every node, u, reachable from v
         //   to see if a route via v is shorter than the current shortest path
-        for (to, weight) in g.adj(v).iter().enumerate() {
-            let alt = dist_to[v] + weight;
-            if alt < dist_to[to] {
+        for adjacency in g.adj(v).iter() {
+            let alt = dist_to[v] + adjacency.weight;
+            if alt < dist_to[adjacency.to] {
                 // Add adjacent node to queue
-                queue.push(alt, to);
-                dist_to[to] = alt;
+                queue.push(alt, adjacency.to);
+                dist_to[adjacency.to] = alt;
             }
         }
     }

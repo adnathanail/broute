@@ -21,9 +21,9 @@ fn graph_to_graphviz_body(g: &dyn Digraph, color: String, with_label: bool) -> G
                 .adj(i)
                 .iter()
                 .enumerate()
-                .map(|(to, weight)| {
+                .map(|(to, adjacency)| {
                     let label_str = if with_label {
-                        format!(",headlabel=\"{}\"", weight)
+                        format!(",headlabel=\"{}\"", adjacency.weight)
                     } else {
                         "".to_string()
                     };
