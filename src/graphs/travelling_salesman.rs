@@ -63,7 +63,7 @@ pub fn travelling_salesman(g: &Digraph) -> GraphPath {
     let mut iterations = 0;
     while temp > 1e-8_f64 && iterations < (100 * g.num_vertices) {
         println!("{}", temp);
-        let mut potential_new_path = get_potential_new_path(& mut rng, g, &best_path);
+        let potential_new_path = get_potential_new_path(& mut rng, g, &best_path);
 
         let new_path_length = get_path_length(g, &potential_new_path);
         if new_path_length < path_length {
