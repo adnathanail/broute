@@ -50,9 +50,11 @@ impl Digraph for AMDigraph {
     }
 
     fn adj(&self, node_number: usize) -> Vec<DigraphAdjacency> {
-        self.distance_matrix[node_number].iter().enumerate().map(|(to, weight)| {
-            DigraphAdjacency::new(to, *weight)
-        }).collect()
+        self.distance_matrix[node_number]
+            .iter()
+            .enumerate()
+            .map(|(to, weight)| DigraphAdjacency::new(to, *weight))
+            .collect()
     }
 
     fn dist(&self, from_node: usize, to_node: usize) -> f64 {
