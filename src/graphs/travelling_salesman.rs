@@ -13,7 +13,7 @@ pub struct GraphPath {
     pub path: Vec<usize>,
 }
 
-fn get_potential_new_path(rng: &mut ThreadRng, g: & Digraph, current_path: & GraphPath) -> GraphPath {
+fn get_potential_new_path(rng: &mut ThreadRng, g: &Digraph, current_path: &GraphPath) -> GraphPath {
     let mut potential_new_path = current_path.clone();
 
     let node_index_to_mutate = rng.gen_range(0..(g.num_vertices - 1));
@@ -63,7 +63,7 @@ pub fn travelling_salesman(g: &Digraph) -> GraphPath {
     let mut iterations = 0;
     while temp > 1e-8_f64 && iterations < (100 * g.num_vertices) {
         println!("{}", temp);
-        let mut potential_new_path = get_potential_new_path(& mut rng, g, &best_path);
+        let mut potential_new_path = get_potential_new_path(&mut rng, g, &best_path);
 
         let new_path_length = get_path_length(g, &potential_new_path);
         if new_path_length < path_length {
