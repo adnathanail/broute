@@ -1,10 +1,11 @@
 name: Lint, build, & test
 
-on:
-  push:
-    branches: [ "master" ]
-  pull_request:
-    branches: [ "master" ]
+on: [ push ]
+
+concurrency: # Cancel if I push to the same branch
+  # Don't cancel on master
+  group: ${{ github.ref == 'refs/heads/master' && format('ci-master-{0}', github.sha) || format('ci-{0}', github.ref) }}
+  cancel-in-progress: true
 
 env:
   CARGO_TERM_COLOR: always
