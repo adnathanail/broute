@@ -1,8 +1,9 @@
+use crate::graphs::datastructures;
 use super::*;
 
 #[test]
 fn dijkstra_test() {
-    let mut g = AMDigraph::new(8);
+    let mut g = datastructures::am_digraph::AMDigraph::new(8);
 
     g.add_edge(0, 1, 5.0);
     g.add_edge(0, 4, 9.0);
