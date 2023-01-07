@@ -47,7 +47,7 @@ fn get_potential_new_path(
     potential_new_path
 }
 
-pub fn travelling_salesman(g: &dyn Digraph) -> GraphPath {
+pub fn travelling_salesman(g: &dyn Digraph, output_graph: bool) -> GraphPath {
     let mut result_data: Vec<(f64, f64)> = vec![];
 
     let mut rng = thread_rng();
@@ -86,18 +86,20 @@ pub fn travelling_salesman(g: &dyn Digraph) -> GraphPath {
         result_data.push((temp, path_length));
     }
 
-    // We create our scatter plot from the data
-    let s1: Plot = Plot::new(result_data.clone()).line_style(LineStyle::new().colour("#DD3355"));
+    if output_graph {
+        // We create our scatter plot from the data
+        let s1: Plot = Plot::new(result_data.clone()).line_style(LineStyle::new().colour("#DD3355"));
 
-    // The 'view' describes what set of data is drawn
-    let v = ContinuousView::new()
-        .add(s1)
-        .x_label("Temperature")
-        .y_label("Path length")
-        .y_range(0.0, result_data[0].1 + 100.0);
+        // The 'view' describes what set of data is drawn
+        let v = ContinuousView::new()
+            .add(s1)
+            .x_label("Temperature")
+            .y_label("Path length")
+            .y_range(0.0, result_data[0].1 + 100.0);
 
-    // A page with a single view is then saved to an SVG file
-    Page::single(&v).save("out/temp_vs_cost.svg").unwrap();
+        // A page with a single view is then saved to an SVG file
+        Page::single(&v).save("out/temp_vs_cost.svg").unwrap();
+    }
 
     best_path
 }
