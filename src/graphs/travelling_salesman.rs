@@ -5,6 +5,7 @@ use plotlib::view::ContinuousView;
 use rand::rngs::ThreadRng;
 use rand::seq::SliceRandom;
 use rand::{thread_rng, Rng};
+use crate::graphs::datastructures::digraph::NodeIndex;
 
 use super::datastructures::digraph::Digraph;
 
@@ -107,6 +108,6 @@ pub fn travelling_salesman(g: &dyn Digraph, output_graph: bool) -> GraphPath {
 
 pub fn get_path_length(g: &dyn Digraph, path: &GraphPath) -> f64 {
     (0..(path.path.len() - 1)).fold(0f64, |total, i| {
-        total + g.dist(path.path[i], path.path[i + 1])
+        total + g.dist(NodeIndex(path.path[i]), NodeIndex(path.path[i + 1]))
     })
 }

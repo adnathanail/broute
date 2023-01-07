@@ -1,10 +1,10 @@
-use crate::graphs::datastructures::digraph::{Digraph, DigraphAdjacency, NodeData};
+use crate::graphs::datastructures::digraph::{Digraph, DigraphAdjacency, NodeData, NodeID, NodeIndex};
 use std::collections::HashMap;
 use std::fmt;
 
 #[derive(Clone, Debug)]
 struct ALDigraphEdge {
-    to: usize,
+    to: NodeIndex,
     weight: f64,
 }
 
@@ -12,9 +12,9 @@ struct ALDigraphEdge {
 pub struct ALDigraph {
     num_vertices: usize,
     adjacency_lists: Vec<Vec<ALDigraphEdge>>,
-    node_data: HashMap<usize, NodeData>,
-    node_id_index_lookup: HashMap<usize, usize>,
-    current_node_index: usize,
+    node_data: HashMap<NodeIndex, NodeData>,
+    node_id_index_lookup: HashMap<NodeID, NodeIndex>,
+    current_node_index: NodeIndex,
 }
 
 impl fmt::Display for ALDigraph {
@@ -45,7 +45,7 @@ impl ALDigraph {
             adjacency_lists: vec![Vec::new(); num_vertices],
             node_data: HashMap::new(),
             node_id_index_lookup: HashMap::new(),
-            current_node_index: 0,
+            current_node_index: NodeIndex(0),
         }
     }
 }
@@ -55,10 +55,10 @@ impl Digraph for ALDigraph {
         self.num_vertices
     }
 
-    fn add_node_data(&mut self, node_id: usize, longitude: f64, latitude: f64) {
+    fn add_node_data(&mut self, node_id: NodeID, longitude: f64, latitude: f64) {
         self.node_id_index_lookup
             .insert(node_id, self.current_node_index);
-        self.current_node_index += 1;
+        self.current_node_index.0 += 1;
         self.node_data.insert(
             self.node_id_index_lookup[&node_id],
             NodeData {
@@ -68,20 +68,20 @@ impl Digraph for ALDigraph {
         );
     }
 
-    fn add_edge(&mut self, from_id: usize, to_id: usize, weight: f64) {
+    fn add_edge(&mut self, from_id: NodeID, to_id: NodeID, weight: f64) {
         let e = ALDigraphEdge {
             to: *self.node_id_index_lookup.get(&to_id).unwrap(),
             weight,
         };
-        self.adjacency_lists[*self.node_id_index_lookup.get(&from_id).unwrap()].push(e);
+        self.adjacency_lists[self.node_id_index_lookup.get(&from_id).unwrap().0].push(e);
     }
 
-    fn get_node_data(&self, node_id: usize) -> &NodeData {
-        self.node_data.get(&node_id).unwrap()
+    fn get_node_data(&self, node_id: NodeID) -> &NodeData {
+        self.node_data.get(self.node_id_index_lookup.get(&node_id).unwrap()).unwrap()
     }
 
-    fn adj(&self, node_index: usize) -> Vec<DigraphAdjacency> {
-        self.adjacency_lists[node_index]
+    fn adj(&self, node_index: NodeIndex) -> Vec<DigraphAdjacency> {
+        self.adjacency_lists[node_index.0]
             .iter()
             .map(|edge| DigraphAdjacency {
                 node_index: edge.to,
@@ -90,7 +90,7 @@ impl Digraph for ALDigraph {
             .collect()
     }
 
-    fn dist(&self, from_index: usize, to_index: usize) -> f64 {
+    fn dist(&self, from_index: NodeIndex, to_index: NodeIndex) -> f64 {
         for u in self.adj(from_index) {
             if u.node_index == to_index {
                 return u.weight;

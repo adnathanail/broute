@@ -3,7 +3,7 @@
 
 use std::fs;
 
-use broute::graphs::datastructures::digraph::Digraph;
+use broute::graphs::datastructures::digraph::{Digraph, NodeID};
 use broute::graphs::{
     output::output_graph_to_file_with_path,
     travelling_salesman::{get_path_length, travelling_salesman},
@@ -26,7 +26,7 @@ fn main() {
     println!("\t{:?}", path.path);
     println!("\t{}", get_path_length(&g, &path));
     path.path.iter().for_each(|x| {
-        println!("\t{:?}", g.get_node_data(*x));
+        println!("\t{:?}", g.get_node_data(NodeID(*x)));
     });
     output_graph_to_file_with_path(&g, &path, "out/path_final.svg".to_string());
 
