@@ -50,7 +50,18 @@ impl Digraph for AMDigraph {
         self.num_vertices
     }
 
-    fn add_node_data(&mut self, node_id: usize, longitude: f64, latitude: f64) {}
+    fn add_node_data(&mut self, node_id: usize, longitude: f64, latitude: f64) {
+        self.node_data.insert(
+            node_id,
+            NodeData {
+                // node_index: self.current_node_index,
+                node_index: node_id,
+                longitude,
+                latitude,
+            },
+        );
+        // self.current_node_index += 1;
+    }
 
     fn add_edge(&mut self, from: usize, to: usize, weight: f64) {
         self.distance_matrix[from][to] = weight;
@@ -71,11 +82,7 @@ impl Digraph for AMDigraph {
         self.distance_matrix[from_node][to_node]
     }
 
-    fn get_node_data(&self, node_id: usize) -> NodeData {
-        NodeData {
-            node_index: node_id,
-            longitude: 0.0,
-            latitude: 0.0,
-        }
+    fn get_node_data(&self, node_id: usize) -> &NodeData {
+        self.node_data.get(&node_id).unwrap()
     }
 }
