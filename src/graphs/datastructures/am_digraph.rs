@@ -1,5 +1,5 @@
-use std::collections::HashMap;
 use crate::graphs::datastructures::digraph::{Digraph, DigraphAdjacency, NodeData};
+use std::collections::HashMap;
 use std::fmt;
 
 #[derive(Debug)]
@@ -51,12 +51,20 @@ impl Digraph for AMDigraph {
     }
 
     fn add_node_data(&mut self, node_id: usize, longitude: f64, latitude: f64) {
-        self.node_data.insert(node_id, NodeData { node_index: self.current_node_index, longitude, latitude });
+        self.node_data.insert(
+            node_id,
+            NodeData {
+                node_index: self.current_node_index,
+                longitude,
+                latitude,
+            },
+        );
         self.current_node_index += 1;
     }
 
     fn add_edge(&mut self, from_id: usize, to_id: usize, weight: f64) {
-        self.distance_matrix[self.node_data.get(&from_id).unwrap().node_index][self.node_data.get(&to_id).unwrap().node_index] = weight;
+        self.distance_matrix[self.node_data.get(&from_id).unwrap().node_index]
+            [self.node_data.get(&to_id).unwrap().node_index] = weight;
     }
 
     fn adj(&self, node_id: usize) -> Vec<DigraphAdjacency> {
@@ -78,7 +86,8 @@ impl Digraph for AMDigraph {
     }
 
     fn dist(&self, from_id: usize, to_id: usize) -> f64 {
-        self.distance_matrix[self.node_data.get(&from_id).unwrap().node_index][self.node_data.get(&to_id).unwrap().node_index]
+        self.distance_matrix[self.node_data.get(&from_id).unwrap().node_index]
+            [self.node_data.get(&to_id).unwrap().node_index]
     }
 
     fn get_node_data(&self, node_id: usize) -> &NodeData {
