@@ -34,19 +34,19 @@ jobs:
     - name: Cache cargo dependencies
       uses: Swatinem/rust-cache@v2
     - name: Benchmark (PR)
-      if: ${{ !cancelled() && (success() || failure()) && github.ref != 'refs/heads/master' }}
+      if: ${{ (success() || failure()) && github.event.pull_request }}
       # https://github.com/bheisler/criterion.rs/issues/193#issuecomment-415740713
       run: |
-        git checkout ${{ github.ref }}
+        git checkout refs/remotes/pull/${{ github.event.pull_request.number }}/merge
         git fetch origin master --depth 1
         git checkout master
         cargo bench --bench benchmarks -- --save-baseline base
-        git checkout ${{ github.event.pull_request.head.sha }}
+        git checkout refs/remotes/pull/${{ github.event.pull_request.number }}/merge
         cargo bench --bench benchmarks -- --baseline base | tee benchmark_output.txt
         pwd
         ls
     - name: PR comment with file
-      if: ${{ github.ref != 'refs/heads/master' }}
+      if: ${{ github.event.pull_request }}
       uses: thollander/actions-comment-pull-request@v2
       with:
         filePath: benchmark_output.txt
