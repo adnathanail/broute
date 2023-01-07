@@ -48,3 +48,4 @@ jobs:
       uses: thollander/actions-comment-pull-request@v2
       with:
         filePath: benchmark_output.txt
+        comment_tag: benchmark_output
