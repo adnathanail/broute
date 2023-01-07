@@ -1,5 +1,5 @@
-use std::collections::HashMap;
 use crate::graphs::datastructures::digraph::{Digraph, DigraphAdjacency, NodeData};
+use std::collections::HashMap;
 use std::fmt;
 
 #[derive(Clone, Debug)]
@@ -55,12 +55,22 @@ impl Digraph for ALDigraph {
     }
 
     fn add_node_data(&mut self, node_id: usize, longitude: f64, latitude: f64) {
-        self.node_data.insert(node_id, NodeData { node_index: self.current_node_index, longitude, latitude });
+        self.node_data.insert(
+            node_id,
+            NodeData {
+                node_index: self.current_node_index,
+                longitude,
+                latitude,
+            },
+        );
         self.current_node_index += 1;
     }
 
     fn add_edge(&mut self, from_id: usize, to_id: usize, weight: f64) {
-        let e = ALDigraphEdge { to: self.node_data.get(&to_id).unwrap().node_index, weight };
+        let e = ALDigraphEdge {
+            to: self.node_data.get(&to_id).unwrap().node_index,
+            weight,
+        };
         self.adjacency_lists[self.node_data.get(&from_id).unwrap().node_index].push(e);
     }
 
