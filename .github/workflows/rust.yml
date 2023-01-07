@@ -30,8 +30,9 @@ jobs:
       run: cargo test --verbose
     - name: Benchmark
       if: ${{ always() }}
+      # https://github.com/bheisler/criterion.rs/issues/193#issuecomment-415740713
       run: |
         git checkout ${{ github.event.pull_request.base.sha }}
-        cargo bench -- --save-baseline base
+        cargo bench --bench benchmarks -- --save-baseline base
         git checkout ${{ github.event.pull_request.head.sha }}
-        cargo bench -- --baseline base
+        cargo bench --bench benchmarks -- --baseline base
