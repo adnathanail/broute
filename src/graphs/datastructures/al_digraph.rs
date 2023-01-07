@@ -38,7 +38,7 @@ impl ALDigraph {
     pub fn new(num_vertices: usize) -> Self {
         Self {
             num_vertices,
-            adjacency_lists: vec![Vec::new(); num_vertices]
+            adjacency_lists: vec![Vec::new(); num_vertices],
         }
     }
 }
@@ -48,9 +48,7 @@ impl Digraph for ALDigraph {
         self.num_vertices
     }
 
-    fn add_node_data(&mut self, node_id: usize, longitude: f64, latitude: f64) {
-
-    }
+    fn add_node_data(&mut self, node_id: usize, longitude: f64, latitude: f64) {}
 
     fn add_edge(&mut self, from: usize, to: usize, weight: f64) {
         let e = ALDigraphEdge { to, weight };
