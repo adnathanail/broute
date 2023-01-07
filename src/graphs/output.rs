@@ -1,10 +1,10 @@
+use crate::graphs::datastructures::digraph::NodeIndex;
 use graphviz_rust::{
     cmd::{CommandArg, Format},
     dot_structures::Graph,
     exec, parse,
     printer::PrinterContext,
 };
-use crate::graphs::datastructures::digraph::NodeIndex;
 
 use super::{datastructures::digraph::Digraph, travelling_salesman::GraphPath};
 

@@ -1,3 +1,4 @@
+use crate::graphs::datastructures::digraph::NodeIndex;
 use plotlib::page::Page;
 use plotlib::repr::Plot;
 use plotlib::style::LineStyle;
@@ -5,7 +6,6 @@ use plotlib::view::ContinuousView;
 use rand::rngs::ThreadRng;
 use rand::seq::SliceRandom;
 use rand::{thread_rng, Rng};
-use crate::graphs::datastructures::digraph::NodeIndex;
 
 use super::datastructures::digraph::Digraph;
 
