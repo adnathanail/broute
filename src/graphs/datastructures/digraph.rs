@@ -7,20 +7,7 @@ pub struct NodeData {
 
 pub struct DigraphAdjacency {
     pub node_index: usize,
-    pub node_longitude: f64,
-    pub node_latitude: f64,
     pub weight: f64,
-}
-
-impl DigraphAdjacency {
-    pub fn new(node_index: usize, node_longitude: f64, node_latitude: f64, weight: f64) -> Self {
-        Self {
-            node_index,
-            node_longitude,
-            node_latitude,
-            weight,
-        }
-    }
 }
 
 pub trait Digraph {
