@@ -45,9 +45,7 @@ impl Digraph for AMDigraph {
         self.num_vertices
     }
 
-    fn add_node_data(&mut self, node_id: usize, longitude: f64, latitude: f64) {
-
-    }
+    fn add_node_data(&mut self, node_id: usize, longitude: f64, latitude: f64) {}
 
     fn add_edge(&mut self, from: usize, to: usize, weight: f64) {
         self.distance_matrix[from][to] = weight;
