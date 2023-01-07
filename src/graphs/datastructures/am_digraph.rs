@@ -9,8 +9,9 @@ pub struct AMDigraph {
     // The only way to create a Graph object, is using the constructor defined below
     num_vertices: usize,
     distance_matrix: Vec<Vec<f64>>,
-    current_node_index: usize,
     node_data: HashMap<usize, NodeData>,
+    node_id_index_lookup: HashMap<usize, usize>,
+    current_node_index: usize,
 }
 
 impl fmt::Display for AMDigraph {
@@ -39,8 +40,9 @@ impl AMDigraph {
         Self {
             num_vertices,
             distance_matrix: vec![vec![f64::MAX; num_vertices]; num_vertices],
-            current_node_index: 0,
             node_data: HashMap::new(),
+            node_id_index_lookup: HashMap::new(),
+            current_node_index: 0,
         }
     }
 }
@@ -51,42 +53,41 @@ impl Digraph for AMDigraph {
     }
 
     fn add_node_data(&mut self, node_id: usize, longitude: f64, latitude: f64) {
+        self.node_id_index_lookup.insert(node_id, self.current_node_index);
+        self.current_node_index += 1;
         self.node_data.insert(
-            node_id,
+            self.node_id_index_lookup[&node_id],
             NodeData {
-                node_index: self.current_node_index,
                 longitude,
                 latitude,
             },
         );
-        self.current_node_index += 1;
     }
 
     fn add_edge(&mut self, from_id: usize, to_id: usize, weight: f64) {
-        self.distance_matrix[self.node_data.get(&from_id).unwrap().node_index]
-            [self.node_data.get(&to_id).unwrap().node_index] = weight;
+        self.distance_matrix[*self.node_id_index_lookup.get(&from_id).unwrap()]
+            [*self.node_id_index_lookup.get(&to_id).unwrap()] = weight;
     }
 
-    fn adj(&self, node_id: usize) -> Vec<DigraphAdjacency> {
-        self.distance_matrix[self.node_data.get(&node_id).unwrap().node_index]
+    fn get_node_data(&self, node_id: usize) -> &NodeData {
+        self.node_data.get(&node_id).unwrap()
+    }
+
+    fn adj(&self, node_index: usize) -> Vec<DigraphAdjacency> {
+        self.distance_matrix[node_index]
             .iter()
             .enumerate()
             .map(|(to, weight)| {
-                let nd: &NodeData = self.node_data.get(&to).unwrap();
                 DigraphAdjacency {
-                    node_index: nd.node_index,
+                    node_index: to,
                     weight: *weight,
                 }
             })
             .collect()
     }
 
-    fn dist(&self, from_id: usize, to_id: usize) -> f64 {
-        self.distance_matrix[self.node_data.get(&from_id).unwrap().node_index]
-            [self.node_data.get(&to_id).unwrap().node_index]
-    }
-
-    fn get_node_data(&self, node_id: usize) -> &NodeData {
-        self.node_data.get(&node_id).unwrap()
+    fn dist(&self, from_index: usize, to_index: usize) -> f64 {
+        self.distance_matrix[from_index]
+            [to_index]
     }
 }

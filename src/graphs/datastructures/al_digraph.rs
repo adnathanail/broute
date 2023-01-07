@@ -12,8 +12,9 @@ struct ALDigraphEdge {
 pub struct ALDigraph {
     num_vertices: usize,
     adjacency_lists: Vec<Vec<ALDigraphEdge>>,
-    current_node_index: usize,
     node_data: HashMap<usize, NodeData>,
+    node_id_index_lookup: HashMap<usize, usize>,
+    current_node_index: usize,
 }
 
 impl fmt::Display for ALDigraph {
@@ -42,8 +43,9 @@ impl ALDigraph {
         Self {
             num_vertices,
             adjacency_lists: vec![Vec::new(); num_vertices],
-            current_node_index: 0,
             node_data: HashMap::new(),
+            node_id_index_lookup: HashMap::new(),
+            current_node_index: 0,
         }
     }
 }
@@ -54,48 +56,47 @@ impl Digraph for ALDigraph {
     }
 
     fn add_node_data(&mut self, node_id: usize, longitude: f64, latitude: f64) {
+        self.node_id_index_lookup.insert(node_id, self.current_node_index);
+        self.current_node_index += 1;
         self.node_data.insert(
-            node_id,
+            self.node_id_index_lookup[&node_id],
             NodeData {
-                node_index: self.current_node_index,
                 longitude,
                 latitude,
             },
         );
-        self.current_node_index += 1;
     }
 
     fn add_edge(&mut self, from_id: usize, to_id: usize, weight: f64) {
         let e = ALDigraphEdge {
-            to: self.node_data.get(&to_id).unwrap().node_index,
+            to: *self.node_id_index_lookup.get(&to_id).unwrap(),
             weight,
         };
-        self.adjacency_lists[self.node_data.get(&from_id).unwrap().node_index].push(e);
+        self.adjacency_lists[*self.node_id_index_lookup.get(&from_id).unwrap()].push(e);
     }
 
-    fn adj(&self, node_id: usize) -> Vec<DigraphAdjacency> {
-        self.adjacency_lists[self.node_data.get(&node_id).unwrap().node_index]
+    fn get_node_data(&self, node_id: usize) -> &NodeData {
+        self.node_data.get(&node_id).unwrap()
+    }
+
+    fn adj(&self, node_index: usize) -> Vec<DigraphAdjacency> {
+        self.adjacency_lists[node_index]
             .iter()
             .map(|edge| {
-                let nd: &NodeData = self.node_data.get(&edge.to).unwrap();
                 DigraphAdjacency {
-                    node_index: nd.node_index,
+                    node_index: edge.to,
                     weight: edge.weight,
                 }
             })
             .collect()
     }
 
-    fn dist(&self, from_id: usize, to_id: usize) -> f64 {
-        for u in self.adj(self.node_data.get(&from_id).unwrap().node_index) {
-            if u.node_index == self.node_data.get(&to_id).unwrap().node_index {
+    fn dist(&self, from_index: usize, to_index: usize) -> f64 {
+        for u in self.adj(from_index) {
+            if u.node_index == to_index {
                 return u.weight;
             }
         }
         panic!("Node not connected!")
-    }
-
-    fn get_node_data(&self, node_id: usize) -> &NodeData {
-        self.node_data.get(&node_id).unwrap()
     }
 }
