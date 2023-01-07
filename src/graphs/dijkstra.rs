@@ -1,5 +1,5 @@
 use super::super::algorithms::priority_queue::PriorityQueue;
-use crate::graphs::datastructures::digraph::Digraph;
+use crate::graphs::datastructures::digraph::{Digraph, NodeIndex};
 use std::collections::VecDeque;
 
 #[cfg(test)]
@@ -34,10 +34,10 @@ pub fn dijkstra(g: &dyn Digraph) -> Vec<f64> {
         let v = queue.remove(min_index).unwrap();
         // Check every node, u, reachable from v
         //   to see if a route via v is shorter than the current shortest path
-        for adjacency in g.adj(v).iter() {
+        for adjacency in g.adj(NodeIndex(v)).iter() {
             let alt = dist_to[v] + adjacency.weight;
-            if alt < dist_to[adjacency.node_index] {
-                dist_to[adjacency.node_index] = alt;
+            if alt < dist_to[adjacency.node_index.0] {
+                dist_to[adjacency.node_index.0] = alt;
             }
         }
     }
@@ -61,12 +61,12 @@ pub fn dijkstra2(g: &dyn Digraph) -> Vec<f64> {
 
         // Check every node, u, reachable from v
         //   to see if a route via v is shorter than the current shortest path
-        for adjacency in g.adj(v).iter() {
+        for adjacency in g.adj(NodeIndex(v)).iter() {
             let alt = dist_to[v] + adjacency.weight;
-            if alt < dist_to[adjacency.node_index] {
+            if alt < dist_to[adjacency.node_index.0] {
                 // Add adjacent node to queue
-                queue.push(alt, adjacency.node_index);
-                dist_to[adjacency.node_index] = alt;
+                queue.push(alt, adjacency.node_index.0);
+                dist_to[adjacency.node_index.0] = alt;
             }
         }
     }

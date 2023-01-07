@@ -1,5 +1,6 @@
 use rand::Rng;
 use rand_distr::{Distribution, Normal};
+use crate::graphs::datastructures::digraph::NodeID;
 
 use super::datastructures::am_digraph::AMDigraph;
 use super::datastructures::digraph::Digraph;
@@ -16,7 +17,7 @@ pub fn get_random_graph(
     let mut g = AMDigraph::new(num_nodes);
 
     for i in 0..num_nodes {
-        g.add_node_data(i, 0.0, 0.0)
+        g.add_node_data(NodeID(i), 0.0, 0.0)
     }
 
     for i in 0..num_nodes {
@@ -24,7 +25,7 @@ pub fn get_random_graph(
             if i != j && rng.gen::<f64>() > conn_prob {
                 let raw_weight = normal.sample(&mut rng);
                 let rounded_weight = (raw_weight * 100.0).round() / 100.0;
-                g.add_edge(i, j, rounded_weight);
+                g.add_edge(NodeID(i), NodeID(j), rounded_weight);
             }
         }
     }
