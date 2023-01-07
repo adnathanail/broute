@@ -1,7 +1,7 @@
+use crate::graphs::datastructures::digraph::NodeID;
 use rand::{thread_rng, Rng};
 use std::{cmp, io::Cursor};
 use tsplib::NodeCoord;
-use crate::graphs::datastructures::digraph::NodeID;
 
 use super::datastructures::am_digraph::AMDigraph;
 use super::datastructures::digraph::Digraph;
@@ -54,7 +54,8 @@ pub fn load_tsplib_file(input_data: String, num_nodes: usize) -> AMDigraph {
                 let dx = coords[j].1 - coords[i].1;
                 let dy = coords[j].2 - coords[i].2;
                 let weight = (f64::powf(dx as f64, 2.0) + f64::powf(dy as f64, 2.0)).sqrt();
-                g.add_edge(NodeID(coords[i].0 - 1), NodeID(coords[j].0 - 1), weight) // -1 because TSPLIB is 1 indexed
+                g.add_edge(NodeID(coords[i].0 - 1), NodeID(coords[j].0 - 1), weight)
+                // -1 because TSPLIB is 1 indexed
             }
         }
     }

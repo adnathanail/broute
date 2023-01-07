@@ -1,4 +1,6 @@
-use crate::graphs::datastructures::digraph::{Digraph, DigraphAdjacency, NodeData, NodeID, NodeIndex};
+use crate::graphs::datastructures::digraph::{
+    Digraph, DigraphAdjacency, NodeData, NodeID, NodeIndex,
+};
 use std::collections::HashMap;
 use std::fmt;
 
@@ -71,7 +73,9 @@ impl Digraph for AMDigraph {
     }
 
     fn get_node_data(&self, node_id: NodeID) -> &NodeData {
-        self.node_data.get(self.node_id_index_lookup.get(&node_id).unwrap()).unwrap()
+        self.node_data
+            .get(self.node_id_index_lookup.get(&node_id).unwrap())
+            .unwrap()
     }
 
     fn adj(&self, node_index: NodeIndex) -> Vec<DigraphAdjacency> {

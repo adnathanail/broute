@@ -1,6 +1,6 @@
+use crate::graphs::datastructures::digraph::NodeID;
 use rand::Rng;
 use rand_distr::{Distribution, Normal};
-use crate::graphs::datastructures::digraph::NodeID;
 
 use super::datastructures::am_digraph::AMDigraph;
 use super::datastructures::digraph::Digraph;
