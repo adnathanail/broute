@@ -39,13 +39,12 @@ impl fmt::Display for ALDigraph {
 
 impl ALDigraph {
     pub fn new(num_vertices: usize) -> Self {
-        let mut out = Self {
+        Self {
             num_vertices,
             adjacency_lists: vec![Vec::new(); num_vertices],
             current_node_index: 0,
             node_data: HashMap::new(),
-        };
-        out
+        }
     }
 }
 
