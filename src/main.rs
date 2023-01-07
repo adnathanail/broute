@@ -9,6 +9,7 @@ use broute::graphs::{
     travelling_salesman::{get_path_length, travelling_salesman},
     tsplib::load_tsplib_file,
 };
+use broute::graphs::datastructures::digraph::Digraph;
 
 fn main() {
     let tsp_string = fs::read_to_string("test_data/dimacs_tsp/d1291.tsp").unwrap();

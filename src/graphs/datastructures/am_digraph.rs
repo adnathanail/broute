@@ -1,5 +1,5 @@
-use crate::graphs::datastructures::digraph::{Digraph, DigraphAdjacency, NodeData};
 use std::collections::HashMap;
+use crate::graphs::datastructures::digraph::{Digraph, DigraphAdjacency, NodeData};
 use std::fmt;
 
 #[derive(Debug)]
@@ -9,6 +9,7 @@ pub struct AMDigraph {
     // The only way to create a Graph object, is using the constructor defined below
     num_vertices: usize,
     distance_matrix: Vec<Vec<f64>>,
+    current_node_index: usize,
     node_data: HashMap<usize, NodeData>,
 }
 
@@ -38,6 +39,7 @@ impl AMDigraph {
         Self {
             num_vertices,
             distance_matrix: vec![vec![f64::MAX; num_vertices]; num_vertices],
+            current_node_index: 0,
             node_data: HashMap::new(),
         }
     }
@@ -48,37 +50,31 @@ impl Digraph for AMDigraph {
         self.num_vertices
     }
 
-    fn add_node_data(&mut self, node_id: usize, longitude: f64, latitude: f64) {
-        self.node_data.insert(
-            node_id,
-            NodeData {
-                node_index: node_id,
-                longitude,
-                latitude,
-            },
-        );
+    fn add_node_data(&mut self, node_index: usize, longitude: f64, latitude: f64) {
+        self.node_data.insert(self.current_node_index, NodeData { node_index, longitude, latitude });
+        self.current_node_index += 1;
     }
 
     fn add_edge(&mut self, from: usize, to: usize, weight: f64) {
-        self.distance_matrix[from][to] = weight;
+        self.distance_matrix[self.node_data.get(&from).unwrap().node_index][self.node_data.get(&to).unwrap().node_index] = weight;
     }
 
     fn adj(&self, node_number: usize) -> Vec<DigraphAdjacency> {
         self.distance_matrix[node_number]
             .iter()
             .enumerate()
-            .map(|(to, weight)| DigraphAdjacency {
-                node_index: to,
-                weight: *weight,
+            .map(|(to, weight)| {
+                let nd: &NodeData = self.node_data.get(&to).unwrap();
+                DigraphAdjacency::new(nd.node_index, nd.longitude, nd.latitude, *weight)
             })
             .collect()
     }
 
     fn dist(&self, from_node: usize, to_node: usize) -> f64 {
-        self.distance_matrix[from_node][to_node]
+        self.distance_matrix[self.node_data.get(&from_node).unwrap().node_index][self.node_data.get(&to_node).unwrap().node_index]
     }
 
-    fn get_node_data(&self, node_id: usize) -> &NodeData {
-        self.node_data.get(&node_id).unwrap()
+    fn get_node_data(&self, node_index: usize) -> &NodeData {
+        self.node_data.get(&node_index).unwrap()
     }
 }
