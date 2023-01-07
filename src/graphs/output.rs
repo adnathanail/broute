@@ -4,6 +4,7 @@ use graphviz_rust::{
     exec, parse,
     printer::PrinterContext,
 };
+use crate::graphs::datastructures::digraph::NodeIndex;
 
 use super::{datastructures::digraph::Digraph, travelling_salesman::GraphPath};
 
@@ -18,7 +19,7 @@ fn graph_to_graphviz_body(g: &dyn Digraph, color: String, with_label: bool) -> G
     let all_node_edges_list: Vec<String> = (0..g.num_vertices())
         .map(|i| {
             let edges_this_node_list: Vec<String> = g
-                .adj(i)
+                .adj(NodeIndex(i))
                 .iter()
                 .enumerate()
                 .map(|(to, adjacency)| {
@@ -46,7 +47,7 @@ fn path_to_graphviz_body(g: &dyn Digraph, path: &GraphPath) -> GraphStringBody {
                 "{} -> {}[headlabel=\"{}\", color=\"red\"]",
                 path.path[i],
                 path.path[i + 1],
-                g.dist(path.path[i], path.path[i + 1])
+                g.dist(NodeIndex(path.path[i]), NodeIndex(path.path[i + 1]))
             )
         })
         .collect();
