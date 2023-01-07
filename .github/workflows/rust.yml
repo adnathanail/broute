@@ -26,6 +26,9 @@ jobs:
       env:
         GITHUB_CONTEXT: ${{ toJSON(github) }}
       run: echo "$GITHUB_CONTEXT"
+    - name: test
+      run: |
+        git show-ref
     - name: Install rust
       run: rustup toolchain install stable --profile minimal
     - name: Cache cargo dependencies
@@ -43,7 +46,7 @@ jobs:
         pwd
         ls
     - name: PR comment with file
-      if: ${{ !cancelled() && (success() || failure()) && github.ref != 'refs/heads/master' }}
+      if: ${{ github.ref != 'refs/heads/master' }}
       uses: thollander/actions-comment-pull-request@v2
       with:
         filePath: benchmark_output.txt
