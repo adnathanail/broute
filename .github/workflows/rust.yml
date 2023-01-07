@@ -49,11 +49,12 @@ jobs:
         git fetch origin master --depth 1
         git checkout master
         cargo bench --bench benchmarks -- --save-baseline base
-        git checkout ${{ github.event.pull_request.head.ref }}
+        git checkout ${{ github.event.pull_request.head.sha }}
         cargo bench --bench benchmarks -- --baseline base | tee benchmark_output.txt
         pwd
         ls
     - name: PR comment with file
+      if: ${{ !cancelled() && (success() || failure()) && github.ref != 'refs/heads/master' }}
       uses: thollander/actions-comment-pull-request@v2
       with:
         filePath: benchmark_output.txt
