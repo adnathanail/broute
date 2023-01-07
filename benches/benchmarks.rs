@@ -50,6 +50,6 @@ criterion_group! {
     name = benches;
     // This can be any expression that returns a `Criterion` object.
     config = Criterion::default().measurement_time(Duration::from_secs(15));
-    targets = dijkstra_benchmark, travelling_salesman_benchmark
+    targets = dijkstra_benchmark //, travelling_salesman_benchmark
 }
 criterion_main!(benches);
