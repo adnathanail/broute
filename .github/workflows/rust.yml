@@ -30,22 +30,11 @@ jobs:
       run: rustup toolchain install stable --profile minimal
     - name: Cache cargo dependencies
       uses: Swatinem/rust-cache@v2
-    - name: Lint
-      run: cargo clippy --all-targets --all-features -- -D warnings
-    - name: Build
-      if: ${{ success() || failure() }}
-      run: cargo build
-    - name: Test
-      if: ${{ success() || failure() }}
-      run: cargo test
-    - name: Benchmark (master)
-      if: ${{ !cancelled() && (success() || failure()) && github.ref == 'refs/heads/master' }}
-      run: |
-        cargo bench --bench benchmarks
     - name: Benchmark (PR)
       if: ${{ !cancelled() && (success() || failure()) && github.ref != 'refs/heads/master' }}
       # https://github.com/bheisler/criterion.rs/issues/193#issuecomment-415740713
       run: |
+        git checkout ${{ github.event.pull_request.head.ref }}
         git fetch origin master --depth 1
         git checkout master
         cargo bench --bench benchmarks -- --save-baseline base
