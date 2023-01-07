@@ -36,8 +36,8 @@ pub fn dijkstra(g: &dyn Digraph) -> Vec<f64> {
         //   to see if a route via v is shorter than the current shortest path
         for adjacency in g.adj(v).iter() {
             let alt = dist_to[v] + adjacency.weight;
-            if alt < dist_to[adjacency.to] {
-                dist_to[adjacency.to] = alt;
+            if alt < dist_to[adjacency.node_data.node_index] {
+                dist_to[adjacency.node_data.node_index] = alt;
             }
         }
     }
@@ -63,10 +63,10 @@ pub fn dijkstra2(g: &dyn Digraph) -> Vec<f64> {
         //   to see if a route via v is shorter than the current shortest path
         for adjacency in g.adj(v).iter() {
             let alt = dist_to[v] + adjacency.weight;
-            if alt < dist_to[adjacency.to] {
+            if alt < dist_to[adjacency.node_data.node_index] {
                 // Add adjacent node to queue
-                queue.push(alt, adjacency.to);
-                dist_to[adjacency.to] = alt;
+                queue.push(alt, adjacency.node_data.node_index);
+                dist_to[adjacency.node_data.node_index] = alt;
             }
         }
     }
