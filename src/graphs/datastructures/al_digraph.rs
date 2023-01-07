@@ -53,7 +53,18 @@ impl Digraph for ALDigraph {
         self.num_vertices
     }
 
-    fn add_node_data(&mut self, node_id: usize, longitude: f64, latitude: f64) {}
+    fn add_node_data(&mut self, node_id: usize, longitude: f64, latitude: f64) {
+        self.node_data.insert(
+            node_id,
+            NodeData {
+                // node_index: self.current_node_index,
+                node_index: node_id,
+                longitude,
+                latitude,
+            },
+        );
+        // self.current_node_index += 1;
+    }
 
     fn add_edge(&mut self, from: usize, to: usize, weight: f64) {
         let e = ALDigraphEdge { to, weight };
@@ -79,11 +90,7 @@ impl Digraph for ALDigraph {
         panic!("Node not connected!")
     }
 
-    fn get_node_data(&self, node_id: usize) -> NodeData {
-        NodeData {
-            node_index: node_id,
-            longitude: 0.0,
-            latitude: 0.0,
-        }
+    fn get_node_data(&self, node_id: usize) -> &NodeData {
+        self.node_data.get(&node_id).unwrap()
     }
 }
