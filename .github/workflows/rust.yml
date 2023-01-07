@@ -38,7 +38,7 @@ jobs:
       if: ${{ !cancelled() && (success() || failure()) && github.ref != 'refs/heads/master' }}
       # https://github.com/bheisler/criterion.rs/issues/193#issuecomment-415740713
       run: |
-        git checkout ${{ GITHUB_BASE_REF }}
+        git checkout $env:GITHUB_BASE_REF
         cargo bench --bench benchmarks -- --save-baseline base
-        git checkout ${{ GITHUB_HEAD_REF }}
+        git checkout $env:GITHUB_HEAD_REF
         cargo bench --bench benchmarks -- --baseline base
