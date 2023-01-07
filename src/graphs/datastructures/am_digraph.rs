@@ -53,7 +53,8 @@ impl Digraph for AMDigraph {
     }
 
     fn add_node_data(&mut self, node_id: usize, longitude: f64, latitude: f64) {
-        self.node_id_index_lookup.insert(node_id, self.current_node_index);
+        self.node_id_index_lookup
+            .insert(node_id, self.current_node_index);
         self.current_node_index += 1;
         self.node_data.insert(
             self.node_id_index_lookup[&node_id],
@@ -77,17 +78,14 @@ impl Digraph for AMDigraph {
         self.distance_matrix[node_index]
             .iter()
             .enumerate()
-            .map(|(to, weight)| {
-                DigraphAdjacency {
-                    node_index: to,
-                    weight: *weight,
-                }
+            .map(|(to, weight)| DigraphAdjacency {
+                node_index: to,
+                weight: *weight,
             })
             .collect()
     }
 
     fn dist(&self, from_index: usize, to_index: usize) -> f64 {
-        self.distance_matrix[from_index]
-            [to_index]
+        self.distance_matrix[from_index][to_index]
     }
 }

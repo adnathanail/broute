@@ -56,7 +56,8 @@ impl Digraph for ALDigraph {
     }
 
     fn add_node_data(&mut self, node_id: usize, longitude: f64, latitude: f64) {
-        self.node_id_index_lookup.insert(node_id, self.current_node_index);
+        self.node_id_index_lookup
+            .insert(node_id, self.current_node_index);
         self.current_node_index += 1;
         self.node_data.insert(
             self.node_id_index_lookup[&node_id],
@@ -82,11 +83,9 @@ impl Digraph for ALDigraph {
     fn adj(&self, node_index: usize) -> Vec<DigraphAdjacency> {
         self.adjacency_lists[node_index]
             .iter()
-            .map(|edge| {
-                DigraphAdjacency {
-                    node_index: edge.to,
-                    weight: edge.weight,
-                }
+            .map(|edge| DigraphAdjacency {
+                node_index: edge.to,
+                weight: edge.weight,
             })
             .collect()
     }
