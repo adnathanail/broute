@@ -42,9 +42,11 @@ jobs:
         git checkout master
         cargo bench --bench benchmarks -- --save-baseline base
         git checkout refs/remotes/pull/${{ github.event.pull_request.number }}/merge
-        echo "_(execution **${{ github.run_id }}** / attempt **${{ github.run_attempt }}**)_" > benchmark_output.txt
-        echo \`\`\` >> benchmark_output.txt
         cargo bench --bench benchmarks -- --baseline base | tee benchmark_output.txt
+        echo "_(execution **${{ github.run_id }}** / attempt **${{ github.run_attempt }}**)_" > temp
+        echo \`\`\` >> temp
+        cat benchmark_output.txt > temp
+        mv temp benchmark_output.txt
         echo \`\`\` >> benchmark_output.txt
         cat benchmark_output.txt
     - name: PR comment with file
