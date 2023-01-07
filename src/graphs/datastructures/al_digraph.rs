@@ -1,4 +1,4 @@
-use crate::graphs::datastructures::digraph::{Digraph, DigraphAdjacency};
+use crate::graphs::datastructures::digraph::{Digraph, DigraphAdjacency, NodeData};
 use std::fmt;
 
 #[derive(Clone, Debug)]
@@ -36,20 +36,20 @@ impl fmt::Display for ALDigraph {
 
 impl ALDigraph {
     pub fn new(num_vertices: usize) -> Self {
-        let mut out = Self {
+        Self {
             num_vertices,
-            adjacency_lists: vec![],
-        };
-        for _ in 0..num_vertices {
-            out.adjacency_lists.push(vec![]);
+            adjacency_lists: vec![Vec::new(); num_vertices]
         }
-        out
     }
 }
 
 impl Digraph for ALDigraph {
     fn num_vertices(&self) -> usize {
         self.num_vertices
+    }
+
+    fn add_node_data(&mut self, node_id: usize, longitude: f64, latitude: f64) {
+
     }
 
     fn add_edge(&mut self, from: usize, to: usize, weight: f64) {
@@ -61,7 +61,11 @@ impl Digraph for ALDigraph {
         self.adjacency_lists[node_number]
             .iter()
             .map(|edge| DigraphAdjacency {
-                to: edge.to,
+                node_data: NodeData {
+                    node_index: edge.to,
+                    longitude: 0.0,
+                    latitude: 0.0,
+                },
                 weight: edge.weight,
             })
             .collect()
@@ -69,10 +73,18 @@ impl Digraph for ALDigraph {
 
     fn dist(&self, from_node: usize, to_node: usize) -> f64 {
         for u in self.adj(from_node) {
-            if u.to == to_node {
+            if u.node_data.node_index == to_node {
                 return u.weight;
             }
         }
         panic!("Node not connected!")
+    }
+
+    fn get_node_data(&self, node_id: usize) -> NodeData {
+        NodeData {
+            node_index: node_id,
+            longitude: 0.0,
+            latitude: 0.0,
+        }
     }
 }
