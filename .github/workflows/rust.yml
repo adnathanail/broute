@@ -22,29 +22,27 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Dump GitHub context
-      env:
-        GITHUB_CONTEXT: ${{ toJSON(github) }}
-      run: echo "$GITHUB_CONTEXT"
-    - name: test
-      run: |
-        git show-ref
     - name: Install rust
       run: rustup toolchain install stable --profile minimal
     - name: Cache cargo dependencies
       uses: Swatinem/rust-cache@v2
+    - name: Lint
+      run: cargo clippy --all-targets --all-features -- -D warnings
+    - name: Build
+      if: ${{ success() || failure() }}
+      run: cargo build
+    - name: Test
+      if: ${{ success() || failure() }}
+      run: cargo test
     - name: Benchmark (PR)
       if: ${{ (success() || failure()) && github.event.pull_request }}
       # https://github.com/bheisler/criterion.rs/issues/193#issuecomment-415740713
       run: |
-        git checkout refs/remotes/pull/${{ github.event.pull_request.number }}/merge
         git fetch origin master --depth 1
         git checkout master
         cargo bench --bench benchmarks -- --save-baseline base
         git checkout refs/remotes/pull/${{ github.event.pull_request.number }}/merge
         cargo bench --bench benchmarks -- --baseline base | tee benchmark_output.txt
-        pwd
-        ls
     - name: PR comment with file
       if: ${{ github.event.pull_request }}
       uses: thollander/actions-comment-pull-request@v2
