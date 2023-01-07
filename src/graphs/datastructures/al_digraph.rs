@@ -60,8 +60,6 @@ impl Digraph for ALDigraph {
             .iter()
             .map(|edge| DigraphAdjacency {
                 node_index: edge.to,
-                node_longitude: 0.0,
-                node_latitude: 0.0,
                 weight: edge.weight,
             })
             .collect()

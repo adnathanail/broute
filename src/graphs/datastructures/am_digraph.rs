@@ -57,8 +57,6 @@ impl Digraph for AMDigraph {
             .enumerate()
             .map(|(to, weight)| DigraphAdjacency {
                 node_index: to,
-                node_longitude: 0.0,
-                node_latitude: 0.0,
                 weight: *weight,
             })
             .collect()
