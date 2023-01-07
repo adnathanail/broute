@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use crate::graphs::datastructures::digraph::{Digraph, DigraphAdjacency, NodeData};
 use std::fmt;
 
@@ -11,6 +12,8 @@ struct ALDigraphEdge {
 pub struct ALDigraph {
     num_vertices: usize,
     adjacency_lists: Vec<Vec<ALDigraphEdge>>,
+    current_node_index: usize,
+    node_data: HashMap<usize, NodeData>,
 }
 
 impl fmt::Display for ALDigraph {
@@ -39,6 +42,8 @@ impl ALDigraph {
         Self {
             num_vertices,
             adjacency_lists: vec![Vec::new(); num_vertices],
+            current_node_index: 0,
+            node_data: HashMap::new(),
         }
     }
 }

@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use crate::graphs::datastructures::digraph::{Digraph, DigraphAdjacency, NodeData};
 use std::fmt;
 
@@ -8,6 +9,8 @@ pub struct AMDigraph {
     // The only way to create a Graph object, is using the constructor defined below
     num_vertices: usize,
     distance_matrix: Vec<Vec<f64>>,
+    current_node_index: usize,
+    node_data: HashMap<usize, NodeData>,
 }
 
 impl fmt::Display for AMDigraph {
@@ -36,6 +39,8 @@ impl AMDigraph {
         Self {
             num_vertices,
             distance_matrix: vec![vec![f64::MAX; num_vertices]; num_vertices],
+            current_node_index: 0,
+            node_data: HashMap::new(),
         }
     }
 }
