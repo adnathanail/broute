@@ -79,11 +79,7 @@ impl Digraph for ALDigraph {
             .map(|edge| {
                 let nd: &NodeData = self.node_data.get(&edge.to).unwrap();
                 DigraphAdjacency {
-                    node_data: NodeData {
-                        node_index: nd.node_index,
-                        longitude: nd.longitude,
-                        latitude: nd.latitude,
-                    },
+                    node_index: nd.node_index,
                     weight: edge.weight,
                 }
             })
@@ -92,7 +88,7 @@ impl Digraph for ALDigraph {
 
     fn dist(&self, from_id: usize, to_id: usize) -> f64 {
         for u in self.adj(self.node_data.get(&from_id).unwrap().node_index) {
-            if u.node_data.node_index == self.node_data.get(&to_id).unwrap().node_index {
+            if u.node_index == self.node_data.get(&to_id).unwrap().node_index {
                 return u.weight;
             }
         }

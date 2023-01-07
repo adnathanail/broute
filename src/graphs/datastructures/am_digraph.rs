@@ -74,11 +74,7 @@ impl Digraph for AMDigraph {
             .map(|(to, weight)| {
                 let nd: &NodeData = self.node_data.get(&to).unwrap();
                 DigraphAdjacency {
-                    node_data: NodeData {
-                        node_index: nd.node_index,
-                        longitude: nd.longitude,
-                        latitude: nd.latitude,
-                    },
+                    node_index: nd.node_index,
                     weight: *weight,
                 }
             })
