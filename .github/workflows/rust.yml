@@ -34,7 +34,7 @@ jobs:
       if: ${{ !cancelled() && (success() || failure()) && github.ref != 'refs/heads/master' }}
       # https://github.com/bheisler/criterion.rs/issues/193#issuecomment-415740713
       run: |
-        git checkout ${{ github.event.pull_request.head.ref }}
+        git checkout ${{ github.ref }}
         git fetch origin master --depth 1
         git checkout master
         cargo bench --bench benchmarks -- --save-baseline base
