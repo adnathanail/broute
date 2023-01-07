@@ -1,4 +1,4 @@
-use crate::graphs::datastructures::digraph::{Digraph, DigraphAdjacency};
+use crate::graphs::datastructures::digraph::{Digraph, DigraphAdjacency, NodeData};
 use std::fmt;
 
 #[derive(Debug)]
@@ -45,6 +45,10 @@ impl Digraph for AMDigraph {
         self.num_vertices
     }
 
+    fn add_node_data(&mut self, node_id: usize, longitude: f64, latitude: f64) {
+
+    }
+
     fn add_edge(&mut self, from: usize, to: usize, weight: f64) {
         self.distance_matrix[from][to] = weight;
     }
@@ -53,11 +57,26 @@ impl Digraph for AMDigraph {
         self.distance_matrix[node_number]
             .iter()
             .enumerate()
-            .map(|(to, weight)| DigraphAdjacency::new(to, *weight))
+            .map(|(to, weight)| DigraphAdjacency {
+                node_data: NodeData {
+                    node_index: to,
+                    longitude: 0.0,
+                    latitude: 0.0,
+                },
+                weight: *weight,
+            })
             .collect()
     }
 
     fn dist(&self, from_node: usize, to_node: usize) -> f64 {
         self.distance_matrix[from_node][to_node]
+    }
+
+    fn get_node_data(&self, node_id: usize) -> NodeData {
+        NodeData {
+            node_index: node_id,
+            longitude: 0.0,
+            latitude: 0.0,
+        }
     }
 }
