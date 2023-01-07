@@ -2,10 +2,11 @@ name: Lint, build, & test
 
 on: [ push ]
 
-concurrency: # Cancel if I push to the same branch
+concurrency:
+  # Cancel if I push to the same branch
+  cancel-in-progress: true
   # Don't cancel on master
   group: ${{ github.ref == 'refs/heads/master' && format('ci-master-{0}', github.sha) || format('ci-{0}', github.ref) }}
-  cancel-in-progress: true
 
 env:
   CARGO_TERM_COLOR: always
@@ -19,14 +20,15 @@ jobs:
     - uses: actions/checkout@v3
     - name: Install rust
       run: rustup toolchain install stable --profile minimal
-    - uses: Swatinem/rust-cache@v2
+    - name: Cache cargo dependencies
+      uses: Swatinem/rust-cache@v2
     - name: Lint
       run: cargo clippy --all-targets --all-features -- -D warnings
     - name: Build
-      if: ${{ !cancelled() && (success() || failure()) }}
+      if: ${{ success() || failure() }}
       run: cargo build
     - name: Test
-      if: ${{ !cancelled() && (success() || failure()) }}
+      if: ${{ success() || failure() }}
       run: cargo test
     - name: Benchmark (master)
       if: ${{ !cancelled() && (success() || failure()) && github.ref == 'refs/heads/master' }}
