@@ -30,4 +30,8 @@ jobs:
       run: cargo test --verbose
     - name: Benchmark
       if: ${{ always() }}
-      run: cargo bench
+      run: |
+        git checkout ${{ github.event.pull_request.base.sha }}
+        cargo bench -- --save-baseline base
+        git checkout ${{ github.event.pull_request.head.sha }}
+        cargo bench -- --baseline base
