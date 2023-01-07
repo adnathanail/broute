@@ -50,17 +50,17 @@ impl Digraph for AMDigraph {
         self.num_vertices
     }
 
-    fn add_node_data(&mut self, node_index: usize, longitude: f64, latitude: f64) {
-        self.node_data.insert(self.current_node_index, NodeData { node_index, longitude, latitude });
+    fn add_node_data(&mut self, node_id: usize, longitude: f64, latitude: f64) {
+        self.node_data.insert(node_id, NodeData { node_index: self.current_node_index, longitude, latitude });
         self.current_node_index += 1;
     }
 
-    fn add_edge(&mut self, from: usize, to: usize, weight: f64) {
-        self.distance_matrix[self.node_data.get(&from).unwrap().node_index][self.node_data.get(&to).unwrap().node_index] = weight;
+    fn add_edge(&mut self, from_id: usize, to_id: usize, weight: f64) {
+        self.distance_matrix[self.node_data.get(&from_id).unwrap().node_index][self.node_data.get(&to_id).unwrap().node_index] = weight;
     }
 
-    fn adj(&self, node_number: usize) -> Vec<DigraphAdjacency> {
-        self.distance_matrix[node_number]
+    fn adj(&self, node_id: usize) -> Vec<DigraphAdjacency> {
+        self.distance_matrix[node_id]
             .iter()
             .enumerate()
             .map(|(to, weight)| {
@@ -70,11 +70,11 @@ impl Digraph for AMDigraph {
             .collect()
     }
 
-    fn dist(&self, from_node: usize, to_node: usize) -> f64 {
-        self.distance_matrix[self.node_data.get(&from_node).unwrap().node_index][self.node_data.get(&to_node).unwrap().node_index]
+    fn dist(&self, from_id: usize, to_id: usize) -> f64 {
+        self.distance_matrix[self.node_data.get(&from_id).unwrap().node_index][self.node_data.get(&to_id).unwrap().node_index]
     }
 
-    fn get_node_data(&self, node_index: usize) -> &NodeData {
-        self.node_data.get(&node_index).unwrap()
+    fn get_node_data(&self, node_id: usize) -> &NodeData {
+        self.node_data.get(&node_id).unwrap()
     }
 }
