@@ -88,7 +88,8 @@ pub fn travelling_salesman(g: &dyn Digraph, output_graph: bool) -> GraphPath {
 
     if output_graph {
         // We create our scatter plot from the data
-        let s1: Plot = Plot::new(result_data.clone()).line_style(LineStyle::new().colour("#DD3355"));
+        let s1: Plot =
+            Plot::new(result_data.clone()).line_style(LineStyle::new().colour("#DD3355"));
 
         // The 'view' describes what set of data is drawn
         let v = ContinuousView::new()
