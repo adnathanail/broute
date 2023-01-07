@@ -48,6 +48,10 @@ pub fn load_tsplib_file(input_data: String, num_nodes: usize) -> AMDigraph {
     }
 
     for i in 0..actual_num_nodes {
+        g.add_node_data(i, coords[i].0 as f64, coords[i].1 as f64);
+    }
+
+    for i in 0..actual_num_nodes {
         for j in 0..actual_num_nodes {
             if coords[i].0 != coords[j].0 {
                 let dx = coords[j].1 - coords[i].1;
