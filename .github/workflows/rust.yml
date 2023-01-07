@@ -21,6 +21,14 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: Wipe benchmark comment
+      if: ${{ (success() || failure()) && github.event.pull_request }}
+      uses: thollander/actions-comment-pull-request@v2
+      with:
+        message: |
+          _(execution **${{ github.run_id }}** / attempt **${{ github.run_attempt }}**)_
+          Awaiting PR run
+        comment_tag: benchmark_output
     - uses: actions/checkout@v3
     - name: Install rust
       run: rustup toolchain install stable --profile minimal
@@ -49,7 +57,7 @@ jobs:
         mv temp benchmark_output.txt
         echo \`\`\` >> benchmark_output.txt
         cat benchmark_output.txt
-    - name: PR comment with file
+    - name: Replace benchmark comment
       if: ${{ (success() || failure()) && github.event.pull_request }}
       uses: thollander/actions-comment-pull-request@v2
       with:
