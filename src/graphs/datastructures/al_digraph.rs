@@ -12,7 +12,6 @@ struct ALDigraphEdge {
 pub struct ALDigraph {
     num_vertices: usize,
     adjacency_lists: Vec<Vec<ALDigraphEdge>>,
-    current_node_index: usize,
     node_data: HashMap<usize, NodeData>,
 }
 
@@ -42,7 +41,6 @@ impl ALDigraph {
         Self {
             num_vertices,
             adjacency_lists: vec![Vec::new(); num_vertices],
-            current_node_index: 0,
             node_data: HashMap::new(),
         }
     }
@@ -57,13 +55,11 @@ impl Digraph for ALDigraph {
         self.node_data.insert(
             node_id,
             NodeData {
-                // node_index: self.current_node_index,
                 node_index: node_id,
                 longitude,
                 latitude,
             },
         );
-        // self.current_node_index += 1;
     }
 
     fn add_edge(&mut self, from: usize, to: usize, weight: f64) {
