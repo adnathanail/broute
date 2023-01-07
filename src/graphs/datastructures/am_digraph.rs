@@ -60,12 +60,19 @@ impl Digraph for AMDigraph {
     }
 
     fn adj(&self, node_id: usize) -> Vec<DigraphAdjacency> {
-        self.distance_matrix[node_id]
+        self.distance_matrix[self.node_data.get(&node_id).unwrap().node_index]
             .iter()
             .enumerate()
             .map(|(to, weight)| {
                 let nd: &NodeData = self.node_data.get(&to).unwrap();
-                DigraphAdjacency::new(nd.node_index, nd.longitude, nd.latitude, *weight)
+                DigraphAdjacency {
+                    node_data: NodeData {
+                        node_index: nd.node_index,
+                        longitude: nd.longitude,
+                        latitude: nd.latitude,
+                    },
+                    weight: *weight,
+                }
             })
             .collect()
     }
