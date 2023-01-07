@@ -18,7 +18,7 @@ fn main() {
 
     println!("Solving travelling salesman");
 
-    let path = travelling_salesman(&g);
+    let path = travelling_salesman(&g, true);
 
     println!("Final");
 
