@@ -1,4 +1,4 @@
-use std::{fs, time::Duration};
+use std::{time::Duration};
 
 use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion};
 
