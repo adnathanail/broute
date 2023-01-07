@@ -5,6 +5,10 @@ use crate::graphs::datastructures;
 fn dijkstra_test() {
     let mut g = datastructures::am_digraph::AMDigraph::new(8);
 
+    for i in 0..8 {
+        g.add_node_data(i, 0.0, 0.0);
+    }
+
     g.add_edge(0, 1, 5.0);
     g.add_edge(0, 4, 9.0);
     g.add_edge(0, 7, 8.0);

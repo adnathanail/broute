@@ -21,5 +21,5 @@ pub trait Digraph {
 
     fn dist(&self, from_id: usize, to_id: usize) -> f64;
 
-    fn get_node_data(&self, node_id: usize) -> NodeData;
+    fn get_node_data(&self, node_id: usize) -> &NodeData;
 }

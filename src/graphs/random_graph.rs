@@ -16,6 +16,10 @@ pub fn get_random_graph(
     let mut g = AMDigraph::new(num_nodes);
 
     for i in 0..num_nodes {
+        g.add_node_data(i, 0.0, 0.0)
+    }
+
+    for i in 0..num_nodes {
         for j in 0..num_nodes {
             if i != j && rng.gen::<f64>() > conn_prob {
                 let raw_weight = normal.sample(&mut rng);
