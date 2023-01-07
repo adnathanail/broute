@@ -45,7 +45,7 @@ jobs:
         cargo bench --bench benchmarks -- --baseline base | tee benchmark_output.txt
         echo "_(execution **${{ github.run_id }}** / attempt **${{ github.run_attempt }}**)_" > temp
         echo \`\`\` >> temp
-        cat benchmark_output.txt > temp
+        cat benchmark_output.txt >> temp
         mv temp benchmark_output.txt
         echo \`\`\` >> benchmark_output.txt
         cat benchmark_output.txt
