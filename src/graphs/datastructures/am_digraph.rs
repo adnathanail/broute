@@ -1,5 +1,5 @@
-use std::collections::HashMap;
 use crate::graphs::datastructures::digraph::{Digraph, DigraphAdjacency, NodeData};
+use std::collections::HashMap;
 use std::fmt;
 
 #[derive(Debug)]
