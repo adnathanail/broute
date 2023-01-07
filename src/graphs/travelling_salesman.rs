@@ -58,15 +58,15 @@ pub fn travelling_salesman(g: &dyn Digraph, output_graph: bool) -> GraphPath {
     best_path.path.shuffle(&mut rng);
     let mut path_length = get_path_length(g, &best_path);
 
-//     println!("Initial state");
+    //     println!("Initial state");
 
-//     println!("\t{:?}", best_path.path);
-//     println!("\t{}", path_length);
+    //     println!("\t{:?}", best_path.path);
+    //     println!("\t{}", path_length);
 
     let mut temp = f64::sqrt(g.num_vertices() as f64);
     let mut iterations = 0;
     while temp > 1e-8_f64 && iterations < (100 * g.num_vertices()) {
-//         println!("{}", temp);
+        //         println!("{}", temp);
         let potential_new_path = get_potential_new_path(&mut rng, g, &best_path);
 
         let new_path_length = get_path_length(g, &potential_new_path);
