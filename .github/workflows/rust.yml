@@ -23,18 +23,18 @@ jobs:
     - name: Lint
       run: cargo clippy --all-targets --all-features -- -D warnings
     - name: Build
-      if: ${{ always() }}
+      if: ${{ !cancelled() && (success() || failure()) }}
       run: cargo build
     - name: Test
-      if: ${{ always() }}
+      if: ${{ !cancelled() && (success() || failure()) }}
       run: cargo test
     - name: Benchmark (master)
-      if: ${{ always() && github.ref == 'refs/heads/master' }}
+      if: ${{ !cancelled() && (success() || failure()) && github.ref == 'refs/heads/master' }}
       # https://github.com/bheisler/criterion.rs/issues/193#issuecomment-415740713
       run: |
         cargo bench --bench benchmarks
     - name: Benchmark (PR)
-      if: ${{ always() && github.ref != 'refs/heads/master' }}
+      if: ${{ !cancelled() && (success() || failure()) && github.ref != 'refs/heads/master' }}
       # https://github.com/bheisler/criterion.rs/issues/193#issuecomment-415740713
       run: |
         git checkout ${{ github.event.pull_request.base.sha }}
