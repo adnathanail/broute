@@ -7,7 +7,7 @@ use rand::rngs::ThreadRng;
 use rand::seq::SliceRandom;
 use rand::{thread_rng, Rng};
 
-use super::datastructures::digraph::Digraph;
+use super::super::datastructures::digraph::Digraph;
 
 #[derive(Debug, Clone)]
 pub struct GraphPath {
