@@ -1,7 +1,4 @@
 pub mod datastructures;
-pub mod dijkstra;
+pub mod input;
 pub mod output;
-pub mod random_graph;
-pub mod searches;
-pub mod travelling_salesman;
-pub mod tsplib;
+pub mod algorithms;

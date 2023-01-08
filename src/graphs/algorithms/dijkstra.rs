@@ -1,4 +1,4 @@
-use super::super::algorithms::priority_queue::PriorityQueue;
+use super::super::super::algorithms::priority_queue::PriorityQueue;
 use crate::graphs::datastructures::digraph::{Digraph, NodeIndex};
 use std::collections::VecDeque;
 
