@@ -5,9 +5,9 @@ use std::fs;
 
 use broute::graphs::datastructures::digraph::{Digraph, NodeID};
 use broute::graphs::{
-    output::output_graph_to_file_with_path,
-    travelling_salesman::{get_path_length, travelling_salesman},
-    tsplib::load_tsplib_file,
+    output::graphviz::output_graph_to_file_with_path,
+    algorithms::travelling_salesman::{get_path_length, travelling_salesman},
+    input::tsplib::load_tsplib_file,
 };
 
 fn main() {
