@@ -15,9 +15,7 @@ fn main() {
 
     let dj_out = dijkstra(&g, *start_node_index);
 
-    let mut p = GraphPath {
-        path: vec![],
-    };
+    let mut p = GraphPath { path: vec![] };
     let mut current_node_index = end_node_index.0;
     while current_node_index != start_node_index.0 {
         p.path.push(NodeIndex(current_node_index));
