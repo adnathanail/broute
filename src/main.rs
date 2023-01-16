@@ -1,34 +1,29 @@
-// Stop the compiler warning about unused functions
-#![allow(dead_code)]
-
-use std::fs;
-
-use broute::graphs::datastructures::digraph::Digraph;
-use broute::graphs::{
-    algorithms::travelling_salesman::{get_path_length, travelling_salesman},
-    input::tsplib::load_tsplib_file,
-    output::graphviz::output_graph_to_file_with_path,
-};
+use broute::graphs::algorithms::dijkstra::dijkstra;
+use broute::graphs::algorithms::travelling_salesman::GraphPath;
+use broute::graphs::datastructures::digraph::{Digraph, NodeID, NodeIndex};
+use broute::graphs::input::pbf::load_pbf_file;
+use broute::graphs::output::svg::to_svg;
 
 fn main() {
-    let tsp_string = fs::read_to_string("test_data/dimacs_tsp/d1291.tsp").unwrap();
+    let g = load_pbf_file("test_data/geofabrik/house.osm.pbf");
 
-    println!("Reading file");
+    println!("{:?}", g.nodes_data().get_node_ids());
+    let start_node_id = NodeID(18446744073709413158);
+    let start_node_index = g.nodes_data().get_node_index_by_id(&start_node_id);
+    let end_node_id = NodeID(18446744073709413159);
+    let end_node_index = g.nodes_data().get_node_index_by_id(&end_node_id);
 
-    let g = load_tsplib_file(tsp_string, usize::MAX);
+    let dj_out = dijkstra(&g, *start_node_index);
 
-    println!("Solving travelling salesman");
+    let mut p = GraphPath {
+        path: vec![],
+    };
+    let mut current_node_index = end_node_index.0;
+    while current_node_index != start_node_index.0 {
+        p.path.push(NodeIndex(current_node_index));
+        current_node_index = dj_out.1[current_node_index].unwrap();
+    }
+    p.path.push(NodeIndex(current_node_index));
 
-    let path = travelling_salesman(&g, true);
-
-    println!("Final");
-
-    println!("\t{:?}", path.path);
-    println!("\t{}", get_path_length(&g, &path));
-    path.path.iter().for_each(|x| {
-        println!("\t{:?}", g.nodes_data().get_node_data_by_index(*x));
-    });
-    output_graph_to_file_with_path(&g, &path, "out/path_final.svg".to_string());
-
-    println!("Done!");
+    to_svg(&g, &p, "out/paths/test3.svg");
 }
