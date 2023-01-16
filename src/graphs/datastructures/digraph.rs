@@ -41,13 +41,21 @@ impl NodesData {
         );
     }
 
-    pub fn get_node_data(&self, node_id: NodeID) -> &NodeData {
+    fn get_node_ids(&self) -> Vec<NodeID> {
+        // Return the list of node ids
+        self.node_id_index_lookup.keys().cloned().collect()
+    }
+    pub fn get_node_data_by_id(&self, node_id: NodeID) -> &NodeData {
         self.node_data
             .get(self.node_id_index_lookup.get(&node_id).unwrap())
             .unwrap()
     }
 
-    pub fn get_index_by_id(&self, node_id: &NodeID) -> &NodeIndex {
+    fn get_node_data_by_index(&self, node_index: NodeIndex) -> &NodeData {
+        self.node_data.get(&node_index).unwrap()
+    }
+
+    pub fn get_node_index_by_id(&self, node_id: &NodeID) -> &NodeIndex {
         self.node_id_index_lookup.get(node_id).unwrap()
     }
 }

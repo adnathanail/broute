@@ -53,10 +53,10 @@ impl Digraph for ALDigraph {
 
     fn add_edge(&mut self, from_id: NodeID, to_id: NodeID, weight: f64) {
         let e = ALDigraphEdge {
-            to: *self.nodes_data.get_index_by_id(&to_id),
+            to: *self.nodes_data.get_node_index_by_id(&to_id),
             weight,
         };
-        self.adjacency_lists[self.nodes_data.get_index_by_id(&from_id).0].push(e);
+        self.adjacency_lists[self.nodes_data.get_node_index_by_id(&from_id).0].push(e);
     }
 
     fn adj(&self, node_index: NodeIndex) -> Vec<DigraphAdjacency> {

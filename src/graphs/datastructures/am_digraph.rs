@@ -49,8 +49,8 @@ impl Digraph for AMDigraph {
     }
 
     fn add_edge(&mut self, from_id: NodeID, to_id: NodeID, weight: f64) {
-        self.distance_matrix[self.nodes_data.get_index_by_id(&from_id).0]
-            [self.nodes_data.get_index_by_id(&to_id).0] = weight;
+        self.distance_matrix[self.nodes_data.get_node_index_by_id(&from_id).0]
+            [self.nodes_data.get_node_index_by_id(&to_id).0] = weight;
     }
 
     fn adj(&self, node_index: NodeIndex) -> Vec<DigraphAdjacency> {
