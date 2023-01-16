@@ -15,7 +15,7 @@ fn dijkstra_benchmark(c: &mut Criterion) {
         })
     });
     group.bench_with_input(BenchmarkId::new("v2", &g), &g, |b, g| {
-        b.iter(|| graphs::algorithms::dijkstra::dijkstra2(g))
+        b.iter(|| graphs::algorithms::dijkstra::dijkstra2(g, graphs::datastructures::digraph::NodeIndex(0)))
     });
 
     group.finish();
@@ -31,7 +31,7 @@ fn dijkstra_benchmark(c: &mut Criterion) {
         })
     });
     group.bench_with_input(BenchmarkId::new("v2", &g), &g, |b, g| {
-        b.iter(|| graphs::algorithms::dijkstra::dijkstra2(g))
+        b.iter(|| graphs::algorithms::dijkstra::dijkstra2(g, graphs::datastructures::digraph::NodeIndex(0)))
     });
 
     group.finish();
