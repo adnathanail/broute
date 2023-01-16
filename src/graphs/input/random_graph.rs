@@ -17,7 +17,7 @@ pub fn get_random_graph(
     let mut g = AMDigraph::new(num_nodes);
 
     for i in 0..num_nodes {
-        g.add_node_data(NodeID(i), 0.0, 0.0)
+        g.mut_nodes_data().add_node_data(NodeID(i), 0.0, 0.0)
     }
 
     for i in 0..num_nodes {
