@@ -48,10 +48,10 @@ pub fn dijkstra(g: &dyn Digraph, from_node: NodeIndex) -> (Vec<f64>, Vec<Option<
     (dist_to, parent)
 }
 
-pub fn dijkstra2(g: &dyn Digraph) -> Vec<f64> {
+pub fn dijkstra2(g: &dyn Digraph, from_node: NodeIndex) -> Vec<f64> {
     // Initialise all distances to infinity
     let mut dist_to = vec![f64::INFINITY; g.num_vertices()];
-    dist_to[0] = 0.0;
+    dist_to[from_node.0] = 0.0;
     // Add first vertex to queue
     let mut queue = PriorityQueue::new();
     queue.push(0.0, 0);
