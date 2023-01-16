@@ -6,10 +6,12 @@ use std::collections::VecDeque;
 #[path = "dijkstra_tests.rs"]
 mod dijkstra_tests;
 
-pub fn dijkstra(g: &dyn Digraph) -> Vec<f64> {
+pub fn dijkstra(g: &dyn Digraph, from_node: NodeIndex) -> (Vec<f64>, Vec<Option<usize>>) {
     // Initialise all distances to infinity
     let mut dist_to = vec![f64::INFINITY; g.num_vertices()];
-    dist_to[0] = 0.0;
+    dist_to[from_node.0] = 0.0;
+    // Initialise all parents to none
+    let mut parent = vec![None; g.num_vertices()];
     // Add all vertices to queue
     let mut queue = VecDeque::new();
     for v in 0..g.num_vertices() {
@@ -26,6 +28,7 @@ pub fn dijkstra(g: &dyn Digraph) -> Vec<f64> {
                 node_with_min_distance = *i;
             }
         }
+
         // Take closest node, v, from queue
         let min_index = queue
             .iter()
@@ -38,10 +41,11 @@ pub fn dijkstra(g: &dyn Digraph) -> Vec<f64> {
             let alt = dist_to[v] + adjacency.weight;
             if alt < dist_to[adjacency.node_index.0] {
                 dist_to[adjacency.node_index.0] = alt;
+                parent[adjacency.node_index.0] = Some(v);
             }
         }
     }
-    dist_to
+    (dist_to, parent)
 }
 
 pub fn dijkstra2(g: &dyn Digraph) -> Vec<f64> {

@@ -80,6 +80,7 @@ dependencies = [
  "plotlib",
  "rand",
  "rand_distr",
+ "svg 0.13.0",
  "tsplib",
 ]
 
@@ -644,7 +645,7 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9462104f987d8d0f6625f0c7764f1c8b890bd1dc8584d8293e031f25c5a0d242"
 dependencies = [
  "failure",
- "svg",
+ "svg 0.7.2",
 ]
 
 [[package]]
@@ -908,6 +909,12 @@ name = "svg"
 version = "0.7.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3685c82a045a6af0c488f0550b0f52b4c77d2a52b0ca8aba719f9d268fa96965"
+
+[[package]]
+name = "svg"
+version = "0.13.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e715e0c3fc987f4c435dc7189641fd9caa6919a74675ace605c38e201d278001"
 
 [[package]]
 name = "syn"
