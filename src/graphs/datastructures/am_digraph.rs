@@ -1,4 +1,6 @@
-use crate::graphs::datastructures::digraph::{Digraph, DigraphAdjacency, NodeID, NodeIndex, NodesData};
+use crate::graphs::datastructures::digraph::{
+    Digraph, DigraphAdjacency, NodeID, NodeIndex, NodesData,
+};
 use std::fmt;
 
 #[derive(Debug)]
@@ -72,6 +74,6 @@ impl Digraph for AMDigraph {
     }
 
     fn mut_nodes_data(&mut self) -> &mut NodesData {
-        & mut self.nodes_data
+        &mut self.nodes_data
     }
 }
