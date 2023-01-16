@@ -26,7 +26,7 @@ fn main() {
     println!("\t{:?}", path.path);
     println!("\t{}", get_path_length(&g, &path));
     path.path.iter().for_each(|x| {
-        println!("\t{:?}", g.nodes_data().get_node_data(NodeID(*x)));
+        println!("\t{:?}", g.nodes_data().get_node_data_by_id(NodeID(*x)));
     });
     output_graph_to_file_with_path(&g, &path, "out/path_final.svg".to_string());
 
