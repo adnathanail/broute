@@ -28,7 +28,9 @@ pub fn dijkstra(g: &dyn Digraph, from_node: NodeIndex) -> (Vec<f64>, Vec<Option<
                 node_with_min_distance = *i;
             }
         }
-
+        if node_with_min_distance == usize::MAX {
+            panic!("Couldn't get node_with_min_distance")
+        }
         // Take closest node, v, from queue
         let min_index = queue
             .iter()
