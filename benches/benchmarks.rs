@@ -10,7 +10,9 @@ fn dijkstra_benchmark(c: &mut Criterion) {
     let mut group = c.benchmark_group("Dijkstra (random graph)");
 
     group.bench_with_input(BenchmarkId::new("v1", &g), &g, |b, g| {
-        b.iter(|| graphs::algorithms::dijkstra::dijkstra(g, graphs::datastructures::digraph::NodeIndex(0)))
+        b.iter(|| {
+            graphs::algorithms::dijkstra::dijkstra(g, graphs::datastructures::digraph::NodeIndex(0))
+        })
     });
     group.bench_with_input(BenchmarkId::new("v2", &g), &g, |b, g| {
         b.iter(|| graphs::algorithms::dijkstra::dijkstra2(g))
@@ -24,7 +26,9 @@ fn dijkstra_benchmark(c: &mut Criterion) {
     let mut group = c.benchmark_group("Dijkstra (DIMCAS d1291)");
 
     group.bench_with_input(BenchmarkId::new("v1", &g), &g, |b, g| {
-        b.iter(|| graphs::algorithms::dijkstra::dijkstra(g, graphs::datastructures::digraph::NodeIndex(0)))
+        b.iter(|| {
+            graphs::algorithms::dijkstra::dijkstra(g, graphs::datastructures::digraph::NodeIndex(0))
+        })
     });
     group.bench_with_input(BenchmarkId::new("v2", &g), &g, |b, g| {
         b.iter(|| graphs::algorithms::dijkstra::dijkstra2(g))
