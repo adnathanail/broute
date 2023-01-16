@@ -45,9 +45,9 @@ fn path_to_graphviz_body(g: &dyn Digraph, path: &GraphPath) -> GraphStringBody {
         .map(|i| {
             format!(
                 "{} -> {}[headlabel=\"{}\", color=\"red\"]",
-                path.path[i],
-                path.path[i + 1],
-                g.dist(NodeIndex(path.path[i]), NodeIndex(path.path[i + 1]))
+                path.path[i].0,
+                path.path[i + 1].0,
+                g.dist(path.path[i], path.path[i + 1])
             )
         })
         .collect();

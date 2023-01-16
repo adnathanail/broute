@@ -11,7 +11,7 @@ use super::super::datastructures::digraph::Digraph;
 
 #[derive(Debug, Clone)]
 pub struct GraphPath {
-    pub path: Vec<usize>,
+    pub path: Vec<NodeIndex>,
 }
 
 fn get_potential_new_path(
@@ -54,7 +54,7 @@ pub fn travelling_salesman(g: &dyn Digraph, output_graph: bool) -> GraphPath {
     let mut rng = thread_rng();
 
     let mut best_path = GraphPath {
-        path: (0..g.num_vertices()).collect(),
+        path: (0..g.num_vertices()).map(NodeIndex).collect(),
     };
     best_path.path.shuffle(&mut rng);
     let mut path_length = get_path_length(g, &best_path);
@@ -108,6 +108,6 @@ pub fn travelling_salesman(g: &dyn Digraph, output_graph: bool) -> GraphPath {
 
 pub fn get_path_length(g: &dyn Digraph, path: &GraphPath) -> f64 {
     (0..(path.path.len() - 1)).fold(0f64, |total, i| {
-        total + g.dist(NodeIndex(path.path[i]), NodeIndex(path.path[i + 1]))
+        total + g.dist(path.path[i], path.path[i + 1])
     })
 }

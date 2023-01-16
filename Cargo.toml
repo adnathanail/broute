@@ -6,13 +6,22 @@ edition = "2021"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+# Benchmarking
 criterion = { version = "0.3.6", features = ["html_reports"] }
+# Random numbers
 rand = "0.8.5"
+# Random distributions
 rand_distr = "0.4.3"
+# Reading OpenStreetMap files
 osmpbf = "0.2"
+# Reading TSPLIB files (academic travelling salesman format)
 tsplib = "0.1.0"
+# Outputting to GraphViz graphs
 graphviz-rust = "0.4.0"
+# Outputting to charts
 plotlib = "0.5.1"
+# Outputting to drawn images
+svg = "0.13.0"
 
 [[bench]]
 name = "benchmarks"
