@@ -1,6 +1,4 @@
-use crate::graphs::datastructures::digraph::{
-    Digraph, DigraphAdjacency, NodeData, NodeID, NodeIndex,
-};
+use crate::graphs::datastructures::digraph::{Digraph, DigraphAdjacency, NodeData, NodeID, NodeIndex, NodesData};
 use std::collections::HashMap;
 use std::fmt;
 
@@ -11,9 +9,7 @@ pub struct AMDigraph {
     // The only way to create a Graph object, is using the constructor defined below
     num_vertices: usize,
     distance_matrix: Vec<Vec<f64>>,
-    node_data: HashMap<NodeIndex, NodeData>,
-    node_id_index_lookup: HashMap<NodeID, NodeIndex>,
-    current_node_index: NodeIndex,
+    nodes_data: NodesData,
 }
 
 impl fmt::Display for AMDigraph {
@@ -42,9 +38,7 @@ impl AMDigraph {
         Self {
             num_vertices,
             distance_matrix: vec![vec![f64::MAX; num_vertices]; num_vertices],
-            node_data: HashMap::new(),
-            node_id_index_lookup: HashMap::new(),
-            current_node_index: NodeIndex(0),
+            nodes_data: NodesData::new(),
         }
     }
 }
@@ -54,28 +48,9 @@ impl Digraph for AMDigraph {
         self.num_vertices
     }
 
-    fn add_node_data(&mut self, node_id: NodeID, longitude: f64, latitude: f64) {
-        self.node_id_index_lookup
-            .insert(node_id, self.current_node_index);
-        self.current_node_index.0 += 1;
-        self.node_data.insert(
-            self.node_id_index_lookup[&node_id],
-            NodeData {
-                longitude,
-                latitude,
-            },
-        );
-    }
-
     fn add_edge(&mut self, from_id: NodeID, to_id: NodeID, weight: f64) {
-        self.distance_matrix[self.node_id_index_lookup.get(&from_id).unwrap().0]
-            [self.node_id_index_lookup.get(&to_id).unwrap().0] = weight;
-    }
-
-    fn get_node_data(&self, node_id: NodeID) -> &NodeData {
-        self.node_data
-            .get(self.node_id_index_lookup.get(&node_id).unwrap())
-            .unwrap()
+        self.distance_matrix[self.nodes_data.get_index_by_id(&from_id).0]
+            [self.nodes_data.get_index_by_id(&to_id).0] = weight;
     }
 
     fn adj(&self, node_index: NodeIndex) -> Vec<DigraphAdjacency> {
@@ -91,5 +66,13 @@ impl Digraph for AMDigraph {
 
     fn dist(&self, from_index: NodeIndex, to_index: NodeIndex) -> f64 {
         self.distance_matrix[from_index.0][to_index.0]
+    }
+
+    fn nodes_data(&self) -> &NodesData {
+        &self.nodes_data
+    }
+
+    fn mut_nodes_data(&mut self) -> &mut NodesData {
+        & mut self.nodes_data
     }
 }
