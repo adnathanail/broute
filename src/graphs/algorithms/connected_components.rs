@@ -1,36 +1,51 @@
 use crate::graphs::datastructures::digraph::{Digraph, NodeIndex};
 
-fn cc_dfs(g: &dyn Digraph, marked: &mut Vec<bool>, cc: &mut Vec<i32>, count: i32, v: usize) {
-    marked[v] = true;
-    cc[v] = count;
-    for w in g.adj(NodeIndex(v)) {
-        if !marked[w.node_index.0] {
-            cc_dfs(g, marked, cc, count, w.node_index.0);
-        }
-    }
+pub struct ConnectedComponents<'a> {
+    g: &'a dyn Digraph,
+    marked: Vec<bool>,
+    cc: Vec<i32>,
+    count: i32,
 }
 
-pub fn connected_components(g: &dyn Digraph) {
-    let mut marked = vec![false; g.num_vertices()];
-    let mut cc = vec![-1; g.num_vertices()];
-    let mut count = 0;
-    for v in 0..g.num_vertices() {
-        if !marked[v] {
-            cc_dfs(g, &mut marked, &mut cc, count, v);
-            count += 1;
+impl<'a> ConnectedComponents<'a> {
+    pub fn new(g: &'a dyn Digraph) -> Self {
+        ConnectedComponents {
+            g,
+            marked: vec![false; g.num_vertices()],
+            cc: vec![-1; g.num_vertices()],
+            count: 0
         }
     }
-    for component in 0..count {
-        let mut num_this_component = 0;
-        for i in 0..g.num_vertices() {
-            if cc[i] == component {
-                num_this_component += 1;
+
+    pub fn run(&mut self) {
+        for v in 0..self.g.num_vertices() {
+            if !self.marked[v] {
+                self.cc_dfs(v);
+                self.count += 1;
             }
         }
-        println!("Component {:} Count {:}", component, num_this_component)
+        for component in 0..self.count {
+            let mut num_this_component = 0;
+            for i in 0..self.g.num_vertices() {
+                if self.cc[i] == component {
+                    num_this_component += 1;
+                }
+            }
+            println!("Component {:} Count {:}", component, num_this_component)
+        }
+        println!("{:}", self.count);
+        for i in 0..self.g.num_vertices() {
+            println!("ID {:} Component {:}", i, self.cc[i])
+        }
     }
-    println!("{:}", count);
-    for i in 0..g.num_vertices() {
-        println!("ID {:} Component {:}", i, cc[i])
+
+    fn cc_dfs(&mut self, v: usize) {
+        self.marked[v] = true;
+        self.cc[v] = self.count;
+        for w in self.g.adj(NodeIndex(v)) {
+            if !self.marked[w.node_index.0] {
+                self.cc_dfs(w.node_index.0);
+            }
+        }
     }
 }
