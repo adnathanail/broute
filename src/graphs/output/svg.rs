@@ -80,7 +80,8 @@ pub fn to_svg(g: &dyn Digraph, path: &GraphPath, output_path: &str) {
     let (min_lon, min_lat, lon_range, lat_range) = get_points_bounds(g);
 
     for index in 0..g.num_vertices() {
-        let (x, y) = get_coords_from_node_index(g, NodeIndex(index), min_lon, min_lat, lon_range, lat_range);
+        let (x, y) =
+            get_coords_from_node_index(g, NodeIndex(index), min_lon, min_lat, lon_range, lat_range);
 
         let sp = Circle::new()
             .set("cx", x)
