@@ -42,7 +42,6 @@ impl NodesData {
     }
 
     pub fn get_node_ids(&self) -> Vec<NodeID> {
-        // Return the list of node ids
         self.node_id_index_lookup.keys().cloned().collect()
     }
 
