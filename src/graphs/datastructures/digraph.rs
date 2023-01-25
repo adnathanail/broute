@@ -66,6 +66,7 @@ impl Default for NodesData {
     }
 }
 
+#[derive(Debug)]
 pub struct DigraphAdjacency {
     pub node_index: NodeIndex,
     pub weight: f64,
