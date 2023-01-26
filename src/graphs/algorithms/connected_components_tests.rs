@@ -19,7 +19,7 @@ fn connected_components_test() {
 
     assert_eq!(cc.cc, [2, 2, 2, 1, 0]);
 
-    let components = cc.get_connected_components();
+    let components = cc.get_connected_subgraphs(1);
 
     assert_eq!(components[0].num_vertices(), 1);
     assert_eq!(components[0].adj(NodeIndex(0)).len(), 0);
@@ -27,7 +27,6 @@ fn connected_components_test() {
     assert_eq!(components[1].num_vertices(), 1);
     assert_eq!(components[1].adj(NodeIndex(0)).len(), 0);
 
-    println!("{:?}", components[2]);
     assert_eq!(components[2].num_vertices(), 3);
     assert_eq!(components[2].adj(NodeIndex(0)).len(), 1);
     assert_eq!(components[2].adj(NodeIndex(0))[0].node_index.0, 2);
