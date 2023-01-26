@@ -1,4 +1,5 @@
 use std::cmp::min;
+use std::collections::HashMap;
 use crate::graphs::datastructures::al_digraph::ALDigraph;
 use crate::graphs::datastructures::digraph::{Digraph, NodeID, NodeIndex};
 
@@ -12,8 +13,7 @@ pub struct ConnectedComponents<'a> {
     node_stack: Vec<usize>,
     indexes: Vec<i32>,
     low_links: Vec<i32>,
-    cc: Vec<i32>,
-    count: i32,
+    cc: Vec<Vec<i32>>,
 }
 
 impl<'a> ConnectedComponents<'a> {
@@ -28,8 +28,7 @@ impl<'a> ConnectedComponents<'a> {
             node_stack: vec![],
             indexes: vec![-1; g.num_vertices()],
             low_links: vec![-1; g.num_vertices()],
-            count: 0,
-            cc: vec![-1; g.num_vertices()],
+            cc: vec![],
         }
     }
 
@@ -58,42 +57,35 @@ impl<'a> ConnectedComponents<'a> {
 
         if self.low_links[v] == self.indexes[v] {
             let mut w: i32 = -1;
+            let mut node_indexes_this_component: Vec<i32> = vec![];
             while w != v as i32 {
                 w = self.node_stack.pop().unwrap() as i32;
-                self.cc[w as usize] = self.count;
+                node_indexes_this_component.push(w)
             }
-            self.count += 1;
+            self.cc.push(node_indexes_this_component);
         }
     }
 
     pub fn get_connected_subgraphs(self, min_graph_size: usize) -> Vec<ALDigraph> {
         let mut out = vec![];
-        for component in 0..self.count {
-            let mut num_this_component = 0;
-            let mut node_indexes_this_component: Vec<NodeIndex> = vec![];
-            for u in 0..self.g.num_vertices() {
-                if self.cc[u] == component {
-                    num_this_component += 1;
-                    node_indexes_this_component.push(NodeIndex(u))
-                }
-            }
-            if num_this_component < min_graph_size {
+        for component in self.cc {
+            if (&component).len() < min_graph_size {
                 continue
             }
 
-            let mut g = ALDigraph::new(num_this_component);
-            for u in &node_indexes_this_component {
-                let u_id = self.g.nodes_data().get_node_id_by_index(&u);
+            let mut g = ALDigraph::new((&component).len());
+            for u in &component {
+                let u_id = self.g.nodes_data().get_node_id_by_index(&NodeIndex(*u as usize));
                 g.mut_nodes_data().add_node_data(
                     *u_id,
-                    *self.g.nodes_data().get_node_data_by_index(*u)
+                    *self.g.nodes_data().get_node_data_by_index(NodeIndex(*u as usize))
                 );
             }
-            for u in &node_indexes_this_component {
-                let u_id = self.g.nodes_data().get_node_id_by_index(&u);
-                for v in self.g.adj(*u) {
+            for u in &component {
+                let u_id = self.g.nodes_data().get_node_id_by_index(&NodeIndex(*u as usize));
+                for v in self.g.adj(NodeIndex(*u as usize)) {
                     let v_id = self.g.nodes_data().get_node_id_by_index(&NodeIndex(v.node_index.0));
-                    if node_indexes_this_component.contains(&v.node_index) {
+                    if (&component).contains(&(v.node_index.0 as i32)) {
                         g.add_edge_by_id(*u_id, *v_id, v.weight)
                     }
                 }
