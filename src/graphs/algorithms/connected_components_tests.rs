@@ -17,7 +17,7 @@ fn connected_components_test() {
     let mut cc = ConnectedComponents::new(&g);
     cc.run();
 
-    assert_eq!(cc.cc, [2, 2, 2, 1, 0]);
+    assert_eq!(cc.cc, vec![vec![4], vec![3], vec![1, 2, 0]]);
 
     let components = cc.get_connected_subgraphs(1);
 
