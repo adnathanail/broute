@@ -1,4 +1,5 @@
 use std::collections::HashMap;
+use crate::algorithms::haversine::haversine;
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct NodeIndex(pub usize);
@@ -70,6 +71,19 @@ impl NodesData {
 
     pub fn get_node_id_by_index(&self, node_index: &NodeIndex) -> &NodeID {
         self.node_index_id_lookup.get(node_index).unwrap()
+    }
+
+    pub fn get_node_index_closest_to_point(&self, longitude: f64, latitude: f64) -> NodeIndex {
+        let mut closest_node_index = NodeIndex(0);
+        let mut closest_node_distance = f64::MAX;
+        for (node_index, node_data) in self.node_data.iter() {
+            let distance = haversine(longitude, latitude, node_data.longitude, node_data.latitude);
+            if distance < closest_node_distance {
+                closest_node_distance = distance;
+                closest_node_index = *node_index;
+            }
+        }
+        closest_node_index
     }
 }
 
