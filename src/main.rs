@@ -15,10 +15,14 @@ fn main() {
 
     println!("Biggest connected subgraph {:} nodes", c_g.num_vertices());
 
-    let start_node_index = c_g.nodes_data().get_node_index_closest_to_point(7.415138, 43.7284765);
+    let start_node_index = c_g
+        .nodes_data()
+        .get_node_index_closest_to_point(7.415138, 43.7284765);
     let start_node_data = c_g.nodes_data().get_node_data_by_index(start_node_index);
 
-    let end_node_index = c_g.nodes_data().get_node_index_closest_to_point(7.4178794, 43.7341524);
+    let end_node_index = c_g
+        .nodes_data()
+        .get_node_index_closest_to_point(7.4178794, 43.7341524);
     let end_node_data = c_g.nodes_data().get_node_data_by_index(end_node_index);
 
     println!(

@@ -1,5 +1,5 @@
-use std::collections::HashMap;
 use crate::algorithms::haversine::haversine;
+use std::collections::HashMap;
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
 pub struct NodeIndex(pub usize);
