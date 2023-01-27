@@ -1,9 +1,8 @@
 use broute::graphs::algorithms::connected_components::ConnectedComponents;
 use broute::graphs::algorithms::dijkstra::dijkstra;
 use broute::graphs::algorithms::travelling_salesman::{get_path_length, GraphPath};
-use broute::graphs::datastructures::digraph::NodeIndex;
+use broute::graphs::datastructures::digraph::{Digraph, NodeIndex};
 use broute::graphs::input::pbf::load_pbf_file;
-use broute::graphs::output::svg::to_svg;
 
 fn main() {
     let g = load_pbf_file("test_data/geofabrik/monaco-latest.osm.pbf");
