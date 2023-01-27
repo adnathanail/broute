@@ -1,5 +1,5 @@
-use crate::graphs::datastructures::digraph::NodeID;
 use super::*;
+use crate::graphs::datastructures::digraph::NodeID;
 
 #[test]
 fn connected_components_test() {
