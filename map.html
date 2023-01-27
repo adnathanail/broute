@@ -1,0 +1,62 @@
+<html lang="en">
+<head>
+    <title>Broute mapping test</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+          integrity="sha256-kLaT2GOSpHechhsozzB+flnD+zUyjE2LlfWPgU04xyI="
+          crossorigin=""/>
+    <style>
+        #map {
+            height: 100%;
+        }
+
+        .map-loading {
+            cursor: wait;
+        }
+    </style>
+</head>
+<body>
+<div id="map"></div>
+<script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+        integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
+        crossorigin=""></script>
+<script>
+    let map = L.map('map').setView([43.7284765, 7.415138], 15);
+
+    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        maxZoom: 19,
+        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    }).addTo(map);
+
+    let start_point = [43.7284765, 7.415138];
+    let end_point = [43.7341524, 7.4178794];
+    let polyline = L.polyline([], {color: 'red'}).addTo(map);
+
+    function update_line() {
+        document.getElementById("map").classList.add("map-loading");
+        fetch(`http://localhost:8000/${start_point[0]}/${start_point[1]}/${end_point[0]}/${end_point[1]}/`)
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data)
+                polyline.setLatLngs(data)
+                document.getElementById("map").classList.remove("map-loading");
+            });
+    }
+
+    update_line();
+
+    function updateStartPoint(e) {
+        start_point = [e.latlng.lat, e.latlng.lng];
+        update_line();
+    }
+
+    function updateEndPoint(e) {
+        end_point = [e.latlng.lat, e.latlng.lng];
+        update_line();
+        return false;
+    }
+
+    map.on('click', updateStartPoint);
+    map.on('contextmenu', updateEndPoint);
+</script>
+</body>
+</html>
