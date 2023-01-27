@@ -1,6 +1,4 @@
-use crate::graphs::datastructures::digraph::{
-    Digraph, DigraphAdjacency, NodeIndex, NodesData,
-};
+use crate::graphs::datastructures::digraph::{Digraph, DigraphAdjacency, NodeIndex, NodesData};
 use std::fmt;
 
 #[derive(Debug)]

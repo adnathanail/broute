@@ -24,7 +24,13 @@ fn main() {
     let end_node_index = c_g.nodes_data().get_node_index_by_id(&end_node_id);
     let end_node_data = c_g.nodes_data().get_node_data_by_index(*end_node_index);
 
-    println!("Running Dijkstra from {:},{:} to {:},{:}", start_node_data.longitude, start_node_data.latitude, end_node_data.longitude, end_node_data.latitude);
+    println!(
+        "Running Dijkstra from {:},{:} to {:},{:}",
+        start_node_data.longitude,
+        start_node_data.latitude,
+        end_node_data.longitude,
+        end_node_data.latitude
+    );
 
     let dj_out = dijkstra(&c_g, *start_node_index);
 

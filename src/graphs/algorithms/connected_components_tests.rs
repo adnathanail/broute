@@ -5,7 +5,8 @@ fn connected_components_test() {
     let mut g = ALDigraph::new(5);
 
     for i in 0..5 {
-        g.mut_nodes_data().add_node_data_by_parts(NodeID(i), 0.0, 0.0);
+        g.mut_nodes_data()
+            .add_node_data_by_parts(NodeID(i), 0.0, 0.0);
     }
 
     g.add_edge_by_id(NodeID(1), NodeID(0), 1.0);
@@ -17,7 +18,14 @@ fn connected_components_test() {
     let mut cc = ConnectedComponents::new(&g);
     cc.run();
 
-    assert_eq!(cc.components, vec![vec![NodeIndex(4)], vec![NodeIndex(3)], vec![NodeIndex(1), NodeIndex(2), NodeIndex(0)]]);
+    assert_eq!(
+        cc.components,
+        vec![
+            vec![NodeIndex(4)],
+            vec![NodeIndex(3)],
+            vec![NodeIndex(1), NodeIndex(2), NodeIndex(0)]
+        ]
+    );
 
     let components = cc.get_connected_subgraphs(1);
 

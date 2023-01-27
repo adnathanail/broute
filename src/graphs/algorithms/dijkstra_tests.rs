@@ -7,7 +7,8 @@ fn dijkstra_test() {
     let mut g = datastructures::am_digraph::AMDigraph::new(8);
 
     for i in 0..8 {
-        g.mut_nodes_data().add_node_data_by_parts(NodeID(i), 0.0, 0.0);
+        g.mut_nodes_data()
+            .add_node_data_by_parts(NodeID(i), 0.0, 0.0);
     }
 
     g.add_edge_by_id(NodeID(0), NodeID(1), 5.0);
