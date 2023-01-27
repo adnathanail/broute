@@ -10,7 +10,8 @@ jobs:
     name: Add issue to project
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/add-to-project@0.4.0
+      - name: Add To GitHub projects
+        uses: actions/add-to-project@v0.4.0
         with:
           project-url: https://github.com/users/adnathanail/projects/1
           github-token: ${{ secrets.ADD_TO_PROJECT_PAT }}
