@@ -1,7 +1,7 @@
+use crate::algorithms::haversine::haversine;
 use crate::graphs::datastructures::al_digraph::ALDigraph;
 use crate::graphs::datastructures::digraph::{Digraph, NodeID};
 use osmpbf::{Element, ElementReader};
-use crate::algorithms::haversine::haversine;
 
 pub fn load_pbf_file(pbf_path: &str) -> ALDigraph {
     let reader = ElementReader::from_path(pbf_path).unwrap();
@@ -58,7 +58,12 @@ pub fn load_pbf_file(pbf_path: &str) -> ALDigraph {
                     let to_id = NodeID(node_ids[i + 1] as usize);
                     let to_node_data = g.nodes_data().get_node_data_by_id(to_id);
 
-                    let weight = haversine(from_node_data.longitude, from_node_data.latitude, to_node_data.longitude, to_node_data.latitude);
+                    let weight = haversine(
+                        from_node_data.longitude,
+                        from_node_data.latitude,
+                        to_node_data.longitude,
+                        to_node_data.latitude,
+                    );
                     g.add_edge_by_id(
                         NodeID(node_ids[i] as usize),
                         NodeID(node_ids[i + 1] as usize),
