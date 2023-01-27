@@ -31,10 +31,13 @@ impl NodesData {
     }
 
     pub fn add_node_data_by_parts(&mut self, node_id: NodeID, longitude: f64, latitude: f64) {
-        self.add_node_data(node_id, NodeData {
+        self.add_node_data(
+            node_id,
+            NodeData {
                 longitude,
                 latitude,
-            });
+            },
+        );
     }
 
     pub fn add_node_data(&mut self, node_id: NodeID, node_data: NodeData) {
@@ -43,10 +46,8 @@ impl NodesData {
         self.node_index_id_lookup
             .insert(self.current_node_index, node_id);
         self.current_node_index.0 += 1;
-        self.node_data.insert(
-            self.node_id_index_lookup[&node_id],
-            node_data
-        );
+        self.node_data
+            .insert(self.node_id_index_lookup[&node_id], node_data);
     }
 
     pub fn get_node_ids(&self) -> Vec<NodeID> {
@@ -91,7 +92,7 @@ pub trait Digraph {
         self.add_edge_by_index(
             *self.nodes_data().get_node_index_by_id(&from_id),
             *self.nodes_data().get_node_index_by_id(&to_id),
-                weight
+            weight,
         )
     }
 
