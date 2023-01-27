@@ -1,6 +1,6 @@
 use broute::graphs::algorithms::dijkstra::dijkstra;
 use broute::graphs::algorithms::travelling_salesman::GraphPath;
-use broute::graphs::datastructures::digraph::{Digraph, NodeID, NodeIndex};
+use broute::graphs::datastructures::digraph::NodeIndex;
 use broute::graphs::input::pbf::load_pbf_file;
 use broute::graphs::output::svg::to_svg;
 
