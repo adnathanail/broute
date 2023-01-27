@@ -1,4 +1,9 @@
-pub fn haversine(start_longitude: f64, start_latitude: f64, end_longitude: f64, end_latitude: f64) -> f64 {
+pub fn haversine(
+    start_longitude: f64,
+    start_latitude: f64,
+    end_longitude: f64,
+    end_latitude: f64,
+) -> f64 {
     let earth_radius = 6371.0;
 
     let start_latitude_radians = start_latitude.to_radians();
