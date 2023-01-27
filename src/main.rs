@@ -45,7 +45,7 @@ fn main() {
 
     println!("{:?}", p.path);
 
-    println!("Distance {:}", get_path_length(&c_g, &p));
+    println!("Distance {:} km", get_path_length(&c_g, &p));
 
     // to_svg(&g, &p, "out/paths/test3.svg");
 }
