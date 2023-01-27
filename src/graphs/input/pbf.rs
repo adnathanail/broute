@@ -30,12 +30,12 @@ pub fn load_pbf_file(pbf_path: &str) -> ALDigraph {
         .for_each(|element| {
             if let Element::Node(n) = element {
                 g.mut_nodes_data()
-                    .add_node_data_by_parts(NodeID(n.id() as usize), n.lon(), n.lat())
+                    .add_node_data_by_parts(NodeID(n.id() as usize), n.lat(), n.lon())
             } else if let Element::DenseNode(dn) = element {
                 g.mut_nodes_data().add_node_data_by_parts(
                     NodeID(dn.id() as usize),
-                    dn.lon(),
                     dn.lat(),
+                    dn.lon(),
                 )
             }
         })
