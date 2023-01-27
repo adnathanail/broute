@@ -14,7 +14,7 @@ struct GraphStringBody {
 }
 
 fn graph_to_graphviz_body(g: &dyn Digraph, color: String, with_label: bool) -> GraphStringBody {
-    let all_node_list: Vec<String> = (0..g.num_vertices()).map(|i| format!("{}", i)).collect();
+    let all_node_list: Vec<String> = (0..g.num_vertices()).map(|i| format!("{i}")).collect();
     let all_node_string = all_node_list.join("\n");
     let all_node_edges_list: Vec<String> = (0..g.num_vertices())
         .map(|i| {
@@ -28,7 +28,7 @@ fn graph_to_graphviz_body(g: &dyn Digraph, color: String, with_label: bool) -> G
                     } else {
                         "".to_string()
                     };
-                    format!("{} -> {}[color=\"{}\"{}]", i, to, color, label_str)
+                    format!("{i} -> {to}[color=\"{color}\"{label_str}]")
                 })
                 .collect();
             edges_this_node_list.join("\n")
@@ -36,7 +36,7 @@ fn graph_to_graphviz_body(g: &dyn Digraph, color: String, with_label: bool) -> G
         .collect();
     let all_node_edges_string = all_node_edges_list.join("\n");
     GraphStringBody {
-        graph_string: format!("{}\n{}", all_node_string, all_node_edges_string),
+        graph_string: format!("{all_node_string}\n{all_node_edges_string}"),
     }
 }
 
