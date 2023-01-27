@@ -22,6 +22,8 @@ graphviz-rust = "0.4.0"
 plotlib = "0.5.1"
 # Outputting to drawn images
 svg = "0.13.0"
+# JSON API
+rocket = { version = "0.5.0-rc.2", features = ["json"] }
 
 [[bench]]
 name = "benchmarks"
