@@ -93,7 +93,7 @@ pub fn to_svg(g: &dyn Digraph, path: &GraphPath, output_path: &str) {
             .set("x", x)
             .set("y", y)
             .set("fill", "white");
-        text.append(svg::node::Text::new(format!("{}", index)));
+        text.append(svg::node::Text::new(format!("{index}")));
 
         document = document.add(sp);
         document = document.add(text);
