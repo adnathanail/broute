@@ -9,8 +9,8 @@ pub struct NodeID(pub usize);
 
 #[derive(Debug, Copy, Clone)]
 pub struct NodeData {
-    pub longitude: f64,
     pub latitude: f64,
+    pub longitude: f64,
 }
 
 #[derive(Debug)]
@@ -31,12 +31,12 @@ impl NodesData {
         }
     }
 
-    pub fn add_node_data_by_parts(&mut self, node_id: NodeID, longitude: f64, latitude: f64) {
+    pub fn add_node_data_by_parts(&mut self, node_id: NodeID, latitude: f64, longitude: f64) {
         self.add_node_data(
             node_id,
             NodeData {
-                longitude,
                 latitude,
+                longitude,
             },
         );
     }
@@ -73,11 +73,11 @@ impl NodesData {
         self.node_index_id_lookup.get(node_index).unwrap()
     }
 
-    pub fn get_node_index_closest_to_point(&self, longitude: f64, latitude: f64) -> NodeIndex {
+    pub fn get_node_index_closest_to_point(&self, latitude: f64, longitude: f64) -> NodeIndex {
         let mut closest_node_index = NodeIndex(0);
         let mut closest_node_distance = f64::MAX;
         for (node_index, node_data) in self.node_data.iter() {
-            let distance = haversine(longitude, latitude, node_data.longitude, node_data.latitude);
+            let distance = haversine(latitude, longitude, node_data.latitude, node_data.longitude);
             if distance < closest_node_distance {
                 closest_node_distance = distance;
                 closest_node_index = *node_index;

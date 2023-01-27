@@ -1,4 +1,5 @@
-#[macro_use] extern crate rocket;
+#[macro_use]
+extern crate rocket;
 
 use std::collections::HashMap;
 
@@ -10,11 +11,12 @@ use broute::graphs::algorithms::travelling_salesman::{get_path_length, GraphPath
 use broute::graphs::datastructures::digraph::{Digraph, NodeIndex};
 use broute::graphs::input::pbf::load_pbf_file;
 
-#[get("/<start_longitude>/<start_latitude>/<end_longitude>/<end_latitude>")]
-fn shortest_path(start_longitude: f64,
-    start_latitude: f64,
-    end_longitude: f64,
-    end_latitude: f64,) -> Json<Vec<(f64, f64)>> {
+#[get("/<start_latitude>/<start_longitude>/<end_latitude>/<end_longitude>")]
+fn shortest_path(start_latitude: f64,
+                 start_longitude: f64,
+                 end_latitude: f64,
+                 end_longitude: f64,
+) -> Json<Vec<(f64, f64)>> {
     let g = load_pbf_file("test_data/geofabrik/monaco-latest.osm.pbf");
 
     println!("Original graph {:} nodes", g.num_vertices());
@@ -27,12 +29,12 @@ fn shortest_path(start_longitude: f64,
 
     let start_node_index = c_g
         .nodes_data()
-        .get_node_index_closest_to_point(start_longitude, start_latitude);
+        .get_node_index_closest_to_point(start_latitude, start_longitude);
     let start_node_data = c_g.nodes_data().get_node_data_by_index(start_node_index);
 
     let end_node_index = c_g
         .nodes_data()
-        .get_node_index_closest_to_point(end_longitude, end_latitude);
+        .get_node_index_closest_to_point(end_latitude, end_longitude);
     let end_node_data = c_g.nodes_data().get_node_data_by_index(end_node_index);
 
     println!(
@@ -62,7 +64,7 @@ fn shortest_path(start_longitude: f64,
     let mut points: Vec<(f64, f64)> = vec![];
     for node_index in &p.path {
         let node_data = c_g.nodes_data().get_node_data_by_index(*node_index);
-        points.push((node_data.longitude, node_data.latitude))
+        points.push((node_data.latitude, node_data.longitude))
     }
 
     Json(points)
