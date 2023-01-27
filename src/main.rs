@@ -1,10 +1,20 @@
+#[macro_use] extern crate rocket;
+
+use std::collections::HashMap;
+
+use rocket::serde::json::Json;
+
 use broute::graphs::algorithms::connected_components::ConnectedComponents;
 use broute::graphs::algorithms::dijkstra::dijkstra;
 use broute::graphs::algorithms::travelling_salesman::{get_path_length, GraphPath};
 use broute::graphs::datastructures::digraph::{Digraph, NodeIndex};
 use broute::graphs::input::pbf::load_pbf_file;
 
-fn main() {
+#[get("/<start_longitude>/<start_latitude>/<end_longitude>/<end_latitude>")]
+fn shortest_path(start_longitude: f64,
+    start_latitude: f64,
+    end_longitude: f64,
+    end_latitude: f64,) -> Json<HashMap<&'static str, f64>> {
     let g = load_pbf_file("test_data/geofabrik/monaco-latest.osm.pbf");
 
     println!("Original graph {:} nodes", g.num_vertices());
@@ -17,12 +27,12 @@ fn main() {
 
     let start_node_index = c_g
         .nodes_data()
-        .get_node_index_closest_to_point(7.415138, 43.7284765);
+        .get_node_index_closest_to_point(start_longitude, start_latitude);
     let start_node_data = c_g.nodes_data().get_node_data_by_index(start_node_index);
 
     let end_node_index = c_g
         .nodes_data()
-        .get_node_index_closest_to_point(7.4178794, 43.7341524);
+        .get_node_index_closest_to_point(end_longitude, end_latitude);
     let end_node_data = c_g.nodes_data().get_node_data_by_index(end_node_index);
 
     println!(
@@ -49,5 +59,17 @@ fn main() {
 
     println!("Distance {:} km", get_path_length(&c_g, &p));
 
-    // to_svg(&g, &p, "out/paths/test3.svg");
+    let mut out = HashMap::new();
+    out.insert("distance", get_path_length(&c_g, &p));
+    Json(out)
+}
+
+#[rocket::main]
+async fn main() -> Result<(), rocket::Error> {
+    let _rocket = rocket::build()
+        .mount("/", routes![shortest_path])
+        .ignite().await?
+        .launch().await?;
+
+    Ok(())
 }
