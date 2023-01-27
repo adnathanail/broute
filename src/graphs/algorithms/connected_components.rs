@@ -94,4 +94,16 @@ impl<'a> ConnectedComponents<'a> {
         }
         out
     }
+
+    pub fn get_largest_connected_subgraphs(self) -> ALDigraph {
+        let mut largest_graph_size = 0;
+        let mut largest_graph: Option<ALDigraph> = None;
+        for g in self.get_connected_subgraphs(2) {
+            if g.num_vertices() > largest_graph_size {
+                largest_graph_size = g.num_vertices();
+                largest_graph = Some(g);
+            }
+        }
+        largest_graph.unwrap()
+    }
 }
