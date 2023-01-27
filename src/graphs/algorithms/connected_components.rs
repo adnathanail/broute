@@ -1,7 +1,6 @@
 use crate::graphs::datastructures::al_digraph::ALDigraph;
-use crate::graphs::datastructures::digraph::{Digraph, NodeID, NodeIndex};
+use crate::graphs::datastructures::digraph::{Digraph, NodeIndex};
 use std::cmp::min;
-use std::collections::HashMap;
 
 #[cfg(test)]
 #[path = "connected_components_tests.rs"]
@@ -47,11 +46,11 @@ impl<'a> ConnectedComponents<'a> {
         self.node_stack.push(v);
 
         for w in self.g.adj(NodeIndex(v)) {
-            if self.indexes[(&w).node_index.0] == -1 {
-                self.strong_connect((&w).node_index.0);
-                self.low_links[v] = min(self.low_links[v], self.low_links[(&w).node_index.0]);
-            } else if self.node_stack.contains(&(&w).node_index.0) {
-                self.low_links[v] = min(self.low_links[v], self.indexes[(&w).node_index.0])
+            if self.indexes[w.node_index.0] == -1 {
+                self.strong_connect(w.node_index.0);
+                self.low_links[v] = min(self.low_links[v], self.low_links[w.node_index.0]);
+            } else if self.node_stack.contains(&w.node_index.0) {
+                self.low_links[v] = min(self.low_links[v], self.indexes[w.node_index.0])
             }
         }
 
@@ -69,24 +68,24 @@ impl<'a> ConnectedComponents<'a> {
     pub fn get_connected_subgraphs(self, min_graph_size: usize) -> Vec<ALDigraph> {
         let mut out = vec![];
         for component in self.components {
-            if (&component).len() < min_graph_size {
+            if component.len() < min_graph_size {
                 continue;
             }
 
-            let mut g = ALDigraph::new((&component).len());
+            let mut g = ALDigraph::new(component.len());
             for u in &component {
                 let u_id = self.g.nodes_data().get_node_id_by_index(u);
                 g.mut_nodes_data()
                     .add_node_data(*u_id, *self.g.nodes_data().get_node_data_by_index(*u));
             }
             for u in &component {
-                let u_id = self.g.nodes_data().get_node_id_by_index(&u);
+                let u_id = self.g.nodes_data().get_node_id_by_index(u);
                 for v in self.g.adj(*u) {
                     let v_id = self
                         .g
                         .nodes_data()
                         .get_node_id_by_index(&NodeIndex(v.node_index.0));
-                    if (&component).contains(&v.node_index) {
+                    if component.contains(&v.node_index) {
                         g.add_edge_by_id(*u_id, *v_id, v.weight)
                     }
                 }
