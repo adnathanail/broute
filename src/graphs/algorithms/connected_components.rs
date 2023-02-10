@@ -94,7 +94,7 @@ impl<'a> ConnectedComponents<'a> {
                 continue;
             }
 
-            out.push((&self).get_subgraph_from_node_ids(component));
+            out.push(self.get_subgraph_from_node_ids(component));
         }
         out
     }
@@ -108,6 +108,6 @@ impl<'a> ConnectedComponents<'a> {
                 largest_component = Some(component.clone());
             }
         }
-        (&self).get_subgraph_from_node_ids(&largest_component.unwrap())
+        self.get_subgraph_from_node_ids(&largest_component.unwrap())
     }
 }
