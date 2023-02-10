@@ -17,7 +17,7 @@ osmpbf = "0.3"
 # Reading TSPLIB files (academic travelling salesman format)
 tsplib = "0.1.0"
 # Outputting to GraphViz graphs
-graphviz-rust = "0.4.0"
+graphviz-rust = "0.6.1"
 # Outputting to charts
 plotlib = "0.5.1"
 # Outputting to drawn images
