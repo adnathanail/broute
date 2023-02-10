@@ -4,30 +4,27 @@ extern crate rocket;
 use rocket::fairing::{Fairing, Info, Kind};
 use rocket::http::Header;
 use rocket::serde::json::Json;
-use rocket::{Request, Response};
+use rocket::{Request, Response, State};
+use std::ops::Deref;
+use std::sync::{Arc, RwLock};
 
 use broute::graphs::algorithms::connected_components::ConnectedComponents;
 use broute::graphs::algorithms::dijkstra::dijkstra;
 use broute::graphs::algorithms::travelling_salesman::{get_path_length, GraphPath};
+use broute::graphs::datastructures::al_digraph::ALDigraph;
 use broute::graphs::datastructures::digraph::{Digraph, NodeIndex};
 use broute::graphs::input::pbf::load_pbf_file;
 
 #[get("/<start_latitude>/<start_longitude>/<end_latitude>/<end_longitude>")]
 fn shortest_path(
+    rc: &State<RoutingCache>,
     start_latitude: f64,
     start_longitude: f64,
     end_latitude: f64,
     end_longitude: f64,
 ) -> Json<Vec<(f64, f64)>> {
-    let g = load_pbf_file("test_data/geofabrik/monaco-latest.osm.pbf");
-
-    println!("Original graph {:} nodes", g.num_vertices());
-
-    let mut cc = ConnectedComponents::new(&g);
-    cc.run();
-    let c_g = cc.get_largest_connected_subgraphs();
-
-    println!("Biggest connected subgraph {:} nodes", c_g.num_vertices());
+    let binding = rc.g.read().unwrap();
+    let c_g = binding.deref();
 
     let start_node_index = c_g
         .nodes_data()
@@ -47,7 +44,7 @@ fn shortest_path(
         end_node_data.latitude
     );
 
-    let dj_out = dijkstra(&c_g, start_node_index);
+    let dj_out = dijkstra(c_g, start_node_index);
 
     println!("Dijkstra ran");
 
@@ -61,7 +58,7 @@ fn shortest_path(
 
     println!("{:?}", p.path);
 
-    println!("Distance {:} km", get_path_length(&c_g, &p));
+    println!("Distance {:} km", get_path_length(c_g, &p));
 
     let mut points: Vec<(f64, f64)> = vec![];
     for node_index in &p.path {
@@ -94,11 +91,35 @@ impl Fairing for CORS {
     }
 }
 
+async fn get_graph() -> ALDigraph {
+    let g = load_pbf_file("test_data/geofabrik/monaco-latest.osm.pbf");
+
+    println!("Original graph {:} nodes", g.num_vertices());
+
+    let mut cc = ConnectedComponents::new(&g);
+    cc.run();
+    let c_g = cc.get_largest_connected_subgraphs();
+
+    println!("Biggest connected subgraph {:} nodes", c_g.num_vertices());
+
+    c_g
+}
+
+struct RoutingCache {
+    // https://stackoverflow.com/questions/68908091/how-do-i-send-read-only-data-to-other-threads-without-copying
+    g: Arc<RwLock<ALDigraph>>,
+}
+
 #[rocket::main]
 async fn main() -> Result<(), rocket::Error> {
+    let c_g = get_graph().await;
+
     let _rocket = rocket::build()
         .mount("/", routes![shortest_path])
         .attach(CORS)
+        .manage(RoutingCache {
+            g: Arc::new(RwLock::new(c_g)),
+        })
         .ignite()
         .await?
         .launch()
