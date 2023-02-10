@@ -4,10 +4,9 @@ extern crate rocket;
 use rocket::fairing::{Fairing, Info, Kind};
 use rocket::http::Header;
 use rocket::serde::json::Json;
-use rocket::{Request, Response, State};
+use rocket::serde::{Deserialize, Serialize};
 use std::ops::Deref;
 use std::sync::{Arc, RwLock};
-use rocket::serde::Serialize;
 
 use broute::graphs::algorithms::connected_components::ConnectedComponents;
 use broute::graphs::algorithms::dijkstra::dijkstra;
@@ -16,7 +15,10 @@ use broute::graphs::datastructures::al_digraph::ALDigraph;
 use broute::graphs::datastructures::digraph::{Digraph, NodeIndex};
 use broute::graphs::input::pbf::load_pbf_file;
 
-#[derive(Serialize)]
+#[cfg(test)]
+mod tests;
+
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
 struct ShortestPathResponse {
     from_point: (f64, f64),
     to_point: (f64, f64),
@@ -26,7 +28,7 @@ struct ShortestPathResponse {
 
 #[get("/<start_latitude>/<start_longitude>/<end_latitude>/<end_longitude>")]
 fn shortest_path(
-    rc: &State<RoutingCache>,
+    rc: &rocket::State<RoutingCache>,
     start_latitude: f64,
     start_longitude: f64,
     end_latitude: f64,
@@ -85,7 +87,11 @@ impl Fairing for CORS {
         }
     }
 
-    async fn on_response<'r>(&self, _request: &'r Request<'_>, response: &mut Response<'r>) {
+    async fn on_response<'r>(
+        &self,
+        _request: &'r rocket::Request<'_>,
+        response: &mut rocket::Response<'r>,
+    ) {
         response.set_header(Header::new("Access-Control-Allow-Origin", "*"));
         response.set_header(Header::new(
             "Access-Control-Allow-Methods",
@@ -115,20 +121,22 @@ struct RoutingCache {
     g: Arc<RwLock<ALDigraph>>,
 }
 
-#[rocket::main]
-async fn main() -> Result<(), rocket::Error> {
+async fn rocket() -> Result<rocket::Rocket<rocket::Ignite>, rocket::Error> {
     let c_g = get_graph().await;
 
-    let _rocket = rocket::build()
+    rocket::build()
         .mount("/", routes![shortest_path])
         .attach(CORS)
         .manage(RoutingCache {
             g: Arc::new(RwLock::new(c_g)),
         })
         .ignite()
-        .await?
-        .launch()
-        .await?;
+        .await
+}
+
+#[rocket::main]
+async fn main() -> Result<(), rocket::Error> {
+    rocket().await?.launch().await?;
 
     Ok(())
 }
