@@ -1,6 +1,9 @@
 #[macro_use]
 extern crate rocket;
 
+use rocket::{Request, Response};
+use rocket::fairing::{Fairing, Info, Kind};
+use rocket::http::Header;
 use rocket::serde::json::Json;
 
 use broute::graphs::algorithms::connected_components::ConnectedComponents;
@@ -50,6 +53,7 @@ fn shortest_path(start_latitude: f64,
     let mut p = GraphPath { path: vec![] };
     let mut current_node_index = end_node_index.0;
     while current_node_index != start_node_index.0 {
+        println!("{current_node_index}");
         p.path.push(NodeIndex(current_node_index));
         current_node_index = dj_out.1[current_node_index].unwrap();
     }
@@ -67,10 +71,6 @@ fn shortest_path(start_latitude: f64,
 
     Json(points)
 }
-
-use rocket::http::Header;
-use rocket::{Request, Response};
-use rocket::fairing::{Fairing, Info, Kind};
 
 pub struct CORS;
 
