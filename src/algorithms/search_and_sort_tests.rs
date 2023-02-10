@@ -48,6 +48,5 @@ fn test_insertion_sort() {
     let mut out = Vec::<i32>::new();
     insertion_sort(&inp, &mut out);
 
-    println!("{inp:?} sorted is {out:?}");
     assert_eq!(out, vec![1, 2, 4, 6, 6, 8, 8]);
 }
