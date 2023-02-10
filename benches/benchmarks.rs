@@ -1,9 +1,6 @@
-use std::{fs, time::Duration};
-
-use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion};
+use criterion::{BenchmarkId, Criterion, criterion_group, criterion_main};
 
 use broute::graphs;
-use broute::graphs::input::pbf::load_pbf_file;
 
 fn dijkstra_benchmark(c: &mut Criterion) {
     let g = graphs::input::random_graph::get_random_graph(3000, 0.5, 4.0, 1.0);
@@ -46,19 +43,22 @@ fn dijkstra_benchmark(c: &mut Criterion) {
 
     group.finish();
 
-    let g = load_pbf_file("test_data/geofabrik/monaco-latest.osm.pbf");
+    let g = graphs::input::pbf::load_pbf_file("test_data/geofabrik/monaco-latest.osm.pbf");
+    let mut cc = graphs::algorithms::connected_components::ConnectedComponents::new(&g);
+    cc.run();
+    let c_g = cc.get_largest_connected_subgraphs();
 
     let mut group = c.benchmark_group("Dijkstra (OSM Monaco)");
 
-    group.bench_with_input(BenchmarkId::new("v1", &g), &g, |b, g| {
+    group.bench_with_input(BenchmarkId::new("v1", &c_g), &c_g, |b, c_g| {
         b.iter(|| {
-            graphs::algorithms::dijkstra::dijkstra(g, graphs::datastructures::digraph::NodeIndex(0))
+            graphs::algorithms::dijkstra::dijkstra(c_g, graphs::datastructures::digraph::NodeIndex(0))
         })
     });
-    group.bench_with_input(BenchmarkId::new("v2", &g), &g, |b, g| {
+    group.bench_with_input(BenchmarkId::new("v2", &c_g), &c_g, |b, c_g| {
         b.iter(|| {
             graphs::algorithms::dijkstra::dijkstra2(
-                g,
+                c_g,
                 graphs::datastructures::digraph::NodeIndex(0),
             )
         })
@@ -80,7 +80,7 @@ fn travelling_salesman_benchmark(c: &mut Criterion) {
 }
 
 fn connected_components_benchmark(c: &mut Criterion) {
-    let g = load_pbf_file("test_data/geofabrik/monaco-latest.osm.pbf");
+    let g = graphs::input::pbf::load_pbf_file("test_data/geofabrik/monaco-latest.osm.pbf");
 
     let mut group = c.benchmark_group("Connected components (OSM Monaco)");
 
