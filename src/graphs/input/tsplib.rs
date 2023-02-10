@@ -1,6 +1,6 @@
 use crate::graphs::datastructures::digraph::NodeID;
 use rand::{thread_rng, Rng};
-use std::{cmp, io::Cursor};
+use std::{cmp, fs, io::Cursor};
 use tsplib::NodeCoord;
 
 use super::super::datastructures::am_digraph::AMDigraph;
@@ -32,8 +32,9 @@ pub fn generate_random_tsplib_file(num_nodes: usize) -> String {
     lines.join("\n")
 }
 
-pub fn load_tsplib_file(input_data: String, num_nodes: usize) -> AMDigraph {
-    let instance = tsplib::parse(Cursor::new(&input_data[..])).unwrap();
+pub fn load_tsplib_file(file_path: &str, num_nodes: usize) -> AMDigraph {
+    let tsp_string = fs::read_to_string(file_path).unwrap();
+    let instance = tsplib::parse(Cursor::new(&tsp_string[..])).unwrap();
 
     let actual_num_nodes = cmp::min(num_nodes, instance.dimension);
 
