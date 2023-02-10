@@ -13,7 +13,7 @@ pub fn dijkstra(g: &dyn Digraph, from_node: NodeIndex) -> (Vec<f64>, Vec<Option<
     let mut parent = vec![None; g.num_vertices()];
     // Add first vertex to queue
     let mut queue = PriorityQueue::new();
-    queue.push(0.0, 0);
+    queue.push(0.0, from_node.0);
 
     // Take next closest node from the heap
     while let Some((v, cost)) = queue.pop() {
