@@ -1,6 +1,5 @@
 use super::super::super::algorithms::priority_queue::PriorityQueue;
 use crate::graphs::datastructures::digraph::{Digraph, NodeIndex};
-use std::collections::VecDeque;
 
 #[cfg(test)]
 #[path = "dijkstra_tests.rs"]
@@ -12,48 +11,6 @@ pub fn dijkstra(g: &dyn Digraph, from_node: NodeIndex) -> (Vec<f64>, Vec<Option<
     dist_to[from_node.0] = 0.0;
     // Initialise all parents to none
     let mut parent = vec![None; g.num_vertices()];
-    // Add all vertices to queue
-    let mut queue = VecDeque::new();
-    for v in 0..g.num_vertices() {
-        queue.push_back(v);
-    }
-
-    while !queue.is_empty() {
-        // Find next closest node to the start
-        let mut node_with_min_distance: usize = usize::MAX;
-        let mut min_distance: f64 = f64::INFINITY;
-        for i in &queue {
-            if dist_to[*i] < min_distance {
-                min_distance = dist_to[*i];
-                node_with_min_distance = *i;
-            }
-        }
-        if node_with_min_distance == usize::MAX {
-            panic!("Couldn't get node_with_min_distance")
-        }
-        // Take closest node, v, from queue
-        let min_index = queue
-            .iter()
-            .position(|&r| r == node_with_min_distance)
-            .unwrap();
-        let v = queue.remove(min_index).unwrap();
-        // Check every node, u, reachable from v
-        //   to see if a route via v is shorter than the current shortest path
-        for adjacency in g.adj(NodeIndex(v)).iter() {
-            let alt = dist_to[v] + adjacency.weight;
-            if alt < dist_to[adjacency.node_index.0] {
-                dist_to[adjacency.node_index.0] = alt;
-                parent[adjacency.node_index.0] = Some(v);
-            }
-        }
-    }
-    (dist_to, parent)
-}
-
-pub fn dijkstra2(g: &dyn Digraph, from_node: NodeIndex) -> Vec<f64> {
-    // Initialise all distances to infinity
-    let mut dist_to = vec![f64::INFINITY; g.num_vertices()];
-    dist_to[from_node.0] = 0.0;
     // Add first vertex to queue
     let mut queue = PriorityQueue::new();
     queue.push(0.0, 0);
@@ -73,8 +30,9 @@ pub fn dijkstra2(g: &dyn Digraph, from_node: NodeIndex) -> Vec<f64> {
                 // Add adjacent node to queue
                 queue.push(alt, adjacency.node_index.0);
                 dist_to[adjacency.node_index.0] = alt;
+                parent[adjacency.node_index.0] = Some(v);
             }
         }
     }
-    dist_to
+    (dist_to, parent)
 }
