@@ -37,7 +37,7 @@
             .then((response) => response.json())
             .then((data) => {
                 console.log(data)
-                polyline.setLatLngs(data)
+                polyline.setLatLngs(data["path"])
                 document.getElementById("map").classList.remove("map-loading");
             });
     }
