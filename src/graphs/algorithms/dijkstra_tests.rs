@@ -45,6 +45,7 @@ fn osm_dijkstra_test() {
     let mut cc = ConnectedComponents::new(&g);
     cc.run();
     let c_g = cc.get_largest_connected_subgraphs();
+    assert_eq!(c_g.num_vertices(), 9936);
     // Get start and end nodes
     let start_node_index = c_g
         .nodes_data()
