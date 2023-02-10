@@ -175,6 +175,7 @@ dependencies = [
  "rand",
  "rand_distr",
  "rocket",
+ "serde",
  "svg 0.13.0",
  "tsplib",
 ]

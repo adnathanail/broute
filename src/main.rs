@@ -7,6 +7,7 @@ use rocket::serde::json::Json;
 use rocket::{Request, Response, State};
 use std::ops::Deref;
 use std::sync::{Arc, RwLock};
+use rocket::serde::Serialize;
 
 use broute::graphs::algorithms::connected_components::ConnectedComponents;
 use broute::graphs::algorithms::dijkstra::dijkstra;
@@ -15,6 +16,14 @@ use broute::graphs::datastructures::al_digraph::ALDigraph;
 use broute::graphs::datastructures::digraph::{Digraph, NodeIndex};
 use broute::graphs::input::pbf::load_pbf_file;
 
+#[derive(Serialize)]
+struct ShortestPathResponse {
+    from_point: (f64, f64),
+    to_point: (f64, f64),
+    path: Vec<(f64, f64)>,
+    path_length: f64,
+}
+
 #[get("/<start_latitude>/<start_longitude>/<end_latitude>/<end_longitude>")]
 fn shortest_path(
     rc: &State<RoutingCache>,
@@ -22,27 +31,17 @@ fn shortest_path(
     start_longitude: f64,
     end_latitude: f64,
     end_longitude: f64,
-) -> Json<Vec<(f64, f64)>> {
+) -> Json<ShortestPathResponse> {
     let binding = rc.g.read().unwrap();
     let c_g = binding.deref();
 
     let start_node_index = c_g
         .nodes_data()
         .get_node_index_closest_to_point(start_latitude, start_longitude);
-    let start_node_data = c_g.nodes_data().get_node_data_by_index(start_node_index);
 
     let end_node_index = c_g
         .nodes_data()
         .get_node_index_closest_to_point(end_latitude, end_longitude);
-    let end_node_data = c_g.nodes_data().get_node_data_by_index(end_node_index);
-
-    println!(
-        "Running Dijkstra from {:},{:} to {:},{:}",
-        start_node_data.longitude,
-        start_node_data.latitude,
-        end_node_data.longitude,
-        end_node_data.latitude
-    );
 
     let dj_out = dijkstra(c_g, start_node_index);
 
@@ -55,10 +54,11 @@ fn shortest_path(
         current_node_index = dj_out.1[current_node_index].unwrap();
     }
     p.path.push(NodeIndex(current_node_index));
+    // Form response
+    let start_node_data = c_g.nodes_data().get_node_data_by_index(start_node_index);
+    let end_node_data = c_g.nodes_data().get_node_data_by_index(end_node_index);
 
-    println!("{:?}", p.path);
-
-    println!("Distance {:} km", get_path_length(c_g, &p));
+    let path_length = get_path_length(c_g, &p);
 
     let mut points: Vec<(f64, f64)> = vec![];
     for node_index in &p.path {
@@ -66,7 +66,12 @@ fn shortest_path(
         points.push((node_data.latitude, node_data.longitude))
     }
 
-    Json(points)
+    Json(ShortestPathResponse {
+        from_point: (start_node_data.latitude, start_node_data.longitude),
+        to_point: (end_node_data.latitude, end_node_data.longitude),
+        path: points,
+        path_length,
+    })
 }
 
 pub struct CORS;
