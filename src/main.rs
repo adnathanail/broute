@@ -1,8 +1,6 @@
 #[macro_use]
 extern crate rocket;
 
-use std::collections::HashMap;
-
 use rocket::serde::json::Json;
 
 use broute::graphs::algorithms::connected_components::ConnectedComponents;
