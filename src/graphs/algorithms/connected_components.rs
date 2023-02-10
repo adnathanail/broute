@@ -65,45 +65,49 @@ impl<'a> ConnectedComponents<'a> {
         }
     }
 
+    fn get_subgraph_from_node_ids(&self, node_ids: &Vec<NodeIndex>) -> ALDigraph {
+        let mut g = ALDigraph::new(node_ids.len());
+        for u in node_ids {
+            let u_id = self.g.nodes_data().get_node_id_by_index(u);
+            g.mut_nodes_data()
+                .add_node_data(*u_id, *self.g.nodes_data().get_node_data_by_index(*u));
+        }
+        for u in node_ids {
+            let u_id = self.g.nodes_data().get_node_id_by_index(u);
+            for v in self.g.adj(*u) {
+                let v_id = self
+                    .g
+                    .nodes_data()
+                    .get_node_id_by_index(&NodeIndex(v.node_index.0));
+                if node_ids.contains(&v.node_index) {
+                    g.add_edge_by_id(*u_id, *v_id, v.weight)
+                }
+            }
+        }
+        g
+    }
+
     pub fn get_connected_subgraphs(self, min_graph_size: usize) -> Vec<ALDigraph> {
         let mut out = vec![];
-        for component in self.components {
+        for component in &self.components {
             if component.len() < min_graph_size {
                 continue;
             }
 
-            let mut g = ALDigraph::new(component.len());
-            for u in &component {
-                let u_id = self.g.nodes_data().get_node_id_by_index(u);
-                g.mut_nodes_data()
-                    .add_node_data(*u_id, *self.g.nodes_data().get_node_data_by_index(*u));
-            }
-            for u in &component {
-                let u_id = self.g.nodes_data().get_node_id_by_index(u);
-                for v in self.g.adj(*u) {
-                    let v_id = self
-                        .g
-                        .nodes_data()
-                        .get_node_id_by_index(&NodeIndex(v.node_index.0));
-                    if component.contains(&v.node_index) {
-                        g.add_edge_by_id(*u_id, *v_id, v.weight)
-                    }
-                }
-            }
-            out.push(g)
+            out.push((&self).get_subgraph_from_node_ids(component));
         }
         out
     }
 
     pub fn get_largest_connected_subgraphs(self) -> ALDigraph {
         let mut largest_graph_size = 0;
-        let mut largest_graph: Option<ALDigraph> = None;
-        for g in self.get_connected_subgraphs(2) {
-            if g.num_vertices() > largest_graph_size {
-                largest_graph_size = g.num_vertices();
-                largest_graph = Some(g);
+        let mut largest_component: Option<Vec<NodeIndex>> = None;
+        for component in &self.components {
+            if component.len() > largest_graph_size {
+                largest_graph_size = component.len();
+                largest_component = Some(component.clone());
             }
         }
-        largest_graph.unwrap()
+        (&self).get_subgraph_from_node_ids(&largest_component.unwrap())
     }
 }
