@@ -1,6 +1,6 @@
 use std::time::Duration;
 
-use criterion::{BenchmarkId, Criterion, criterion_group, criterion_main};
+use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion};
 
 use broute::graphs;
 
@@ -54,7 +54,10 @@ fn dijkstra_benchmark(c: &mut Criterion) {
 
     group.bench_with_input(BenchmarkId::new("v1", &c_g), &c_g, |b, c_g| {
         b.iter(|| {
-            graphs::algorithms::dijkstra::dijkstra(c_g, graphs::datastructures::digraph::NodeIndex(0))
+            graphs::algorithms::dijkstra::dijkstra(
+                c_g,
+                graphs::datastructures::digraph::NodeIndex(0),
+            )
         })
     });
     group.bench_with_input(BenchmarkId::new("v2", &c_g), &c_g, |b, c_g| {
