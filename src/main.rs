@@ -136,7 +136,7 @@ async fn rocket() -> Result<rocket::Rocket<rocket::Ignite>, rocket::Error> {
 
 #[rocket::main]
 async fn main() -> Result<(), rocket::Error> {
-    rocket().await?.launch().await?;
+    let _rocket = rocket().await?.launch().await?;
 
     Ok(())
 }
