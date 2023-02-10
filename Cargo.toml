@@ -7,7 +7,7 @@ edition = "2021"
 
 [dependencies]
 # Benchmarking
-criterion = { version = "0.3.6", features = ["html_reports"] }
+criterion = { version = "0.4.0", features = ["html_reports"] }
 # Random numbers
 rand = "0.8.5"
 # Random distributions
