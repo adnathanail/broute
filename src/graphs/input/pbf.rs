@@ -59,10 +59,10 @@ pub fn load_pbf_file(pbf_path: &str) -> ALDigraph {
                     let to_node_data = g.nodes_data().get_node_data_by_id(to_id);
 
                     let weight = haversine(
-                        from_node_data.longitude,
                         from_node_data.latitude,
-                        to_node_data.longitude,
+                        from_node_data.longitude,
                         to_node_data.latitude,
+                        to_node_data.longitude,
                     );
                     g.add_edge_by_id(
                         NodeID(node_ids[i] as usize),

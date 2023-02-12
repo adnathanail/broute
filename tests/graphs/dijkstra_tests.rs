@@ -60,7 +60,7 @@ fn osm_dijkstra_test() {
     // Reverse engineer shortest path
     let p = dj.get_graph_path(end_node_index);
     // Check path length
-    assert_eq!(p.get_length_on_graph(&c_g), 1.7092824759861902);
+    assert_eq!(p.get_length_on_graph(&c_g), 1.416306768485833);
     // Check path points
     let mut points: Vec<(f64, f64)> = vec![];
     for node_index in &p.path {
