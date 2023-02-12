@@ -11,10 +11,6 @@ pub struct Dijkstra<'a> {
 }
 
 impl<'a> Dijkstra<'a> {
-    /// Implements Tarjan's strongly connected component algorithm
-    ///
-    /// Original code based on pseudocode here
-    ///   https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm#The_algorithm_in_pseudocode
     pub fn new(g: &'a dyn Digraph, from_node: NodeIndex) -> Self {
         Dijkstra {
             g,
@@ -53,8 +49,12 @@ impl<'a> Dijkstra<'a> {
         }
     }
 
-    pub fn get_dist_to(self) -> Vec<f64> {
+    pub fn get_dist_to_vec(self) -> Vec<f64> {
         self.dist_to
+    }
+
+    pub fn get_dist_to(&self, to_node: NodeIndex) -> f64 {
+        self.dist_to[to_node.0]
     }
 
     pub fn get_graph_path(self, to_node: NodeIndex) -> GraphPath {
