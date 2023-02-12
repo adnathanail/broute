@@ -9,10 +9,10 @@ use std::ops::Deref;
 use std::sync::{Arc, RwLock};
 
 use broute::graphs::algorithms::connected_components::ConnectedComponents;
-use broute::graphs::algorithms::dijkstra::dijkstra;
-use broute::graphs::algorithms::travelling_salesman::{get_path_length, GraphPath};
+use broute::graphs::algorithms::dijkstra::Dijkstra;
+use broute::graphs::algorithms::travelling_salesman::get_path_length;
 use broute::graphs::datastructures::al_digraph::ALDigraph;
-use broute::graphs::datastructures::digraph::{Digraph, NodeIndex};
+use broute::graphs::datastructures::digraph::Digraph;
 use broute::graphs::input::pbf::load_pbf_file;
 
 #[cfg(test)]
@@ -45,17 +45,12 @@ fn shortest_path(
         .nodes_data()
         .get_node_index_closest_to_point(end_latitude, end_longitude);
 
-    let dj_out = dijkstra(c_g, start_node_index);
+    let mut dj = Dijkstra::new(c_g, start_node_index);
+    dj.run();
 
     println!("Dijkstra ran");
 
-    let mut p = GraphPath { path: vec![] };
-    let mut current_node_index = end_node_index.0;
-    while current_node_index != start_node_index.0 {
-        p.path.push(NodeIndex(current_node_index));
-        current_node_index = dj_out.1[current_node_index].unwrap();
-    }
-    p.path.push(NodeIndex(current_node_index));
+    let p = dj.get_graph_path(end_node_index);
     // Form response
     let start_node_data = c_g.nodes_data().get_node_data_by_index(start_node_index);
     let end_node_data = c_g.nodes_data().get_node_data_by_index(end_node_index);
