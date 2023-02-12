@@ -1,4 +1,5 @@
 use crate::graphs::datastructures::digraph::NodeIndex;
+use crate::graphs::datastructures::graph_path::GraphPath;
 use graphviz_rust::{
     cmd::{CommandArg, Format},
     dot_structures::Graph,
@@ -6,7 +7,7 @@ use graphviz_rust::{
     printer::PrinterContext,
 };
 
-use super::super::{algorithms::travelling_salesman::GraphPath, datastructures::digraph::Digraph};
+use super::super::datastructures::digraph::Digraph;
 
 #[derive(Debug)]
 struct GraphStringBody {
