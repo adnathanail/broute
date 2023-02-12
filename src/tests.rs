@@ -3,7 +3,7 @@ use rocket::http::Status;
 use rocket::local::asynchronous::Client;
 
 #[async_test]
-async fn hello_world() {
+async fn test_shortest_path_api() {
     let client = Client::tracked(rocket().await.unwrap())
         .await
         .expect("valid rocket instance");
