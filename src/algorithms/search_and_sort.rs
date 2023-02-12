@@ -1,7 +1,3 @@
-#[cfg(test)]
-#[path = "search_and_sort_tests.rs"]
-mod search_and_sort_tests;
-
 pub fn binary_search(list_to_search: &[i32], len: usize, value_to_find: &i32) -> Option<usize> {
     let mut lower_bound: i32 = 0;
     let mut upper_bound: i32 = len as i32 - 1;

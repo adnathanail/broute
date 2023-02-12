@@ -1,5 +1,5 @@
-use super::*;
-use crate::graphs::datastructures::NodeID;
+use broute::graphs::algorithms::ConnectedComponents;
+use broute::graphs::datastructures::{ALDigraph, Digraph, NodeID, NodeIndex};
 
 #[test]
 fn connected_components_test() {
@@ -20,7 +20,7 @@ fn connected_components_test() {
     cc.run();
 
     assert_eq!(
-        cc.components,
+        *cc.get_components(),
         vec![
             vec![NodeIndex(4)],
             vec![NodeIndex(3)],
