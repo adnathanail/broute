@@ -1,5 +1,5 @@
-use crate::graphs::algorithms::travelling_salesman::GraphPath;
 use super::super::super::algorithms::priority_queue::PriorityQueue;
+use crate::graphs::algorithms::travelling_salesman::GraphPath;
 use crate::graphs::datastructures::digraph::{Digraph, NodeIndex};
 
 #[cfg(test)]
