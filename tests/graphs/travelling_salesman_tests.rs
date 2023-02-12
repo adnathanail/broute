@@ -1,4 +1,4 @@
-use broute::graphs::algorithms::{ConnectedComponents, Dijkstra, travelling_salesman};
+use broute::graphs::algorithms::{ConnectedComponents, form_abstracted_graph, travelling_salesman};
 use broute::graphs::datastructures::{AMDigraph, Digraph, NodeID, NodeIndex};
 use broute::graphs::input::load_pbf_file;
 
@@ -40,28 +40,7 @@ fn dijkstra_travelling_salesman_integration_test() {
     assert_eq!(pickup_node_ids, [NodeID(1074585047), NodeID(252362113), NodeID(1204303590), NodeID(1573112159), NodeID(1736929694)]);
 
     // Form abstracted graph
-    let mut abstracted_graph = AMDigraph::new(pickup_node_ids.len());
-    for node_id in &pickup_node_ids {
-        let node_data = c_g.nodes_data().get_node_data_by_id(*node_id);
-        abstracted_graph
-            .mut_nodes_data()
-            .add_node_data(*node_id, *node_data)
-    }
-    for from_node_id in &pickup_node_ids {
-        let from_node_index = c_g.nodes_data().get_node_index_by_id(from_node_id);
-        let mut dj = Dijkstra::new(&c_g, *from_node_index);
-        dj.run();
-        for to_node_id in &pickup_node_ids {
-            if to_node_id != from_node_id {
-                let to_node_index = c_g.nodes_data().get_node_index_by_id(to_node_id);
-                abstracted_graph.add_edge_by_id(
-                    *from_node_id,
-                    *to_node_id,
-                    dj.get_dist_to(*to_node_index),
-                )
-            }
-        }
-    }
+    let abstracted_graph = form_abstracted_graph(&c_g, &pickup_node_ids);
     check_graph_adjacency(&abstracted_graph, &pickup_node_ids[0], vec![(NodeIndex(0), 1.377158916250499), (NodeIndex(1), 0.9789951317313738), (NodeIndex(2), 1.755917633260777), (NodeIndex(3), 2.6659932095468)]);
     check_graph_adjacency(&abstracted_graph, &pickup_node_ids[1], vec![(NodeIndex(0), 1.980472813282169), (NodeIndex(1), 2.4817146592249784), (NodeIndex(2), 1.455229434276506), (NodeIndex(3), 2.0888624885817397)]);
     check_graph_adjacency(&abstracted_graph, &pickup_node_ids[2], vec![(NodeIndex(0), 2.075826825805118), (NodeIndex(1), 2.1511220126275212), (NodeIndex(2), 1.8695162433680703), (NodeIndex(3), 2.4192915795174095)]);
