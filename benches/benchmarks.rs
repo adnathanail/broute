@@ -3,8 +3,7 @@ use std::time::Duration;
 use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion};
 
 use broute::graphs;
-use broute::graphs::algorithms::connected_components::ConnectedComponents;
-use broute::graphs::algorithms::dijkstra::dijkstra;
+use broute::graphs::algorithms::dijkstra::Dijkstra;
 use broute::graphs::algorithms::travelling_salesman::travelling_salesman;
 use broute::graphs::datastructures::digraph::NodeIndex;
 
@@ -15,7 +14,12 @@ fn dijkstra_benchmark(c: &mut Criterion) {
     group.bench_with_input(
         BenchmarkId::new("Random graph", &random_g),
         &random_g,
-        |b, random_g| b.iter(|| dijkstra(random_g, NodeIndex(0))),
+        |b, random_g| {
+            b.iter(|| {
+                let mut dj = Dijkstra::new(random_g, NodeIndex(0));
+                dj.run();
+            })
+        },
     );
 
     let dimacs_g =
@@ -23,7 +27,12 @@ fn dijkstra_benchmark(c: &mut Criterion) {
     group.bench_with_input(
         BenchmarkId::new("DIMCAS d1291", &dimacs_g),
         &dimacs_g,
-        |b, dimacs_g| b.iter(|| dijkstra(dimacs_g, NodeIndex(0))),
+        |b, dimacs_g| {
+            b.iter(|| {
+                let mut dj = Dijkstra::new(dimacs_g, NodeIndex(0));
+                dj.run();
+            })
+        },
     );
 
     let monaco_g = graphs::input::pbf::load_pbf_file("test_data/geofabrik/monaco-latest.osm.pbf");
@@ -34,7 +43,12 @@ fn dijkstra_benchmark(c: &mut Criterion) {
     group.bench_with_input(
         BenchmarkId::new("OSM Monaco", &monaco_largest_g),
         &monaco_largest_g,
-        |b, monaco_largest_g| b.iter(|| dijkstra(monaco_largest_g, NodeIndex(0))),
+        |b, monaco_largest_g| {
+            b.iter(|| {
+                let mut dj = Dijkstra::new(monaco_largest_g, NodeIndex(0));
+                dj.run();
+            })
+        },
     );
 
     group.finish();
@@ -59,7 +73,7 @@ fn connected_components_benchmark(c: &mut Criterion) {
 
     group.bench_with_input(BenchmarkId::new("OSM Monaco", &g), &g, |b, g| {
         b.iter(|| {
-            let mut cc = ConnectedComponents::new(g);
+            let mut cc = graphs::algorithms::connected_components::ConnectedComponents::new(g);
             cc.run();
             cc.get_largest_connected_subgraphs()
         })
