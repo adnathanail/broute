@@ -1,2 +1,2 @@
-pub mod connected_components_tests;
-pub mod dijkstra_tests;
+mod connected_components_tests;
+mod dijkstra_tests;
