@@ -1,5 +1,4 @@
-use crate::graphs::datastructures::al_digraph::ALDigraph;
-use crate::graphs::datastructures::digraph::{Digraph, NodeIndex};
+use crate::graphs::datastructures::{ALDigraph, Digraph, NodeIndex};
 use std::cmp::min;
 
 #[cfg(test)]

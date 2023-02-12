@@ -1,6 +1,6 @@
 use crate::algorithms::haversine::haversine;
-use crate::graphs::datastructures::al_digraph::ALDigraph;
-use crate::graphs::datastructures::digraph::{Digraph, NodeID};
+use crate::graphs::datastructures::ALDigraph;
+use crate::graphs::datastructures::{Digraph, NodeID};
 use osmpbf::{Element, ElementReader};
 
 pub fn load_pbf_file(pbf_path: &str) -> ALDigraph {

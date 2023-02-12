@@ -1,3 +1,7 @@
-pub mod pbf;
-pub mod random_graph;
-pub mod tsplib;
+mod pbf;
+mod random_graph;
+mod tsplib;
+
+pub use self::pbf::*;
+pub use self::random_graph::*;
+pub use self::tsplib::*;

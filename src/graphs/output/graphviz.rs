@@ -1,13 +1,10 @@
-use crate::graphs::datastructures::digraph::NodeIndex;
-use crate::graphs::datastructures::graph_path::GraphPath;
+use crate::graphs::datastructures::{Digraph, GraphPath, NodeIndex};
 use graphviz_rust::{
     cmd::{CommandArg, Format},
     dot_structures::Graph,
     exec, parse,
     printer::PrinterContext,
 };
-
-use super::super::datastructures::digraph::Digraph;
 
 #[derive(Debug)]
 struct GraphStringBody {

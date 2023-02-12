@@ -1,6 +1,4 @@
-use crate::graphs::datastructures::digraph::{Digraph, NodeIndex};
-use crate::graphs::datastructures::graph_path::GraphPath;
-
+use crate::graphs::datastructures::{Digraph, GraphPath, NodeIndex};
 use svg::node::element::path::Data;
 use svg::node::element::{Circle, Path};
 use svg::{Document, Node};

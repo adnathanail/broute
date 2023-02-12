@@ -1,9 +1,6 @@
-use crate::graphs::datastructures::digraph::NodeID;
+use crate::graphs::datastructures::{AMDigraph, Digraph, NodeID};
 use rand::Rng;
 use rand_distr::{Distribution, Normal};
-
-use super::super::datastructures::am_digraph::AMDigraph;
-use super::super::datastructures::digraph::Digraph;
 
 pub fn get_random_graph(
     num_nodes: usize,
