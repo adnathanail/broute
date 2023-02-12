@@ -1,16 +1,14 @@
 use std::time::Duration;
 
+use broute::graphs::algorithms::{travelling_salesman, ConnectedComponents, Dijkstra};
+use broute::graphs::datastructures::NodeIndex;
+use broute::graphs::input::{get_random_graph, load_pbf_file, load_tsplib_file};
 use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion};
-
-use broute::graphs;
-use broute::graphs::algorithms::dijkstra::Dijkstra;
-use broute::graphs::algorithms::travelling_salesman::travelling_salesman;
-use broute::graphs::datastructures::digraph::NodeIndex;
 
 fn dijkstra_benchmark(c: &mut Criterion) {
     let mut group = c.benchmark_group("Dijkstra");
 
-    let random_g = graphs::input::random_graph::get_random_graph(3000, 0.5, 4.0, 1.0);
+    let random_g = get_random_graph(3000, 0.5, 4.0, 1.0);
     group.bench_with_input(
         BenchmarkId::new("Random graph", &random_g),
         &random_g,
@@ -22,8 +20,7 @@ fn dijkstra_benchmark(c: &mut Criterion) {
         },
     );
 
-    let dimacs_g =
-        graphs::input::tsplib::load_tsplib_file("test_data/dimacs_tsp/d1291.tsp", usize::MAX);
+    let dimacs_g = load_tsplib_file("test_data/dimacs_tsp/d1291.tsp", usize::MAX);
     group.bench_with_input(
         BenchmarkId::new("DIMCAS d1291", &dimacs_g),
         &dimacs_g,
@@ -35,9 +32,8 @@ fn dijkstra_benchmark(c: &mut Criterion) {
         },
     );
 
-    let monaco_g = graphs::input::pbf::load_pbf_file("test_data/geofabrik/monaco-latest.osm.pbf");
-    let mut monaco_cc =
-        graphs::algorithms::connected_components::ConnectedComponents::new(&monaco_g);
+    let monaco_g = load_pbf_file("test_data/geofabrik/monaco-latest.osm.pbf");
+    let mut monaco_cc = ConnectedComponents::new(&monaco_g);
     monaco_cc.run();
     let monaco_largest_g = monaco_cc.get_largest_connected_subgraphs();
     group.bench_with_input(
@@ -55,7 +51,7 @@ fn dijkstra_benchmark(c: &mut Criterion) {
 }
 
 fn travelling_salesman_benchmark(c: &mut Criterion) {
-    let g = graphs::input::tsplib::load_tsplib_file("test_data/dimacs_tsp/d1291.tsp", usize::MAX);
+    let g = load_tsplib_file("test_data/dimacs_tsp/d1291.tsp", usize::MAX);
 
     let mut group = c.benchmark_group("Travelling salesman");
 
@@ -67,13 +63,13 @@ fn travelling_salesman_benchmark(c: &mut Criterion) {
 }
 
 fn connected_components_benchmark(c: &mut Criterion) {
-    let g = graphs::input::pbf::load_pbf_file("test_data/geofabrik/monaco-latest.osm.pbf");
+    let g = load_pbf_file("test_data/geofabrik/monaco-latest.osm.pbf");
 
     let mut group = c.benchmark_group("Connected components");
 
     group.bench_with_input(BenchmarkId::new("OSM Monaco", &g), &g, |b, g| {
         b.iter(|| {
-            let mut cc = graphs::algorithms::connected_components::ConnectedComponents::new(g);
+            let mut cc = ConnectedComponents::new(g);
             cc.run();
             cc.get_largest_connected_subgraphs()
         })

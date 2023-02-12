@@ -1,5 +1,5 @@
 use super::*;
-use crate::graphs::datastructures::digraph::NodeID;
+use crate::graphs::datastructures::NodeID;
 
 #[test]
 fn connected_components_test() {
@@ -24,7 +24,7 @@ fn connected_components_test() {
         vec![
             vec![NodeIndex(4)],
             vec![NodeIndex(3)],
-            vec![NodeIndex(1), NodeIndex(2), NodeIndex(0)]
+            vec![NodeIndex(1), NodeIndex(2), NodeIndex(0)],
         ]
     );
 

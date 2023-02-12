@@ -1,4 +1,9 @@
-pub mod al_digraph;
-pub mod am_digraph;
-pub mod digraph;
-pub mod graph_path;
+mod al_digraph;
+mod am_digraph;
+mod digraph;
+mod graph_path;
+
+pub use al_digraph::*;
+pub use am_digraph::*;
+pub use digraph::*;
+pub use graph_path::*;
