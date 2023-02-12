@@ -53,7 +53,7 @@ pub fn travelling_salesman(g: &dyn Digraph, output_graph: bool) -> GraphPath {
         path: (0..g.num_vertices()).map(NodeIndex).collect(),
     };
     best_path.path.shuffle(&mut rng);
-    let mut path_length = (&best_path).get_length_on_graph(g);
+    let mut path_length = best_path.get_length_on_graph(g);
 
     // println!("Initial state");
     //
@@ -66,7 +66,7 @@ pub fn travelling_salesman(g: &dyn Digraph, output_graph: bool) -> GraphPath {
         // println!("{}", temp);
         let potential_new_path = get_potential_new_path(&mut rng, g, &best_path);
 
-        let new_path_length = (&potential_new_path).get_length_on_graph(g);
+        let new_path_length = potential_new_path.get_length_on_graph(g);
         if new_path_length < path_length {
             best_path = potential_new_path;
             path_length = new_path_length;
