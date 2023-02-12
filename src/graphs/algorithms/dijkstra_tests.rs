@@ -1,6 +1,5 @@
 use super::*;
 use crate::graphs::algorithms::connected_components::ConnectedComponents;
-use crate::graphs::algorithms::travelling_salesman::{get_path_length, GraphPath};
 use crate::graphs::datastructures;
 use crate::graphs::datastructures::digraph::NodeID;
 use crate::graphs::input::pbf::load_pbf_file;
@@ -64,7 +63,7 @@ fn osm_dijkstra_test() {
     }
     p.path.push(NodeIndex(current_node_index));
     // Check path length
-    assert_eq!(get_path_length(&c_g, &p), 1.7092824759861902);
+    assert_eq!((&p).get_length_on_graph(&c_g), 1.7092824759861902);
     // Check path points
     let mut points: Vec<(f64, f64)> = vec![];
     for node_index in &p.path {
