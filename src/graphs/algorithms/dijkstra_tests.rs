@@ -30,8 +30,11 @@ fn simple_dijkstra_test() {
     g.add_edge_by_id(NodeID(7), NodeID(2), 7.0);
     g.add_edge_by_id(NodeID(7), NodeID(5), 6.0);
 
+    let mut dj = Dijkstra::new(&g, NodeIndex(0));
+    dj.run();
+
     assert_eq!(
-        dijkstra(&g, NodeIndex(0)).0,
+        dj.get_dist_to(),
         [0.0, 5.0, 14.0, 17.0, 9.0, 13.0, 25.0, 8.0]
     );
 }
@@ -53,15 +56,10 @@ fn osm_dijkstra_test() {
         .nodes_data()
         .get_node_index_closest_to_point(43.7341524, 7.4178794);
     // Run Dijkstra
-    let dj_out = dijkstra(&c_g, start_node_index);
+    let mut dj = Dijkstra::new(&c_g, start_node_index);
+    dj.run();
     // Reverse engineer shortest path
-    let mut p = GraphPath { path: vec![] };
-    let mut current_node_index = end_node_index.0;
-    while current_node_index != start_node_index.0 {
-        p.path.push(NodeIndex(current_node_index));
-        current_node_index = dj_out.1[current_node_index].unwrap();
-    }
-    p.path.push(NodeIndex(current_node_index));
+    let p = dj.get_graph_path(end_node_index);
     // Check path length
     assert_eq!((&p).get_length_on_graph(&c_g), 1.7092824759861902);
     // Check path points
