@@ -1,6 +1,6 @@
 use super::super::super::algorithms::priority_queue::PriorityQueue;
-use crate::graphs::algorithms::travelling_salesman::GraphPath;
 use crate::graphs::datastructures::digraph::{Digraph, NodeIndex};
+use crate::graphs::datastructures::graph_path::GraphPath;
 
 #[cfg(test)]
 #[path = "dijkstra_tests.rs"]

@@ -1,5 +1,5 @@
-use crate::graphs::algorithms::travelling_salesman::GraphPath;
 use crate::graphs::datastructures::digraph::{Digraph, NodeIndex};
+use crate::graphs::datastructures::graph_path::GraphPath;
 
 use svg::node::element::path::Data;
 use svg::node::element::{Circle, Path};

@@ -1,4 +1,5 @@
 use crate::graphs::datastructures::digraph::NodeIndex;
+use crate::graphs::datastructures::graph_path::GraphPath;
 use plotlib::page::Page;
 use plotlib::repr::Plot;
 use plotlib::style::LineStyle;
@@ -8,19 +9,6 @@ use rand::seq::SliceRandom;
 use rand::{thread_rng, Rng};
 
 use super::super::datastructures::digraph::Digraph;
-
-#[derive(Debug, Clone)]
-pub struct GraphPath {
-    pub path: Vec<NodeIndex>,
-}
-
-impl GraphPath {
-    pub fn get_length_on_graph(&self, g: &dyn Digraph) -> f64 {
-        (0..(self.path.len() - 1)).fold(0f64, |total, i| {
-            total + g.dist(self.path[i + 1], self.path[i])
-        })
-    }
-}
 
 fn get_potential_new_path(
     rng: &mut ThreadRng,
