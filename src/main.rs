@@ -10,7 +10,6 @@ use std::sync::{Arc, RwLock};
 
 use broute::graphs::algorithms::connected_components::ConnectedComponents;
 use broute::graphs::algorithms::dijkstra::Dijkstra;
-use broute::graphs::algorithms::travelling_salesman::get_path_length;
 use broute::graphs::datastructures::al_digraph::ALDigraph;
 use broute::graphs::datastructures::digraph::Digraph;
 use broute::graphs::input::pbf::load_pbf_file;
@@ -55,7 +54,7 @@ fn shortest_path(
     let start_node_data = c_g.nodes_data().get_node_data_by_index(start_node_index);
     let end_node_data = c_g.nodes_data().get_node_data_by_index(end_node_index);
 
-    let path_length = get_path_length(c_g, &p);
+    let path_length = (&p).get_length_on_graph(c_g);
 
     let mut points: Vec<(f64, f64)> = vec![];
     for node_index in &p.path {
