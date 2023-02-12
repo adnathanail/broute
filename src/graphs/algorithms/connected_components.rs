@@ -1,7 +1,6 @@
 use crate::graphs::datastructures::{ALDigraph, Digraph, NodeIndex};
 use std::cmp::min;
 
-
 pub struct ConnectedComponents<'a> {
     g: &'a dyn Digraph,
     index: i32,
