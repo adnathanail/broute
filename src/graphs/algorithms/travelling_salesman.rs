@@ -46,11 +46,13 @@ pub fn travelling_salesman(g: &dyn Digraph, output_graph: bool) -> GraphPath {
 
     let mut rng = thread_rng();
 
-    let mut best_path = GraphPath {
+    let mut current_path = GraphPath {
         path: (0..g.num_vertices()).map(NodeIndex).collect(),
     };
-    best_path.path.shuffle(&mut rng);
-    let mut path_length = best_path.get_length_on_graph(g);
+    current_path.path.shuffle(&mut rng);
+    let mut path_length = current_path.get_length_on_graph(g);
+
+    let mut best_path = current_path.clone();
 
     // println!("Initial state");
     //
@@ -61,16 +63,17 @@ pub fn travelling_salesman(g: &dyn Digraph, output_graph: bool) -> GraphPath {
     let mut iterations = 0;
     while temp > 1e-8_f64 && iterations < (100 * g.num_vertices()) {
         // println!("{}", temp);
-        let potential_new_path = get_potential_new_path(&mut rng, g, &best_path);
+        let potential_new_path = get_potential_new_path(&mut rng, g, &current_path);
 
         let new_path_length = potential_new_path.get_length_on_graph(g);
         if new_path_length < path_length {
-            best_path = potential_new_path;
+            current_path = potential_new_path;
+            best_path = current_path.clone();
             path_length = new_path_length;
         } else {
             // TODO: Is this between 0 and 1?
             if f64::exp(-f64::abs(new_path_length - path_length) / temp) > rng.gen::<f64>() {
-                best_path = potential_new_path;
+                current_path = potential_new_path;
                 path_length = new_path_length;
             }
         }
@@ -93,7 +96,7 @@ pub fn travelling_salesman(g: &dyn Digraph, output_graph: bool) -> GraphPath {
             .y_range(0.0, result_data[0].1 + 100.0);
 
         // A page with a single view is then saved to an SVG file
-        Page::single(&v).save("out/temp_vs_cost.svg").unwrap();
+        Page::single(&v).save("out/tsp_test_1.svg").unwrap();
     }
 
     best_path
