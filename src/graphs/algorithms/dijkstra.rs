@@ -2,9 +2,6 @@ use super::super::super::algorithms::PriorityQueue;
 use crate::graphs::datastructures::GraphPath;
 use crate::graphs::datastructures::{Digraph, NodeIndex};
 
-#[cfg(test)]
-#[path = "dijkstra_tests.rs"]
-mod dijkstra_tests;
 
 pub struct Dijkstra<'a> {
     g: &'a dyn Digraph,

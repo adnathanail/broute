@@ -1,4 +1,4 @@
-use super::*;
+use broute::algorithms::{binary_search, insertion_sort};
 
 #[test]
 fn binary_search_test() {

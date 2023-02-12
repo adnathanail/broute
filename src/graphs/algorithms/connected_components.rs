@@ -1,9 +1,6 @@
 use crate::graphs::datastructures::{ALDigraph, Digraph, NodeIndex};
 use std::cmp::min;
 
-#[cfg(test)]
-#[path = "connected_components_tests.rs"]
-mod connected_components_tests;
 
 pub struct ConnectedComponents<'a> {
     g: &'a dyn Digraph,
@@ -84,6 +81,10 @@ impl<'a> ConnectedComponents<'a> {
             }
         }
         g
+    }
+
+    pub fn get_components(&self) -> &Vec<Vec<NodeIndex>> {
+        &self.components
     }
 
     pub fn get_connected_subgraphs(self, min_graph_size: usize) -> Vec<ALDigraph> {
