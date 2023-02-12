@@ -33,7 +33,7 @@ fn simple_dijkstra_test() {
     dj.run();
 
     assert_eq!(
-        dj.get_dist_to(),
+        dj.get_dist_to_vec(),
         [0.0, 5.0, 14.0, 17.0, 9.0, 13.0, 25.0, 8.0]
     );
 }
