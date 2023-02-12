@@ -1,4 +1,4 @@
-use crate::algorithms::haversine::haversine;
+use crate::algorithms::haversine;
 use crate::graphs::datastructures::ALDigraph;
 use crate::graphs::datastructures::{Digraph, NodeID};
 use osmpbf::{Element, ElementReader};

@@ -1,4 +1,4 @@
-use crate::algorithms::haversine::haversine;
+use crate::algorithms::haversine;
 use std::collections::HashMap;
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
