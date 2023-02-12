@@ -57,6 +57,10 @@ impl<'a> Dijkstra<'a> {
         }
     }
 
+    pub fn get_dist_to(self) -> Vec<f64> {
+        self.dist_to
+    }
+
     pub fn get_graph_path(self, to_node: NodeIndex) -> GraphPath {
         let mut p = GraphPath { path: vec![] };
         let mut current_node_index = to_node.0;
