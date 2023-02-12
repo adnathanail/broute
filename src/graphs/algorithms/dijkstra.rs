@@ -2,7 +2,6 @@ use super::super::super::algorithms::PriorityQueue;
 use crate::graphs::datastructures::GraphPath;
 use crate::graphs::datastructures::{Digraph, NodeIndex};
 
-
 pub struct Dijkstra<'a> {
     g: &'a dyn Digraph,
     from_node: NodeIndex,
