@@ -1,4 +1,4 @@
-use super::super::super::algorithms::priority_queue::PriorityQueue;
+use super::super::super::algorithms::PriorityQueue;
 use crate::graphs::datastructures::GraphPath;
 use crate::graphs::datastructures::{Digraph, NodeIndex};
 
