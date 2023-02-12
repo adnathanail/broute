@@ -1,10 +1,7 @@
-use crate::graphs::datastructures::digraph::NodeID;
+use crate::graphs::datastructures::{AMDigraph, Digraph, NodeID};
 use rand::{thread_rng, Rng};
 use std::{cmp, fs, io::Cursor};
 use tsplib::NodeCoord;
-
-use super::super::datastructures::am_digraph::AMDigraph;
-use super::super::datastructures::digraph::Digraph;
 
 pub fn generate_random_tsplib_file(num_nodes: usize) -> String {
     let mut rng = thread_rng();

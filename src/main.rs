@@ -1,18 +1,15 @@
 #[macro_use]
 extern crate rocket;
 
+use broute::graphs::algorithms::{ConnectedComponents, Dijkstra};
+use broute::graphs::datastructures::{ALDigraph, Digraph};
+use broute::graphs::input::load_pbf_file;
 use rocket::fairing::{Fairing, Info, Kind};
 use rocket::http::Header;
 use rocket::serde::json::Json;
 use rocket::serde::{Deserialize, Serialize};
 use std::ops::Deref;
 use std::sync::{Arc, RwLock};
-
-use broute::graphs::algorithms::connected_components::ConnectedComponents;
-use broute::graphs::algorithms::dijkstra::Dijkstra;
-use broute::graphs::datastructures::al_digraph::ALDigraph;
-use broute::graphs::datastructures::digraph::Digraph;
-use broute::graphs::input::pbf::load_pbf_file;
 
 #[cfg(test)]
 mod tests;

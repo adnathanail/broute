@@ -1,3 +1,7 @@
-pub mod connected_components;
-pub mod dijkstra;
-pub mod travelling_salesman;
+mod connected_components;
+mod dijkstra;
+mod travelling_salesman;
+
+pub use connected_components::*;
+pub use dijkstra::*;
+pub use travelling_salesman::*;

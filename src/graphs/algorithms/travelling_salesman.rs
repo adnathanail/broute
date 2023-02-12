@@ -1,5 +1,4 @@
-use crate::graphs::datastructures::digraph::NodeIndex;
-use crate::graphs::datastructures::graph_path::GraphPath;
+use crate::graphs::datastructures::{Digraph, GraphPath, NodeIndex};
 use plotlib::page::Page;
 use plotlib::repr::Plot;
 use plotlib::style::LineStyle;
@@ -7,8 +6,6 @@ use plotlib::view::ContinuousView;
 use rand::rngs::ThreadRng;
 use rand::seq::SliceRandom;
 use rand::{thread_rng, Rng};
-
-use super::super::datastructures::digraph::Digraph;
 
 fn get_potential_new_path(
     rng: &mut ThreadRng,

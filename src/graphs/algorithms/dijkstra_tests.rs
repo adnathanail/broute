@@ -1,12 +1,12 @@
 use super::*;
 use crate::graphs::algorithms::connected_components::ConnectedComponents;
 use crate::graphs::datastructures;
-use crate::graphs::datastructures::digraph::NodeID;
-use crate::graphs::input::pbf::load_pbf_file;
+use crate::graphs::datastructures::NodeID;
+use crate::graphs::input::load_pbf_file;
 
 #[test]
 fn simple_dijkstra_test() {
-    let mut g = datastructures::am_digraph::AMDigraph::new(8);
+    let mut g = datastructures::AMDigraph::new(8);
 
     for i in 0..8 {
         g.mut_nodes_data()
