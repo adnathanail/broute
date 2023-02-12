@@ -1,8 +1,7 @@
-use super::*;
-use crate::graphs::algorithms::connected_components::ConnectedComponents;
-use crate::graphs::datastructures;
-use crate::graphs::datastructures::NodeID;
-use crate::graphs::input::load_pbf_file;
+use broute::graphs::algorithms::{ConnectedComponents, Dijkstra};
+use broute::graphs::datastructures;
+use broute::graphs::datastructures::{Digraph, NodeID, NodeIndex};
+use broute::graphs::input::load_pbf_file;
 
 #[test]
 fn simple_dijkstra_test() {
