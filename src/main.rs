@@ -54,7 +54,7 @@ fn shortest_path(
     let start_node_data = c_g.nodes_data().get_node_data_by_index(start_node_index);
     let end_node_data = c_g.nodes_data().get_node_data_by_index(end_node_index);
 
-    let path_length = (&p).get_length_on_graph(c_g);
+    let path_length = p.get_length_on_graph(c_g);
 
     let mut points: Vec<(f64, f64)> = vec![];
     for node_index in &p.path {
