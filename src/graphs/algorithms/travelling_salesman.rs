@@ -14,6 +14,14 @@ pub struct GraphPath {
     pub path: Vec<NodeIndex>,
 }
 
+impl GraphPath {
+    pub fn get_length_on_graph(&self, g: &dyn Digraph) -> f64 {
+        (0..(self.path.len() - 1)).fold(0f64, |total, i| {
+            total + g.dist(self.path[i + 1], self.path[i])
+        })
+    }
+}
+
 fn get_potential_new_path(
     rng: &mut ThreadRng,
     g: &dyn Digraph,
@@ -57,7 +65,7 @@ pub fn travelling_salesman(g: &dyn Digraph, output_graph: bool) -> GraphPath {
         path: (0..g.num_vertices()).map(NodeIndex).collect(),
     };
     best_path.path.shuffle(&mut rng);
-    let mut path_length = get_path_length(g, &best_path);
+    let mut path_length = (&best_path).get_length_on_graph(g);
 
     // println!("Initial state");
     //
@@ -70,7 +78,7 @@ pub fn travelling_salesman(g: &dyn Digraph, output_graph: bool) -> GraphPath {
         // println!("{}", temp);
         let potential_new_path = get_potential_new_path(&mut rng, g, &best_path);
 
-        let new_path_length = get_path_length(g, &potential_new_path);
+        let new_path_length = (&potential_new_path).get_length_on_graph(g);
         if new_path_length < path_length {
             best_path = potential_new_path;
             path_length = new_path_length;
@@ -104,10 +112,4 @@ pub fn travelling_salesman(g: &dyn Digraph, output_graph: bool) -> GraphPath {
     }
 
     best_path
-}
-
-pub fn get_path_length(g: &dyn Digraph, path: &GraphPath) -> f64 {
-    (0..(path.path.len() - 1)).fold(0f64, |total, i| {
-        total + g.dist(path.path[i + 1], path.path[i])
-    })
 }
