@@ -97,7 +97,7 @@ pub fn travelling_salesman(g: &dyn Digraph, desired_duration_millis: f64) -> Gra
 
         let potential_new_path = get_potential_new_path(&mut rng, g, &best_path);
 
-        if get_path_length(g, &potential_new_path) < get_path_length(g, &best_path) {
+        if potential_new_path.get_length_on_graph(g) < best_path.get_length_on_graph(g) {
             best_path = potential_new_path;
         } else {
             if 1.0f64.exp().powf(-10.0 * portion_elapsed.powf(3.0)) > rng.gen::<f64>() {
@@ -106,8 +106,8 @@ pub fn travelling_salesman(g: &dyn Digraph, desired_duration_millis: f64) -> Gra
         }
 
         iters += 1;
-        println!("{}", get_path_length(g, &best_path));
-        result_data.push((portion_elapsed, get_path_length(g, &best_path)));
+        println!("{}", best_path.get_length_on_graph(g));
+        result_data.push((portion_elapsed, best_path.get_length_on_graph(g)));
     }
 
     println!("{} iters", iters);
@@ -126,26 +126,4 @@ pub fn travelling_salesman(g: &dyn Digraph, desired_duration_millis: f64) -> Gra
     Page::single(&v).save("out/temp_vs_cost.svg").unwrap();
 
     best_path
-}
-
-// 1060 iters
-// pub fn old_get_path_length(g: &DigraphAM, path: &GraphPath) -> f64 {
-//    (0..(path.path.len() - 1)).fold(0f64, |total, i| {
-//        total + g.dist(path.path[i], path.path[i + 1])
-//    })
-//}
-
-// 1713 iters
-pub fn get_path_length(g: &dyn Digraph, path: &GraphPath) -> f64 {
-    let mut route_iter = path.path.iter();
-    let mut current_city = match route_iter.next() {
-        None => return 0.0,
-        Some(v) => *v,
-    };
-
-    route_iter.fold(0.0, |mut total_distance, &next_city| {
-        total_distance += g.dist(current_city, next_city);
-        current_city = next_city;
-        total_distance
-    })
 }
