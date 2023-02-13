@@ -22,41 +22,50 @@
 <script>
     let map = L.map('map').setView([43.7284765, 7.415138], 15);
 
+    let colors = ["red", "yellow", "green", "blue"];
+
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
         attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(map);
 
-    let start_point = [43.7284765, 7.415138];
-    let end_point = [43.7341524, 7.4178794];
-    let polyline = L.polyline([], {color: 'red'}).addTo(map);
+    let polylines = [];
+
+    let marker_id_to_lng_lat = {};
 
     function update_line() {
+        let points_list = [];
+        for (let key in marker_id_to_lng_lat) {
+            points_list.push(`${marker_id_to_lng_lat[key][0]},${marker_id_to_lng_lat[key][1]}`)
+        }
+        let points_str = points_list.join("|");
+        for (let polyline of polylines) {
+            polyline.remove();
+        }
         document.getElementById("map").classList.add("map-loading");
-        fetch(`http://localhost:8000/shortest_path/${start_point[0]}/${start_point[1]}/${end_point[0]}/${end_point[1]}/`)
+        let url = `http://localhost:8000/route_optimisation/${points_str}/`;
+        fetch(url)
             .then((response) => response.json())
             .then((data) => {
-                console.log(data)
-                polyline.setLatLngs(data["path"])
+                for (let leg in data["legs"]) {
+                    polylines.push(L.polyline(data["legs"][leg], {color: colors[leg % colors.length]}).addTo(map));
+                }
                 document.getElementById("map").classList.remove("map-loading");
             });
     }
 
-    update_line();
-
-    function updateStartPoint(e) {
-        start_point = [e.latlng.lat, e.latlng.lng];
+    function addPoint(e) {
+        let marker = L.marker([e.latlng.lat, e.latlng.lng]).addTo(map);
+        marker_id_to_lng_lat[marker._leaflet_id] = [e.latlng.lat, e.latlng.lng];
         update_line();
+        marker.on('click', function () {
+            marker.remove()
+            delete marker_id_to_lng_lat[marker._leaflet_id];
+            update_line();
+        })
     }
 
-    function updateEndPoint(e) {
-        end_point = [e.latlng.lat, e.latlng.lng];
-        update_line();
-        return false;
-    }
-
-    map.on('click', updateStartPoint);
-    map.on('contextmenu', updateEndPoint);
+    map.on('click', addPoint);
 </script>
 </body>
 </html>
