@@ -1,4 +1,4 @@
-use crate::graphs::datastructures::{AMDigraph, Digraph, NodeID};
+use crate::graphs::datastructures::{AMDigraph, Digraph, LatLng, NodeID};
 use rand::Rng;
 use rand_distr::{Distribution, Normal};
 
@@ -15,7 +15,7 @@ pub fn get_random_graph(
 
     for i in 0..num_nodes {
         g.mut_nodes_data()
-            .add_node_data_by_parts(NodeID(i), 0.0, 0.0)
+            .add_node_data_by_parts(NodeID(i), LatLng { latitude: 0.0, longitude: 0.0 })
     }
 
     for i in 0..num_nodes {

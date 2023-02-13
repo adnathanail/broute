@@ -13,17 +13,17 @@ fn get_points_bounds(g: &dyn Digraph) -> (f64, f64, f64, f64) {
     for node_id in g.nodes_data().get_node_ids() {
         let nd = g.nodes_data().get_node_data_by_id(node_id);
 
-        if nd.longitude < min_lon {
-            min_lon = nd.longitude;
+        if nd.latlng.longitude < min_lon {
+            min_lon = nd.latlng.longitude;
         }
-        if nd.longitude > max_lon {
-            max_lon = nd.longitude;
+        if nd.latlng.longitude > max_lon {
+            max_lon = nd.latlng.longitude;
         }
-        if nd.latitude < min_lat {
-            min_lat = nd.latitude;
+        if nd.latlng.latitude < min_lat {
+            min_lat = nd.latlng.latitude;
         }
-        if nd.latitude > max_lat {
-            max_lat = nd.latitude;
+        if nd.latlng.latitude > max_lat {
+            max_lat = nd.latlng.latitude;
         }
     }
     let lon_range = max_lon - min_lon;
@@ -59,8 +59,8 @@ fn get_coords_from_node_index(
         min_lat,
         lon_range,
         lat_range,
-        nd.longitude,
-        nd.latitude,
+        nd.latlng.longitude,
+        nd.latlng.latitude,
     )
 }
 

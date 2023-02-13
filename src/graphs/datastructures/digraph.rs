@@ -10,8 +10,7 @@ pub struct NodeID(pub usize);
 
 #[derive(Debug, Copy, Clone)]
 pub struct NodeData {
-    pub latitude: f64,
-    pub longitude: f64,
+    pub latlng: LatLng,
 }
 
 #[derive(Debug)]
@@ -32,12 +31,11 @@ impl NodesData {
         }
     }
 
-    pub fn add_node_data_by_parts(&mut self, node_id: NodeID, latitude: f64, longitude: f64) {
+    pub fn add_node_data_by_parts(&mut self, node_id: NodeID, latlng: LatLng) {
         self.add_node_data(
             node_id,
             NodeData {
-                latitude,
-                longitude,
+                latlng,
             },
         );
     }
@@ -83,10 +81,7 @@ impl NodesData {
                     latitude,
                     longitude,
                 },
-                LatLng {
-                    latitude: node_data.latitude,
-                    longitude: node_data.longitude,
-                },
+                node_data.latlng,
             );
             if distance < closest_node_distance {
                 closest_node_distance = distance;

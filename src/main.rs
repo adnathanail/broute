@@ -56,12 +56,12 @@ fn shortest_path(
     let mut points: Vec<(f64, f64)> = vec![];
     for node_index in &p.path {
         let node_data = c_g.nodes_data().get_node_data_by_index(*node_index);
-        points.push((node_data.latitude, node_data.longitude))
+        points.push(node_data.latlng.to_lat_lng_tuple())
     }
 
     Json(ShortestPathResponse {
-        from_point: (start_node_data.latitude, start_node_data.longitude),
-        to_point: (end_node_data.latitude, end_node_data.longitude),
+        from_point: start_node_data.latlng.to_lat_lng_tuple(),
+        to_point: end_node_data.latlng.to_lat_lng_tuple(),
         path: points,
         path_length,
     })
