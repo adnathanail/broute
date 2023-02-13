@@ -72,15 +72,12 @@ impl NodesData {
         self.node_index_id_lookup.get(node_index).unwrap()
     }
 
-    pub fn get_node_index_closest_to_point(&self, latitude: f64, longitude: f64) -> NodeIndex {
+    pub fn get_node_index_closest_to_lat_lng(&self, lat_lng: LatLng) -> NodeIndex {
         let mut closest_node_index = NodeIndex(0);
         let mut closest_node_distance = f64::MAX;
         for (node_index, node_data) in self.node_data.iter() {
             let distance = haversine(
-                LatLng {
-                    latitude,
-                    longitude,
-                },
+                lat_lng,
                 node_data.latlng,
             );
             if distance < closest_node_distance {

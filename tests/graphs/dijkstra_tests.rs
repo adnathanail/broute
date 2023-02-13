@@ -1,6 +1,6 @@
 use broute::graphs::algorithms::{ConnectedComponents, Dijkstra};
 use broute::graphs::datastructures;
-use broute::graphs::datastructures::{Digraph, NodeID, NodeIndex};
+use broute::graphs::datastructures::{Digraph, LatLng, NodeID, NodeIndex};
 use broute::graphs::input::load_pbf_file;
 
 #[test]
@@ -9,7 +9,7 @@ fn simple_dijkstra_test() {
 
     for i in 0..8 {
         g.mut_nodes_data()
-            .add_node_data_by_parts(NodeID(i), 0.0, 0.0);
+            .add_node_data_by_parts(NodeID(i), LatLng { latitude: 0.0, longitude: 0.0 });
     }
 
     g.add_edge_by_id(NodeID(0), NodeID(1), 5.0);
@@ -50,10 +50,10 @@ fn osm_dijkstra_test() {
     // Get start and end nodes
     let start_node_index = c_g
         .nodes_data()
-        .get_node_index_closest_to_point(43.7284765, 7.415138);
+        .get_node_index_closest_to_lat_lng(LatLng { latitude: 43.7284765, longitude: 7.415138 });
     let end_node_index = c_g
         .nodes_data()
-        .get_node_index_closest_to_point(43.7341524, 7.4178794);
+        .get_node_index_closest_to_lat_lng(LatLng { latitude: 43.7341524, longitude: 7.4178794 });
     // Run Dijkstra
     let mut dj = Dijkstra::new(&c_g, start_node_index);
     dj.run();
