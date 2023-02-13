@@ -2,7 +2,7 @@
 extern crate rocket;
 
 use broute::graphs::algorithms::{ConnectedComponents, Dijkstra};
-use broute::graphs::datastructures::{ALDigraph, Digraph};
+use broute::graphs::datastructures::{ALDigraph, Digraph, LatLng};
 use broute::graphs::input::load_pbf_file;
 use rocket::fairing::{Fairing, Info, Kind};
 use rocket::http::Header;
@@ -35,11 +35,11 @@ fn shortest_path(
 
     let start_node_index = c_g
         .nodes_data()
-        .get_node_index_closest_to_point(start_latitude, start_longitude);
+        .get_node_index_closest_to_lat_lng(LatLng { latitude: start_latitude, longitude: start_longitude });
 
     let end_node_index = c_g
         .nodes_data()
-        .get_node_index_closest_to_point(end_latitude, end_longitude);
+        .get_node_index_closest_to_lat_lng(LatLng { latitude: end_latitude, longitude: end_longitude });
 
     let mut dj = Dijkstra::new(c_g, start_node_index);
     dj.run();

@@ -1,5 +1,5 @@
 use broute::graphs::algorithms::{form_abstracted_graph, travelling_salesman, ConnectedComponents};
-use broute::graphs::datastructures::{Digraph, NodeID, NodeIndex};
+use broute::graphs::datastructures::{Digraph, LatLng, NodeID, NodeIndex};
 use broute::graphs::input::load_pbf_file;
 
 fn check_graph_adjacency(
@@ -28,20 +28,20 @@ fn dijkstra_travelling_salesman_integration_test() {
     assert_eq!(c_g.num_vertices(), 9936);
 
     // 5 points across Monaco
-    let pickup_points: Vec<[f64; 2]> = Vec::from([
-        [43.7290416923665, 7.4111366271972665],
-        [43.732592386855366, 7.416672706604005],
-        [43.727630659255674, 7.419397830963136],
-        [43.732297795757404, 7.425642013549806],
-        [43.739507109017445, 7.42926836013794],
+    let pickup_points: Vec<LatLng> = Vec::from([
+        LatLng { latitude: 43.7290416923665, longitude: 7.4111366271972665 },
+        LatLng { latitude: 43.732592386855366, longitude: 7.416672706604005 },
+        LatLng { latitude: 43.727630659255674, longitude: 7.419397830963136 },
+        LatLng { latitude: 43.732297795757404, longitude: 7.425642013549806 },
+        LatLng { latitude: 43.739507109017445, longitude: 7.42926836013794 },
     ]);
 
     // Get ID of closest node for each point
     let mut pickup_node_ids: Vec<NodeID> = vec![];
-    for point in pickup_points {
+    for lat_lng in pickup_points {
         let node_index = c_g
             .nodes_data()
-            .get_node_index_closest_to_point(point[0], point[1]);
+            .get_node_index_closest_to_lat_lng(lat_lng);
         let node_id = c_g.nodes_data().get_node_id_by_index(&node_index);
         pickup_node_ids.push(*node_id);
     }
