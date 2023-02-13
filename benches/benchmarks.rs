@@ -1,6 +1,8 @@
 use std::time::Duration;
 
-use broute::graphs::algorithms::{travelling_salesman, ConnectedComponents, Dijkstra, form_abstracted_graph};
+use broute::graphs::algorithms::{
+    form_abstracted_graph, travelling_salesman, ConnectedComponents, Dijkstra,
+};
 use broute::graphs::datastructures::{Digraph, NodeIndex};
 use broute::graphs::input::{get_random_graph, load_pbf_file, load_tsplib_file};
 use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion};
@@ -55,9 +57,11 @@ fn travelling_salesman_benchmark(c: &mut Criterion) {
     let mut group = c.benchmark_group("Travelling salesman");
 
     let dimacs_g = load_tsplib_file("test_data/dimacs_tsp/d1291.tsp", usize::MAX);
-    group.bench_with_input(BenchmarkId::new("DIMCAS d1291", &dimacs_g), &dimacs_g, |b, g| {
-        b.iter(|| travelling_salesman(g, false))
-    });
+    group.bench_with_input(
+        BenchmarkId::new("DIMCAS d1291", &dimacs_g),
+        &dimacs_g,
+        |b, g| b.iter(|| travelling_salesman(g, false)),
+    );
 
     let monaco_g = load_pbf_file("test_data/geofabrik/monaco-latest.osm.pbf");
 
@@ -66,12 +70,16 @@ fn travelling_salesman_benchmark(c: &mut Criterion) {
     let monaco_largest_g = monaco_cc.get_largest_connected_subgraphs();
 
     let all_node_ids = monaco_largest_g.nodes_data().get_node_ids();
-    let selected_node_ids = all_node_ids.into_iter().choose_multiple(&mut rand::thread_rng(), 5);
+    let selected_node_ids = all_node_ids
+        .into_iter()
+        .choose_multiple(&mut rand::thread_rng(), 5);
 
     let abstracted_graph = form_abstracted_graph(&monaco_largest_g, &selected_node_ids);
-    group.bench_with_input(BenchmarkId::new("OSM Monaco - 5 random nodes", &abstracted_graph), &abstracted_graph, |b, g| {
-        b.iter(|| travelling_salesman(g, false))
-    });
+    group.bench_with_input(
+        BenchmarkId::new("OSM Monaco - 5 random nodes", &abstracted_graph),
+        &abstracted_graph,
+        |b, g| b.iter(|| travelling_salesman(g, false)),
+    );
 
     group.finish();
 }
