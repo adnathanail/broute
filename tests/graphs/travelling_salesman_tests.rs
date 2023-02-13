@@ -1,5 +1,5 @@
 use broute::graphs::algorithms::{ConnectedComponents, form_abstracted_graph, travelling_salesman};
-use broute::graphs::datastructures::{AMDigraph, Digraph, NodeID, NodeIndex};
+use broute::graphs::datastructures::{Digraph, NodeID, NodeIndex};
 use broute::graphs::input::load_pbf_file;
 
 fn check_graph_adjacency(g: &dyn Digraph, node_id: &NodeID, expected_adjacency: Vec<(NodeIndex, f64)>) {
@@ -41,10 +41,10 @@ fn dijkstra_travelling_salesman_integration_test() {
 
     // Form abstracted graph
     let abstracted_graph = form_abstracted_graph(&c_g, &pickup_node_ids);
-    check_graph_adjacency(&abstracted_graph, &pickup_node_ids[0], vec![(NodeIndex(0), 1.377158916250499), (NodeIndex(1), 0.9789951317313738), (NodeIndex(2), 1.755917633260777), (NodeIndex(3), 2.6659932095468)]);
-    check_graph_adjacency(&abstracted_graph, &pickup_node_ids[1], vec![(NodeIndex(0), 1.980472813282169), (NodeIndex(1), 2.4817146592249784), (NodeIndex(2), 1.455229434276506), (NodeIndex(3), 2.0888624885817397)]);
-    check_graph_adjacency(&abstracted_graph, &pickup_node_ids[2], vec![(NodeIndex(0), 2.075826825805118), (NodeIndex(1), 2.1511220126275212), (NodeIndex(2), 1.8695162433680703), (NodeIndex(3), 2.4192915795174095)]);
-    check_graph_adjacency(&abstracted_graph, &pickup_node_ids[3], vec![(NodeIndex(0), 7.835010613747839), (NodeIndex(1), 7.604014959490413), (NodeIndex(2), 8.336252459690652), (NodeIndex(3), 6.42873712450868)]);
+    check_graph_adjacency(&abstracted_graph, &pickup_node_ids[0], vec![(NodeIndex(1), 1.377158916250499), (NodeIndex(2), 0.9789951317313738), (NodeIndex(3), 1.755917633260777), (NodeIndex(4), 2.6659932095468)]);
+    check_graph_adjacency(&abstracted_graph, &pickup_node_ids[1], vec![(NodeIndex(0), 1.980472813282169), (NodeIndex(2), 2.4817146592249784), (NodeIndex(3), 1.455229434276506), (NodeIndex(4), 2.0888624885817397)]);
+    check_graph_adjacency(&abstracted_graph, &pickup_node_ids[2], vec![(NodeIndex(0), 2.075826825805118), (NodeIndex(1), 2.1511220126275212), (NodeIndex(3), 1.8695162433680703), (NodeIndex(4), 2.4192915795174095)]);
+    check_graph_adjacency(&abstracted_graph, &pickup_node_ids[3], vec![(NodeIndex(0), 7.835010613747839), (NodeIndex(1), 7.604014959490413), (NodeIndex(2), 8.336252459690652), (NodeIndex(4), 6.42873712450868)]);
     check_graph_adjacency(&abstracted_graph, &pickup_node_ids[4], vec![(NodeIndex(0), 3.3510388777275084), (NodeIndex(1), 3.0842902626239828), (NodeIndex(2), 3.850361636228818), (NodeIndex(3), 2.921153828236195)]);
 
     // output_graph_to_file(
