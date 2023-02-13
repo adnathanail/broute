@@ -8,7 +8,7 @@ async fn test_shortest_path_api() {
         .await
         .expect("valid rocket instance");
     let response = client
-        .get("/43.7284765/7.415138/43.7341524/7.4178794/")
+        .get("/shortest_path/43.7284765/7.415138/43.7341524/7.4178794/")
         .dispatch()
         .await;
     assert_eq!(response.status(), Status::Ok);
