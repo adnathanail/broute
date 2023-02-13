@@ -59,11 +59,8 @@ fn graph_string_to_file(graph_string_body: GraphStringBody, output_path: String)
     //    thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: Os { code: 2, kind: NotFound, message: "No such file or directory" }', src/graphs/output.rs:11:8
     // You need to install the graphviz package
     // https://graphviz.org/download/
-    let graphviz_graph: Graph = parse(&format!(
-        "digraph G {{\n{}\n}}",
-        graph_string_body.graph_string
-    ))
-    .unwrap();
+    let graphviz_graph_string = &format!("digraph G {{\n{}\n}}", graph_string_body.graph_string);
+    let graphviz_graph: Graph = parse(graphviz_graph_string).unwrap();
 
     exec(
         graphviz_graph,
@@ -74,7 +71,7 @@ fn graph_string_to_file(graph_string_body: GraphStringBody, output_path: String)
             CommandArg::Custom("-Ksfdp".to_string()),
         ],
     )
-    .unwrap();
+        .unwrap();
 }
 
 pub fn output_graph_to_file(g: &dyn Digraph, output_path: String) {
