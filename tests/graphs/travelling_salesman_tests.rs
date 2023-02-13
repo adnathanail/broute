@@ -117,7 +117,7 @@ fn dijkstra_travelling_salesman_integration_test() {
     // Run TSP
     let mut path_lengths: Vec<f64> = vec![];
     for _ in 0..100 {
-        let best_path = travelling_salesman(&abstracted_graph, true);
+        let best_path = travelling_salesman(&abstracted_graph, false);
         path_lengths.push(best_path.get_length_on_graph(&abstracted_graph));
     }
     assert!((path_lengths.into_iter().sum::<f64>() / 100.0) < 8.0);
