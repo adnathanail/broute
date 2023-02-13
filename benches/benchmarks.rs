@@ -67,7 +67,6 @@ fn travelling_salesman_benchmark(c: &mut Criterion) {
 
     let all_node_ids = monaco_largest_g.nodes_data().get_node_ids();
     let selected_node_ids = all_node_ids.into_iter().choose_multiple(&mut rand::thread_rng(), 5);
-    println!("{:?}", selected_node_ids);
 
     let abstracted_graph = form_abstracted_graph(&monaco_largest_g, &selected_node_ids);
     group.bench_with_input(BenchmarkId::new("OSM Monaco - 5 random nodes", &abstracted_graph), &abstracted_graph, |b, g| {

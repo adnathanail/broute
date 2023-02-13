@@ -58,7 +58,7 @@ fn dijkstra_travelling_salesman_integration_test() {
         let best_path = travelling_salesman(&abstracted_graph, true);
         path_lengths.push(best_path.get_length_on_graph(&abstracted_graph));
     }
-    assert_eq!((path_lengths.into_iter().sum::<f64>() / 100.0) < 8.0, true);
+    assert!((path_lengths.into_iter().sum::<f64>() / 100.0) < 8.0);
 
     // output_graph_to_file_with_path(
     //     &abstracted_graph,
