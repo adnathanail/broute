@@ -6,8 +6,13 @@ fn connected_components_test() {
     let mut g = ALDigraph::new(5);
 
     for i in 0..5 {
-        g.mut_nodes_data()
-            .add_node_data_by_parts(NodeID(i), LatLng { latitude: 0.0, longitude: 0.0 });
+        g.mut_nodes_data().add_node_data_by_parts(
+            NodeID(i),
+            LatLng {
+                latitude: 0.0,
+                longitude: 0.0,
+            },
+        );
     }
 
     g.add_edge_by_id(NodeID(1), NodeID(0), 1.0);
