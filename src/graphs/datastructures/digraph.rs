@@ -1,4 +1,5 @@
 use crate::algorithms::haversine;
+use crate::graphs::datastructures::LatLng;
 use std::collections::HashMap;
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
@@ -77,7 +78,16 @@ impl NodesData {
         let mut closest_node_index = NodeIndex(0);
         let mut closest_node_distance = f64::MAX;
         for (node_index, node_data) in self.node_data.iter() {
-            let distance = haversine(latitude, longitude, node_data.latitude, node_data.longitude);
+            let distance = haversine(
+                LatLng {
+                    latitude,
+                    longitude,
+                },
+                LatLng {
+                    latitude: node_data.latitude,
+                    longitude: node_data.longitude,
+                },
+            );
             if distance < closest_node_distance {
                 closest_node_distance = distance;
                 closest_node_index = *node_index;
