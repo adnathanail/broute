@@ -1,9 +1,11 @@
 #[macro_use]
 extern crate rocket;
 
-use broute::graphs::algorithms::{ConnectedComponents, Dijkstra};
-use broute::graphs::datastructures::{ALDigraph, Digraph, LatLng};
-use broute::graphs::input::load_pbf_file;
+use broute::graphs::algorithms::{
+    form_abstracted_graph, travelling_salesman, ConnectedComponents, Dijkstra,
+};
+use broute::graphs::datastructures::{ALDigraph, Digraph, LatLng, NodeID};
+use broute::graphs::input::{load_pbf_file, load_tsplib_file};
 use rocket::fairing::{Fairing, Info, Kind};
 use rocket::http::Header;
 use rocket::serde::json::Json;
@@ -22,7 +24,7 @@ struct ShortestPathResponse {
     path_length: f64,
 }
 
-#[get("/<start_latitude>/<start_longitude>/<end_latitude>/<end_longitude>")]
+#[get("/shortest_path/<start_latitude>/<start_longitude>/<end_latitude>/<end_longitude>")]
 fn shortest_path(
     rc: &rocket::State<RoutingCache>,
     start_latitude: f64,
@@ -67,6 +69,68 @@ fn shortest_path(
         path: points,
         path_length,
     })
+}
+
+#[derive(Debug, PartialEq, Serialize, Deserialize)]
+struct RouteOptimisationResponse {
+    legs: Vec<Vec<(f64, f64)>>,
+}
+
+#[get("/route_optimisation/<points_str>")]
+fn route_optimisation(
+    rc: &rocket::State<RoutingCache>,
+    points_str: &str,
+) -> Json<RouteOptimisationResponse> {
+    let binding = rc.g.read().unwrap();
+    let c_g = binding.deref();
+
+    let lat_lng_list: Vec<LatLng> = points_str
+        .split("|")
+        .map(|p_str| p_str.split(",").collect())
+        .map(|p: Vec<&str>| LatLng {
+            latitude: p[0].parse().unwrap(),
+            longitude: p[1].parse().unwrap(),
+        })
+        .collect();
+
+    let mut node_id_list: Vec<NodeID> = vec![];
+    for lat_lng in lat_lng_list {
+        let node_index = c_g.nodes_data().get_node_index_closest_to_lat_lng(lat_lng);
+        node_id_list.push(*c_g.nodes_data().get_node_id_by_index(&node_index));
+    }
+
+    let abstracted_graph = form_abstracted_graph(c_g, &node_id_list);
+
+    let p = travelling_salesman(&abstracted_graph, false);
+
+    let mut p_node_ids = vec![];
+    for p_node_index in p.path {
+        p_node_ids.push(
+            abstracted_graph
+                .nodes_data()
+                .get_node_id_by_index(&p_node_index),
+        )
+    }
+
+    let mut legs: Vec<Vec<(f64, f64)>> = vec![];
+    for i in 0..(p_node_ids.len() - 1) {
+        let from_node_index = c_g.nodes_data().get_node_index_by_id(p_node_ids[i]);
+        let mut dj = Dijkstra::new(c_g, *from_node_index);
+        dj.run();
+
+        let to_node_index = c_g.nodes_data().get_node_index_by_id(p_node_ids[i + 1]);
+        let leg_p = dj.get_graph_path(*to_node_index);
+
+        let mut leg: Vec<(f64, f64)> = vec![];
+        for node_index in &leg_p.path {
+            let node_data = c_g.nodes_data().get_node_data_by_index(*node_index);
+            leg.push(node_data.latlng.as_lat_lng_tuple())
+        }
+        legs.push(leg)
+    }
+    println!("{:?}", legs);
+
+    Json(RouteOptimisationResponse { legs })
 }
 
 pub struct CORS;
@@ -118,7 +182,7 @@ async fn rocket() -> Result<rocket::Rocket<rocket::Ignite>, rocket::Error> {
     let c_g = get_graph().await;
 
     rocket::build()
-        .mount("/", routes![shortest_path])
+        .mount("/", routes![shortest_path, route_optimisation])
         .attach(CORS)
         .manage(RoutingCache {
             g: Arc::new(RwLock::new(c_g)),
