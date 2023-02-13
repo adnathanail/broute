@@ -58,13 +58,15 @@ impl<'a> Dijkstra<'a> {
     }
 
     pub fn get_graph_path(self, to_node: NodeIndex) -> GraphPath {
-        let mut p = GraphPath { path: vec![] };
+        let mut node_indexes = vec![];
         let mut current_node_index = to_node.0;
         while current_node_index != self.from_node.0 {
-            p.path.push(NodeIndex(current_node_index));
+            node_indexes.push(NodeIndex(current_node_index));
             current_node_index = self.parent[current_node_index].unwrap();
         }
-        p.path.push(NodeIndex(current_node_index));
-        p
+        node_indexes.push(NodeIndex(current_node_index));
+        // The parent HashMap is tracing the path backwards so we reverse it
+        node_indexes.reverse();
+        GraphPath { path: node_indexes }
     }
 }
