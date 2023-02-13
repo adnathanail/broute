@@ -71,7 +71,7 @@ fn graph_string_to_file(graph_string_body: GraphStringBody, output_path: String)
             CommandArg::Custom("-Ksfdp".to_string()),
         ],
     )
-        .unwrap();
+    .unwrap();
 }
 
 pub fn output_graph_to_file(g: &dyn Digraph, output_path: String) {
