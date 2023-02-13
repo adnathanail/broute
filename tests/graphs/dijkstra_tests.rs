@@ -72,7 +72,7 @@ fn osm_dijkstra_test() {
     let mut points: Vec<(f64, f64)> = vec![];
     for node_index in &p.path {
         let node_data = c_g.nodes_data().get_node_data_by_index(*node_index);
-        points.push((node_data.latitude, node_data.longitude))
+        points.push(node_data.latlng.as_lat_lng_tuple())
     }
     assert_eq!(
         points,

@@ -1,5 +1,5 @@
 use broute::graphs::algorithms::ConnectedComponents;
-use broute::graphs::datastructures::{ALDigraph, Digraph, NodeID, NodeIndex};
+use broute::graphs::datastructures::{ALDigraph, Digraph, LatLng, NodeID, NodeIndex};
 
 #[test]
 fn connected_components_test() {
@@ -7,7 +7,7 @@ fn connected_components_test() {
 
     for i in 0..5 {
         g.mut_nodes_data()
-            .add_node_data_by_parts(NodeID(i), 0.0, 0.0);
+            .add_node_data_by_parts(NodeID(i), LatLng { latitude: 0.0, longitude: 0.0 });
     }
 
     g.add_edge_by_id(NodeID(1), NodeID(0), 1.0);
