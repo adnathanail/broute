@@ -5,7 +5,7 @@ use broute::graphs::algorithms::{
     form_abstracted_graph, travelling_salesman, ConnectedComponents, Dijkstra,
 };
 use broute::graphs::datastructures::{ALDigraph, Digraph, LatLng, NodeID};
-use broute::graphs::input::{load_pbf_file, load_tsplib_file};
+use broute::graphs::input::load_pbf_file;
 use rocket::fairing::{Fairing, Info, Kind};
 use rocket::http::Header;
 use rocket::serde::json::Json;
@@ -85,8 +85,8 @@ fn route_optimisation(
     let c_g = binding.deref();
 
     let lat_lng_list: Vec<LatLng> = points_str
-        .split("|")
-        .map(|p_str| p_str.split(",").collect())
+        .split('|')
+        .map(|p_str| p_str.split(',').collect())
         .map(|p: Vec<&str>| LatLng {
             latitude: p[0].parse().unwrap(),
             longitude: p[1].parse().unwrap(),
@@ -128,7 +128,7 @@ fn route_optimisation(
         }
         legs.push(leg)
     }
-    println!("{:?}", legs);
+    println!("{legs:?}");
 
     Json(RouteOptimisationResponse { legs })
 }
