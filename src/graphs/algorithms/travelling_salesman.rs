@@ -1,3 +1,4 @@
+use std::time::Instant;
 use crate::graphs::algorithms::Dijkstra;
 use crate::graphs::datastructures::{AMDigraph, Digraph, GraphPath, NodeID, NodeIndex};
 use plotlib::page::Page;
@@ -34,11 +35,15 @@ pub fn form_abstracted_graph(g: &dyn Digraph, node_ids: &Vec<NodeID>) -> AMDigra
     abstracted_graph
 }
 
-fn get_potential_new_path(
-    rng: &mut ThreadRng,
-    g: &dyn Digraph,
-    current_path: &GraphPath,
-) -> GraphPath {
+pub fn generate_path(rng: &mut ThreadRng, path_length: usize) -> GraphPath {
+    let mut path = GraphPath {
+        path: (0..path_length).map(|n| NodeIndex(n)).collect(),
+    };
+    path.path.shuffle(rng);
+    path
+}
+
+fn get_potential_new_path(rng: &mut ThreadRng, g: &dyn Digraph, current_path: &GraphPath) -> GraphPath {
     let mut potential_new_path = current_path.clone();
 
     let node_index_to_mutate = rng.gen_range(0..(g.num_vertices() - 1));
@@ -68,63 +73,75 @@ fn get_potential_new_path(
     potential_new_path
 }
 
-pub fn travelling_salesman(g: &dyn Digraph, output_graph: bool) -> GraphPath {
+pub fn travelling_salesman(g: &dyn Digraph, desired_duration_millis: f64) -> GraphPath {
     let mut result_data: Vec<(f64, f64)> = vec![];
 
     let mut rng = thread_rng();
 
-    let mut current_path = GraphPath {
-        path: (0..g.num_vertices()).map(NodeIndex).collect(),
-    };
-    current_path.path.shuffle(&mut rng);
-    let mut path_length = current_path.get_length_on_graph(g);
+    let mut best_path = generate_path(&mut rng, g.num_vertices());
 
-    let mut best_path = current_path.clone();
+    let start_time = Instant::now();
 
-    // println!("Initial state");
-    //
-    // println!("\t{:?}", best_path.path);
-    // println!("\t{}", path_length);
+    let mut iters = 0;
 
-    let mut temp = f64::sqrt(g.num_vertices() as f64);
-    let mut iterations = 0;
-    while temp > 1e-8_f64 && iterations < (100 * g.num_vertices()) {
-        // println!("{}", temp);
-        let potential_new_path = get_potential_new_path(&mut rng, g, &current_path);
+    loop {
+        let portion_elapsed = (start_time.elapsed().as_millis() as f64) / desired_duration_millis;
 
-        let new_path_length = potential_new_path.get_length_on_graph(g);
-        if new_path_length < path_length {
-            current_path = potential_new_path;
-            best_path.clone_from(&current_path);
-            path_length = new_path_length;
+        if portion_elapsed >= 1.0 {
+            break;
+        }
+
+        let potential_new_path = get_potential_new_path(&mut rng, g, &best_path);
+
+        if get_path_length(g, &potential_new_path) < get_path_length(g, &best_path) {
+            best_path = potential_new_path;
         } else {
-            // TODO: Is this between 0 and 1?
-            if f64::exp(-f64::abs(new_path_length - path_length) / temp) > rng.gen::<f64>() {
-                current_path = potential_new_path;
-                path_length = new_path_length;
+            if 1.0f64.exp().powf(-10.0 * portion_elapsed.powf(3.0)) > rng.gen::<f64>() {
+                best_path = potential_new_path;
             }
         }
 
-        temp *= 0.995;
-        iterations += 1;
-        result_data.push((temp, path_length));
+        iters += 1;
+        println!("{}", get_path_length(g, &best_path));
+        result_data.push((portion_elapsed, get_path_length(g, &best_path)));
     }
 
-    if output_graph {
-        // We create our scatter plot from the data
-        let s1: Plot =
-            Plot::new(result_data.clone()).line_style(LineStyle::new().colour("#DD3355"));
+    println!("{} iters", iters);
 
-        // The 'view' describes what set of data is drawn
-        let v = ContinuousView::new()
-            .add(s1)
-            .x_label("Temperature")
-            .y_label("Path length")
-            .y_range(0.0, result_data[0].1 + 100.0);
+    // We create our scatter plot from the data
+    let s1: Plot = Plot::new(result_data.clone()).line_style(LineStyle::new().colour("#DD3355"));
 
-        // A page with a single view is then saved to an SVG file
-        Page::single(&v).save("out/tsp_test_1.svg").unwrap();
-    }
+    // The 'view' describes what set of data is drawn
+    let v = ContinuousView::new()
+        .add(s1)
+        .x_label("Temperature")
+        .y_label("Path length")
+        .y_range(0.0, result_data[0].1 + 100.0);
+
+    // A page with a single view is then saved to an SVG file
+    Page::single(&v).save("out/temp_vs_cost.svg").unwrap();
 
     best_path
+}
+
+// 1060 iters
+// pub fn old_get_path_length(g: &DigraphAM, path: &GraphPath) -> f64 {
+//    (0..(path.path.len() - 1)).fold(0f64, |total, i| {
+//        total + g.dist(path.path[i], path.path[i + 1])
+//    })
+//}
+
+// 1713 iters
+pub fn get_path_length(g: &dyn Digraph, path: &GraphPath) -> f64 {
+    let mut route_iter = path.path.iter();
+    let mut current_city = match route_iter.next() {
+        None => return 0.0,
+        Some(v) => *v,
+    };
+
+    route_iter.fold(0.0, |mut total_distance, &next_city| {
+        total_distance += g.dist(current_city, next_city);
+        current_city = next_city;
+        total_distance
+    })
 }
