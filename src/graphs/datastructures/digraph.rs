@@ -32,12 +32,7 @@ impl NodesData {
     }
 
     pub fn add_node_data_by_parts(&mut self, node_id: NodeID, latlng: LatLng) {
-        self.add_node_data(
-            node_id,
-            NodeData {
-                latlng,
-            },
-        );
+        self.add_node_data(node_id, NodeData { latlng });
     }
 
     pub fn add_node_data(&mut self, node_id: NodeID, node_data: NodeData) {
@@ -76,10 +71,7 @@ impl NodesData {
         let mut closest_node_index = NodeIndex(0);
         let mut closest_node_distance = f64::MAX;
         for (node_index, node_data) in self.node_data.iter() {
-            let distance = haversine(
-                lat_lng,
-                node_data.latlng,
-            );
+            let distance = haversine(lat_lng, node_data.latlng);
             if distance < closest_node_distance {
                 closest_node_distance = distance;
                 closest_node_index = *node_index;

@@ -33,13 +33,15 @@ fn shortest_path(
     let binding = rc.g.read().unwrap();
     let c_g = binding.deref();
 
-    let start_node_index = c_g
-        .nodes_data()
-        .get_node_index_closest_to_lat_lng(LatLng { latitude: start_latitude, longitude: start_longitude });
+    let start_node_index = c_g.nodes_data().get_node_index_closest_to_lat_lng(LatLng {
+        latitude: start_latitude,
+        longitude: start_longitude,
+    });
 
-    let end_node_index = c_g
-        .nodes_data()
-        .get_node_index_closest_to_lat_lng(LatLng { latitude: end_latitude, longitude: end_longitude });
+    let end_node_index = c_g.nodes_data().get_node_index_closest_to_lat_lng(LatLng {
+        latitude: end_latitude,
+        longitude: end_longitude,
+    });
 
     let mut dj = Dijkstra::new(c_g, start_node_index);
     dj.run();
