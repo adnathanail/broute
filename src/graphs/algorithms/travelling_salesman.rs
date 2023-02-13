@@ -1,4 +1,3 @@
-use std::time::Instant;
 use crate::graphs::algorithms::Dijkstra;
 use crate::graphs::datastructures::{AMDigraph, Digraph, GraphPath, NodeID, NodeIndex};
 use plotlib::page::Page;
@@ -8,6 +7,7 @@ use plotlib::view::ContinuousView;
 use rand::rngs::ThreadRng;
 use rand::seq::SliceRandom;
 use rand::{thread_rng, Rng};
+use std::time::Instant;
 
 pub fn form_abstracted_graph(g: &dyn Digraph, node_ids: &Vec<NodeID>) -> AMDigraph {
     let mut abstracted_graph = AMDigraph::new(node_ids.len());
@@ -43,7 +43,11 @@ pub fn generate_path(rng: &mut ThreadRng, path_length: usize) -> GraphPath {
     path
 }
 
-fn get_potential_new_path(rng: &mut ThreadRng, g: &dyn Digraph, current_path: &GraphPath) -> GraphPath {
+fn get_potential_new_path(
+    rng: &mut ThreadRng,
+    g: &dyn Digraph,
+    current_path: &GraphPath,
+) -> GraphPath {
     let mut potential_new_path = current_path.clone();
 
     let node_index_to_mutate = rng.gen_range(0..(g.num_vertices() - 1));
