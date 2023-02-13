@@ -95,7 +95,7 @@ pub fn travelling_salesman(g: &dyn Digraph, output_graph: bool) -> GraphPath {
         let new_path_length = potential_new_path.get_length_on_graph(g);
         if new_path_length < path_length {
             current_path = potential_new_path;
-            best_path = current_path.clone();
+            best_path.clone_from(&current_path);
             path_length = new_path_length;
         } else {
             // TODO: Is this between 0 and 1?
