@@ -59,6 +59,7 @@ impl Digraph for AMDigraph {
                 node_index: NodeIndex(to),
                 weight: *weight,
             })
+            .filter(|adjacency| adjacency.weight != f64::MAX)
             .collect()
     }
 
