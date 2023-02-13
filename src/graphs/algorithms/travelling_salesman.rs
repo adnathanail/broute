@@ -70,21 +70,19 @@ impl<'a, T: Digraph> SimulatedAnnealing<'a, T> {
     }
 
     pub fn run(&mut self) {
-        let mut temp = f64::sqrt(self.g.num_vertices() as f64);
+        let mut temp = f64::sqrt(g.num_vertices() as f64);
         let mut iterations = 0;
-        while temp > 1e-8_f64 && iterations < (100 * self.g.num_vertices()) {
-            let potential_new_path = self.get_potential_new_path();
+        while temp > 1e-8_f64 && iterations < (100 * g.num_vertices()) {
+            let potential_new_path = get_potential_new_path(self.rng, &current_path);
 
-            let new_path_length = potential_new_path.get_length_on_graph(self.g);
+            let new_path_length = potential_new_path.get_length_on_graph(g);
             if new_path_length < self.path_length {
                 self.current_path = potential_new_path;
                 self.best_path.clone_from(&self.current_path);
                 self.path_length = new_path_length;
             } else {
                 // TODO: Is this between 0 and 1?
-                if f64::exp(-f64::abs(new_path_length - self.path_length) / temp)
-                    > self.rng.gen::<f64>()
-                {
+                if f64::exp(-f64::abs(new_path_length - self.path_length) / temp) > self.rng.gen::<f64>() {
                     self.current_path = potential_new_path;
                     self.path_length = new_path_length;
                 }
@@ -99,29 +97,9 @@ impl<'a, T: Digraph> SimulatedAnnealing<'a, T> {
     fn get_potential_new_path(&mut self) -> GraphPath {
         let mut potential_new_path = self.current_path.clone();
 
-        let node_index_to_mutate = self.rng.gen_range(0..(self.g.num_vertices() - 1));
-
-        let reverse_or_transport: bool = self.rng.gen();
-
-        if reverse_or_transport {
-            let node_index_to_swap_with = if node_index_to_mutate < (self.g.num_vertices() - 1) {
-                node_index_to_mutate + 1
-            } else {
-                0
-            };
-            potential_new_path
-                .path
-                .swap(node_index_to_mutate, node_index_to_swap_with);
-        } else {
-            // Cyclic permutation
-            let node_to_move = potential_new_path.path[node_index_to_mutate];
-            // -2 because we are looking for new position with 1 node missing
-            let new_node_position = self.rng.gen_range(0..(self.g.num_vertices() - 2));
-            potential_new_path.path.remove(node_index_to_mutate);
-            potential_new_path
-                .path
-                .insert(new_node_position, node_to_move)
-        }
+        let i = self.rng.gen_range(0..potential_new_path.path.len());
+        let j = self.rng.gen_range(0..potential_new_path.path.len());
+        potential_new_path.path.swap(i, j);
 
         potential_new_path
     }
