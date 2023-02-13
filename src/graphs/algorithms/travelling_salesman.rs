@@ -1,3 +1,5 @@
+use std::cmp::{max, min};
+use std::f64::consts::E;
 use crate::graphs::algorithms::AStar;
 use crate::graphs::datastructures::{AMDigraph, Digraph, GraphPath, NodeID, NodeIndex};
 use plotlib::page::Page;
@@ -69,39 +71,41 @@ impl<'a, T: Digraph> SimulatedAnnealing<'a, T> {
         }
     }
 
-    pub fn run(&mut self) {
-        let mut temp = f64::sqrt(g.num_vertices() as f64);
-        let mut iterations = 0;
-        while temp > 1e-8_f64 && iterations < (100 * g.num_vertices()) {
-            let potential_new_path = get_potential_new_path(self.rng, &current_path);
+    pub fn run(&mut self, initial_temperature: f64, cooling_rate: f64, iterations_per_temperature: usize) {
+        // No meaningful permutations for 0, 1, 2 nodes
+        if self.current_path.path.len() < 3 {
+            return;
+        }
 
-            let new_path_length = potential_new_path.get_length_on_graph(g);
-            if new_path_length < self.path_length {
-                self.current_path = potential_new_path;
-                self.best_path.clone_from(&self.current_path);
-                self.path_length = new_path_length;
-            } else {
-                // TODO: Is this between 0 and 1?
-                if f64::exp(-f64::abs(new_path_length - self.path_length) / temp) > self.rng.gen::<f64>() {
-                    self.current_path = potential_new_path;
+        let mut temp = initial_temperature;
+        while temp > 1e-5 {
+            for _ in 0..iterations_per_temperature {
+                let new_path = self.get_potential_new_path();
+                let new_path_length = new_path.get_length_on_graph(g);
+                let delta_cost = new_path_length - self.path_length;
+
+                if delta_cost < 0.0 || self.rng.gen::<f64>() < E.powf(-delta_cost / temp) {
+                    self.current_path = new_path;
                     self.path_length = new_path_length;
+                }
+                if delta_cost < 0.0 {
+                    self.best_path.clone_from(&self.current_path);
                 }
             }
 
-            temp *= 0.995;
-            iterations += 1;
-            self.result_data.push((temp, self.path_length));
+            temp *= cooling_rate;
+            result_data.push((temp, current_path_length));
         }
     }
 
     fn get_potential_new_path(&mut self) -> GraphPath {
-        let mut potential_new_path = self.current_path.clone();
+        let mut new_path = self.current_path.clone();
 
-        let i = self.rng.gen_range(0..potential_new_path.path.len());
-        let j = self.rng.gen_range(0..potential_new_path.path.len());
-        potential_new_path.path.swap(i, j);
+        let i = self.rng.gen_range(1..new_path.path.len() - 1);
+        let j = self.rng.gen_range(1..new_path.path.len() - 1);
+        new_path.path[min(i, j)..max(i, j)].reverse();
 
-        potential_new_path
+        new_path
     }
 
     pub fn get_best_path(&self) -> &GraphPath {

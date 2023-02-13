@@ -65,3 +65,4 @@ It's not really a metric graph because of traffic jams etc.
 
 https://stackoverflow.com/questions/49837125/confusion-about-np-hard-and-np-complete-in-traveling-salesman-problems
 https://link.springer.com/content/pdf/10.1007/978-3-031-02574-7.pdf?pdf=button
+https://github.com/networkx/networkx/blob/main/networkx/algorithms/approximation/traveling_salesman.py
