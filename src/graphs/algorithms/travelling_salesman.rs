@@ -1,3 +1,4 @@
+use crate::graphs::algorithms::Dijkstra;
 use crate::graphs::datastructures::{AMDigraph, Digraph, GraphPath, NodeID, NodeIndex};
 use plotlib::page::Page;
 use plotlib::repr::Plot;
@@ -6,7 +7,6 @@ use plotlib::view::ContinuousView;
 use rand::rngs::ThreadRng;
 use rand::seq::SliceRandom;
 use rand::{thread_rng, Rng};
-use crate::graphs::algorithms::Dijkstra;
 
 pub fn form_abstracted_graph(g: &dyn Digraph, node_ids: &Vec<NodeID>) -> AMDigraph {
     let mut abstracted_graph = AMDigraph::new(node_ids.len());
