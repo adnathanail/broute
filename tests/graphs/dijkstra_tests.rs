@@ -8,8 +8,13 @@ fn simple_dijkstra_test() {
     let mut g = datastructures::AMDigraph::new(8);
 
     for i in 0..8 {
-        g.mut_nodes_data()
-            .add_node_data_by_parts(NodeID(i), LatLng { latitude: 0.0, longitude: 0.0 });
+        g.mut_nodes_data().add_node_data_by_parts(
+            NodeID(i),
+            LatLng {
+                latitude: 0.0,
+                longitude: 0.0,
+            },
+        );
     }
 
     g.add_edge_by_id(NodeID(0), NodeID(1), 5.0);
@@ -48,12 +53,14 @@ fn osm_dijkstra_test() {
     let c_g = cc.get_largest_connected_subgraphs();
     assert_eq!(c_g.num_vertices(), 9936);
     // Get start and end nodes
-    let start_node_index = c_g
-        .nodes_data()
-        .get_node_index_closest_to_lat_lng(LatLng { latitude: 43.7284765, longitude: 7.415138 });
-    let end_node_index = c_g
-        .nodes_data()
-        .get_node_index_closest_to_lat_lng(LatLng { latitude: 43.7341524, longitude: 7.4178794 });
+    let start_node_index = c_g.nodes_data().get_node_index_closest_to_lat_lng(LatLng {
+        latitude: 43.7284765,
+        longitude: 7.415138,
+    });
+    let end_node_index = c_g.nodes_data().get_node_index_closest_to_lat_lng(LatLng {
+        latitude: 43.7341524,
+        longitude: 7.4178794,
+    });
     // Run Dijkstra
     let mut dj = Dijkstra::new(&c_g, start_node_index);
     dj.run();

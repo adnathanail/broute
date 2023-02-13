@@ -43,8 +43,13 @@ pub fn load_tsplib_file(file_path: &str, num_nodes: usize) -> AMDigraph {
     let mut g = AMDigraph::new(actual_num_nodes);
 
     for (i, coord) in coords.iter().enumerate().take(actual_num_nodes) {
-        g.mut_nodes_data()
-            .add_node_data_by_parts(NodeID(i), LatLng { latitude: coord.0 as f64, longitude: coord.1 as f64 });
+        g.mut_nodes_data().add_node_data_by_parts(
+            NodeID(i),
+            LatLng {
+                latitude: coord.0 as f64,
+                longitude: coord.1 as f64,
+            },
+        );
     }
 
     for i in 0..actual_num_nodes {
