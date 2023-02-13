@@ -84,6 +84,8 @@ fn route_optimisation(
     let binding = rc.g.read().unwrap();
     let c_g = binding.deref();
 
+    println!("Graph loaded from cache");
+
     let lat_lng_list: Vec<LatLng> = points_str
         .split('|')
         .map(|p_str| p_str.split(',').collect())
@@ -93,6 +95,8 @@ fn route_optimisation(
         })
         .collect();
 
+    println!("Coords parsed");
+
     let mut node_id_list: Vec<NodeID> = vec![];
     for lat_lng in lat_lng_list {
         let node_index = c_g.nodes_data().get_node_index_closest_to_lat_lng(lat_lng);
@@ -101,7 +105,11 @@ fn route_optimisation(
 
     let abstracted_graph = form_abstracted_graph(c_g, &node_id_list);
 
+    println!("Abstracted graph constructed");
+
     let p = travelling_salesman(&abstracted_graph, false);
+
+    println!("TSP ran");
 
     let mut p_node_ids = vec![];
     for p_node_index in p.path {
@@ -111,6 +119,8 @@ fn route_optimisation(
                 .get_node_id_by_index(&p_node_index),
         )
     }
+
+    println!("Original graph node ID's extracted");
 
     let mut legs: Vec<Vec<(f64, f64)>> = vec![];
     for i in 0..(p_node_ids.len() - 1) {
@@ -128,7 +138,7 @@ fn route_optimisation(
         }
         legs.push(leg)
     }
-    println!("{legs:?}");
+    println!("Legs reconstructed");
 
     Json(RouteOptimisationResponse { legs })
 }
