@@ -30,12 +30,11 @@ pub fn load_pbf_file(pbf_path: &str) -> ALDigraph {
         .for_each(|element| {
             if let Element::Node(n) = element {
                 g.mut_nodes_data()
-                    .add_node_data_by_parts(NodeID(n.id() as usize), n.lat(), n.lon())
+                    .add_node_data_by_parts(NodeID(n.id() as usize), LatLng { latitude: n.lat(), longitude: n.lon() })
             } else if let Element::DenseNode(dn) = element {
                 g.mut_nodes_data().add_node_data_by_parts(
                     NodeID(dn.id() as usize),
-                    dn.lat(),
-                    dn.lon(),
+                    LatLng { latitude: dn.lat(), longitude: dn.lon() },
                 )
             }
         })
@@ -59,14 +58,8 @@ pub fn load_pbf_file(pbf_path: &str) -> ALDigraph {
                     let to_node_data = g.nodes_data().get_node_data_by_id(to_id);
 
                     let weight = haversine(
-                        LatLng {
-                            latitude: from_node_data.latitude,
-                            longitude: from_node_data.longitude,
-                        },
-                        LatLng {
-                            latitude: to_node_data.latitude,
-                            longitude: to_node_data.longitude,
-                        },
+                        from_node_data.latlng,
+                        to_node_data.latlng,
                     );
                     g.add_edge_by_id(
                         NodeID(node_ids[i] as usize),
