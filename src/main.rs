@@ -211,3 +211,20 @@ async fn main() -> Result<(), rocket::Error> {
 
     Ok(())
 }
+
+// fn main() {
+//     let dimacs_g = load_tsplib_file("test_data/dimacs_tsp/d1291.tsp", usize::MAX);
+//
+//     for t in [100.0, 1000.0, 10000.0] {
+//         for a in [0.99, 0.995, 0.999] {
+//             for i in [50, 100, 500] {
+//                 println!("{t} {a} {i}");
+//                 let start = SystemTime::now();
+//                 travelling_salesman(&dimacs_g, false, t, a, i);
+//                 let end = SystemTime::now();
+//                 let duration = end.duration_since(start).unwrap();
+//                 println!("\t{} seconds", duration.as_secs());
+//             }
+//         }
+//     }
+// }
