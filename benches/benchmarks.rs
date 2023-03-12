@@ -6,8 +6,8 @@ use broute::graphs::algorithms::{
 use broute::graphs::datastructures::{Digraph, NodeIndex};
 use broute::graphs::input::{get_random_graph, load_pbf_file, load_tsplib_file, load_xgmml_file};
 use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion};
-use rand::Rng;
 use rand::seq::IteratorRandom;
+use rand::Rng;
 
 fn shortest_path_benchmark(c: &mut Criterion) {
     let mut group = c.benchmark_group("Shortest path");
@@ -58,9 +58,13 @@ fn shortest_path_benchmark(c: &mut Criterion) {
         &dimacs_g,
         |b, g| {
             b.iter(|| {
-                let mut dj = Dijkstra::new(g, NodeIndex(rng.gen_range(1..(dimacs_g.num_vertices() + 1))));
+                let mut dj = Dijkstra::new(
+                    g,
+                    NodeIndex(rng.gen_range(1..(dimacs_g.num_vertices() + 1))),
+                );
                 dj.run();
-                let p = dj.get_graph_path(NodeIndex(rng.gen_range(1..(dimacs_g.num_vertices() + 1))));
+                let p =
+                    dj.get_graph_path(NodeIndex(rng.gen_range(1..(dimacs_g.num_vertices() + 1))));
                 p.get_length_on_graph(&dimacs_g);
             })
         },

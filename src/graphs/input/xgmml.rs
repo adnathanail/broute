@@ -53,7 +53,10 @@ pub fn load_xgmml_file(file_path: &str) -> Result<ALDigraph> {
     for i in 1..(num_nodes + 1) {
         g.mut_nodes_data().add_node_data_by_parts(
             NodeID(i),
-            LatLng { latitude: 0.0, longitude: 0.0 },  // Lat lng aren't given in this dataset
+            LatLng {
+                latitude: 0.0,
+                longitude: 0.0,
+            }, // Lat lng aren't given in this dataset
         );
     }
 
@@ -63,7 +66,11 @@ pub fn load_xgmml_file(file_path: &str) -> Result<ALDigraph> {
         let ip = line?;
         let parts = ip.split(" ").collect::<Vec<&str>>();
         if parts[0] == "a" {
-            g.add_edge_by_index(NodeIndex(parts[1].parse::<usize>()? - 1), NodeIndex(parts[2].parse::<usize>()? - 1), parts[3].parse::<f64>()?);
+            g.add_edge_by_index(
+                NodeIndex(parts[1].parse::<usize>()? - 1),
+                NodeIndex(parts[2].parse::<usize>()? - 1),
+                parts[3].parse::<f64>()?,
+            );
         }
     }
 
