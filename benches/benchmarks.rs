@@ -58,13 +58,10 @@ fn shortest_path_benchmark(c: &mut Criterion) {
         &dimacs_g,
         |b, g| {
             b.iter(|| {
-                let mut dj = Dijkstra::new(
-                    g,
-                    NodeIndex(rng.gen_range(1..=dimacs_g.num_vertices())),
-                );
+                let mut dj =
+                    Dijkstra::new(g, NodeIndex(rng.gen_range(1..=dimacs_g.num_vertices())));
                 dj.run();
-                let p =
-                    dj.get_graph_path(NodeIndex(rng.gen_range(1..=dimacs_g.num_vertices())));
+                let p = dj.get_graph_path(NodeIndex(rng.gen_range(1..=dimacs_g.num_vertices())));
                 p.get_length_on_graph(&dimacs_g);
             })
         },
