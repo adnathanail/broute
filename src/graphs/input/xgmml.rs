@@ -1,7 +1,5 @@
-use std::fs;
 use std::fs::File;
 use std::io::BufRead;
-use std::path::Path;
 
 use crate::graphs::datastructures::{ALDigraph, Digraph, LatLng, NodeID, NodeIndex};
 
@@ -39,7 +37,7 @@ pub fn load_xgmml_file(file_path: &str) -> Result<ALDigraph> {
     let lines = std::io::BufReader::new(file).lines();
     for line in lines {
         let ip = line?;
-        let parts = ip.split(" ").collect::<Vec<&str>>();
+        let parts = ip.split(' ').collect::<Vec<&str>>();
         if parts[0] == "p" {
             opt_num_nodes = parts[2].parse::<usize>().ok();
             break;
@@ -50,7 +48,7 @@ pub fn load_xgmml_file(file_path: &str) -> Result<ALDigraph> {
     };
 
     let mut g = ALDigraph::new(num_nodes);
-    for i in 1..(num_nodes + 1) {
+    for i in 1..=num_nodes {
         g.mut_nodes_data().add_node_data_by_parts(
             NodeID(i),
             LatLng {
@@ -64,7 +62,7 @@ pub fn load_xgmml_file(file_path: &str) -> Result<ALDigraph> {
     let lines = std::io::BufReader::new(file).lines();
     for line in lines {
         let ip = line?;
-        let parts = ip.split(" ").collect::<Vec<&str>>();
+        let parts = ip.split(' ').collect::<Vec<&str>>();
         if parts[0] == "a" {
             g.add_edge_by_index(
                 NodeIndex(parts[1].parse::<usize>()? - 1),
