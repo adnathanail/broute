@@ -78,7 +78,9 @@ impl<'a> SimulatedAnnealing<'a> {
                 self.path_length = new_path_length;
             } else {
                 // TODO: Is this between 0 and 1?
-                if f64::exp(-f64::abs(new_path_length - self.path_length) / temp) > self.rng.gen::<f64>() {
+                if f64::exp(-f64::abs(new_path_length - self.path_length) / temp)
+                    > self.rng.gen::<f64>()
+                {
                     self.current_path = potential_new_path;
                     self.path_length = new_path_length;
                 }
