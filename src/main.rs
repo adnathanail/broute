@@ -1,17 +1,19 @@
 #[macro_use]
 extern crate rocket;
 
+use std::ops::Deref;
+use std::sync::{Arc, RwLock};
+
+use rocket::fairing::{Fairing, Info, Kind};
+use rocket::http::Header;
+use rocket::serde::{Deserialize, Serialize};
+use rocket::serde::json::Json;
+
 use broute::graphs::algorithms::{
-    form_abstracted_graph, travelling_salesman, ConnectedComponents, Dijkstra,
+    ConnectedComponents, Dijkstra, form_abstracted_graph, travelling_salesman,
 };
 use broute::graphs::datastructures::{ALDigraph, Digraph, LatLng, NodeID};
 use broute::graphs::input::load_pbf_file;
-use rocket::fairing::{Fairing, Info, Kind};
-use rocket::http::Header;
-use rocket::serde::json::Json;
-use rocket::serde::{Deserialize, Serialize};
-use std::ops::Deref;
-use std::sync::{Arc, RwLock};
 
 #[cfg(test)]
 mod tests;
@@ -170,7 +172,7 @@ impl Fairing for CORS {
 }
 
 async fn get_graph() -> ALDigraph {
-    let g = load_pbf_file("test_data/geofabrik/monaco-latest.osm.pbf");
+    let g = load_pbf_file("test_data/geofabrik/monaco-latest.osm.pbf").unwrap();
 
     println!("Original graph {:} nodes", g.num_vertices());
 
