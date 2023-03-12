@@ -1,7 +1,7 @@
 mod connected_components;
-mod dijkstra;
+mod shortest_path;
 mod travelling_salesman;
 
 pub use connected_components::*;
-pub use dijkstra::*;
+pub use shortest_path::*;
 pub use travelling_salesman::*;
