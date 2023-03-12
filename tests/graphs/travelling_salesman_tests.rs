@@ -1,4 +1,4 @@
-use broute::graphs::algorithms::{form_abstracted_graph, travelling_salesman, ConnectedComponents};
+use broute::graphs::algorithms::{form_abstracted_graph, SimulatedAnnealing, ConnectedComponents};
 use broute::graphs::datastructures::{Digraph, LatLng, NodeID, NodeIndex};
 use broute::graphs::input::load_pbf_file;
 
@@ -19,7 +19,7 @@ fn check_graph_adjacency(
 #[test]
 fn dijkstra_travelling_salesman_integration_test() {
     // Load graph
-    let g = load_pbf_file("test_data/geofabrik/monaco-latest.osm.pbf");
+    let g = load_pbf_file("test_data/geofabrik/monaco-latest.osm.pbf").unwrap();
 
     // Get largest connected subgraph
     let mut cc = ConnectedComponents::new(&g);
@@ -130,8 +130,9 @@ fn dijkstra_travelling_salesman_integration_test() {
     // Run TSP
     let mut path_lengths: Vec<f64> = vec![];
     for _ in 0..100 {
-        let best_path = travelling_salesman(&abstracted_graph, false);
-        path_lengths.push(best_path.get_length_on_graph(&abstracted_graph));
+        let mut sa = SimulatedAnnealing::new(&abstracted_graph);
+        sa.run();
+        path_lengths.push(sa.get_best_path().get_length_on_graph(&abstracted_graph));
     }
     assert!((path_lengths.into_iter().sum::<f64>() / 100.0) < 8.0);
 

@@ -10,7 +10,7 @@ use rocket::serde::{Deserialize, Serialize};
 use rocket::serde::json::Json;
 
 use broute::graphs::algorithms::{
-    ConnectedComponents, Dijkstra, form_abstracted_graph, travelling_salesman,
+    ConnectedComponents, Dijkstra, form_abstracted_graph, SimulatedAnnealing,
 };
 use broute::graphs::datastructures::{ALDigraph, Digraph, LatLng, NodeID};
 use broute::graphs::input::load_pbf_file;
@@ -109,16 +109,17 @@ fn route_optimisation(
 
     println!("Abstracted graph constructed");
 
-    let p = travelling_salesman(&abstracted_graph, false);
+    let mut sa = SimulatedAnnealing::new(&abstracted_graph);
+    sa.run();
 
     println!("TSP ran");
 
     let mut p_node_ids = vec![];
-    for p_node_index in p.path {
+    for p_node_index in &sa.get_best_path().path {
         p_node_ids.push(
             abstracted_graph
                 .nodes_data()
-                .get_node_id_by_index(&p_node_index),
+                .get_node_id_by_index(p_node_index),
         )
     }
 

@@ -46,7 +46,7 @@ fn simple_dijkstra_test() {
 #[test]
 fn osm_dijkstra_test() {
     // Load graph
-    let g = load_pbf_file("test_data/geofabrik/monaco-latest.osm.pbf");
+    let g = load_pbf_file("test_data/geofabrik/monaco-latest.osm.pbf").unwrap();
     // Get largest connected subgraph
     let mut cc = ConnectedComponents::new(&g);
     cc.run();
