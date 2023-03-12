@@ -37,3 +37,9 @@ https://towardsdatascience.com/connecting-datapoints-to-a-road-graph-with-python
 https://github.com/gboeing/osmnx
 https://wiki.openstreetmap.org/wiki/Overpass_API
 https://help.openstreetmap.org/questions/42740/how-to-maintain-a-local-copy-of-a-specific-area-of-the-osm-database
+
+# Unsorted
+
+https://www.youtube.com/watch?v=5DdaoQeTis4
+https://link.springer.com/content/pdf/10.1007/978-3-031-02574-7.pdf?pdf=button
+https://github.com/nspring/style-check
