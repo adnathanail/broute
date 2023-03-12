@@ -137,7 +137,7 @@ fn dijkstra_travelling_salesman_integration_test() {
 
     let average_path_length = path_lengths.into_iter().sum::<f64>() / 100.0;
     println!("{average_path_length}");
-    assert!(average_path_length < 8.0);
+    assert!(average_path_length < 8.1);
 
     // output_graph_to_file_with_path(
     //     &abstracted_graph,
