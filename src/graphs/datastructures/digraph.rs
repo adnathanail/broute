@@ -45,6 +45,10 @@ impl NodesData {
             .insert(self.node_id_index_lookup[&node_id], node_data);
     }
 
+    pub fn get_node_indexes(&self) -> Vec<NodeIndex> {
+        (0..self.current_node_index.0).map(|i| NodeIndex(i)).into_iter().collect()
+    }
+
     pub fn get_node_ids(&self) -> Vec<NodeID> {
         self.node_id_index_lookup.keys().cloned().collect()
     }
