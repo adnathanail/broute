@@ -1,7 +1,7 @@
 use broute::graphs::algorithms::{ConnectedComponents, Dijkstra};
 use broute::graphs::datastructures;
 use broute::graphs::datastructures::{Digraph, LatLng, NodeID, NodeIndex};
-use broute::graphs::input::load_pbf_file;
+use broute::graphs::input::{load_pbf_file, load_xgmml_file};
 
 #[test]
 fn simple_dijkstra_test() {
@@ -173,4 +173,17 @@ fn osm_dijkstra_test() {
             (43.734151700000005, 7.417887500000001)
         ]
     );
+}
+
+#[test]
+fn dimacs_shortest_path_dijkstra_test() {
+    // Load graph
+    let dimacs_g = load_xgmml_file("test_data/dimacs_shortest_path/USA-road-d.NY.gr").unwrap();
+    // Run Dijkstra
+    let mut dj = Dijkstra::new(&dimacs_g, NodeIndex(0));
+    dj.run();
+    // Get shortest path length
+    let p = dj.get_graph_path(NodeIndex(264345));
+    // Check path length
+    assert_eq!(p.get_length_on_graph(&dimacs_g), 495306.0);
 }
