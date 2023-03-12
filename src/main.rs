@@ -5,6 +5,11 @@ use std::ops::Deref;
 use std::sync::{Arc, RwLock};
 
 use broute::geography::datastructures::LatLng;
+use broute::graphs::algorithms::{
+    form_abstracted_graph, travelling_salesman, ConnectedComponents, Dijkstra,
+};
+use broute::graphs::datastructures::{ALDigraph, Digraph, LatLng, NodeID};
+use broute::graphs::input::{load_pbf_file, load_tsplib_file};
 use rocket::fairing::{Fairing, Info, Kind};
 use rocket::http::Header;
 use rocket::serde::json::Json;
@@ -15,6 +20,7 @@ use broute::graphs::algorithms::{
 };
 use broute::graphs::datastructures::{ALDigraph, Digraph, NodeID};
 use broute::graphs::input::load_pbf_file;
+use std::time::SystemTime;
 
 #[cfg(test)]
 mod tests;
@@ -111,7 +117,7 @@ fn route_optimisation(
     println!("Abstracted graph constructed");
 
     let mut sa = SimulatedAnnealing::new(&abstracted_graph);
-    sa.run();
+    sa.run(100.0, 0.99, 100);
 
     println!("TSP ran");
 
@@ -205,26 +211,24 @@ async fn rocket() -> Result<rocket::Rocket<rocket::Ignite>, rocket::Error> {
         .await
 }
 
-#[rocket::main]
-async fn main() -> Result<(), rocket::Error> {
-    let _rocket = rocket().await?.launch().await?;
-
-    Ok(())
-}
-
-// fn main() {
-//     let dimacs_g = load_tsplib_file("test_data/dimacs_tsp/d1291.tsp", usize::MAX);
+// #[rocket::main]
+// async fn main() -> Result<(), rocket::Error> {
+//     let _rocket = rocket().await?.launch().await?;
 //
-//     for t in [100.0, 1000.0, 10000.0] {
-//         for a in [0.99, 0.995, 0.999] {
-//             for i in [50, 100, 500] {
-//                 println!("{t} {a} {i}");
-//                 let start = SystemTime::now();
-//                 travelling_salesman(&dimacs_g, false, t, a, i);
-//                 let end = SystemTime::now();
-//                 let duration = end.duration_since(start).unwrap();
-//                 println!("\t{} seconds", duration.as_secs());
-//             }
-//         }
-//     }
+//     Ok(())
 // }
+
+fn main() {
+    let dimacs_g = load_tsplib_file("test_data/dimacs_tsp/d1291.tsp", usize::MAX);
+
+    for a in [0.9995] {
+        for i in [50, 100, 500, 1000] {
+            println!("100 {a} {i}");
+            let start = SystemTime::now();
+            travelling_salesman(&dimacs_g, false, 100.0, a, i);
+            let end = SystemTime::now();
+            let duration = end.duration_since(start).unwrap();
+            println!("\t{} seconds", duration.as_secs());
+        }
+    }
+}
