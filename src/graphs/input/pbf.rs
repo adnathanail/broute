@@ -3,8 +3,21 @@ use crate::graphs::datastructures::{ALDigraph, LatLng};
 use crate::graphs::datastructures::{Digraph, NodeID};
 use osmpbf::{Element, ElementReader};
 
-pub fn load_pbf_file(pbf_path: &str) -> ALDigraph {
-    let reader = ElementReader::from_path(pbf_path).unwrap();
+#[derive(Debug)]
+pub enum PBFImportError {
+    OSMPBFError(osmpbf::Error),
+}
+
+impl From<osmpbf::Error> for PBFImportError {
+    fn from(err: osmpbf::Error) -> PBFImportError {
+        PBFImportError::OSMPBFError(err)
+    }
+}
+
+type Result<T> = std::result::Result<T, PBFImportError>;
+
+pub fn load_pbf_file(pbf_path: &str) -> Result<ALDigraph> {
+    let reader = ElementReader::from_path(pbf_path)?;
 
     let num_nodes = reader
         .par_map_reduce(
@@ -15,8 +28,7 @@ pub fn load_pbf_file(pbf_path: &str) -> ALDigraph {
             },
             || 0_u64,     // Zero is the identity value for addition
             |a, b| a + b, // Sum the partial results
-        )
-        .unwrap();
+        )?;
 
     println!("Number of nodes: {num_nodes}");
 
@@ -24,7 +36,7 @@ pub fn load_pbf_file(pbf_path: &str) -> ALDigraph {
 
     println!("Graph initialised");
 
-    let reader = ElementReader::from_path(pbf_path).unwrap();
+    let reader = ElementReader::from_path(pbf_path)?;
 
     reader
         .for_each(|element| {
@@ -45,14 +57,13 @@ pub fn load_pbf_file(pbf_path: &str) -> ALDigraph {
                     },
                 )
             }
-        })
-        .unwrap();
+        })?;
 
     println!("Nodes added");
 
     let mut ways = 0_u64;
 
-    let reader = ElementReader::from_path(pbf_path).unwrap();
+    let reader = ElementReader::from_path(pbf_path)?;
 
     reader
         .for_each(|element| {
@@ -74,10 +85,9 @@ pub fn load_pbf_file(pbf_path: &str) -> ALDigraph {
                 }
                 ways += 1;
             }
-        })
-        .unwrap();
+        })?;
 
     println!("Edges added");
 
-    g
+    Ok(g)
 }
