@@ -8,8 +8,8 @@ use broute::graphs::input::{get_random_graph, load_pbf_file, load_tsplib_file};
 use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion};
 use rand::seq::IteratorRandom;
 
-fn dijkstra_benchmark(c: &mut Criterion) {
-    let mut group = c.benchmark_group("Dijkstra");
+fn shortest_path_benchmark(c: &mut Criterion) {
+    let mut group = c.benchmark_group("Shortest path");
 
     let random_g = get_random_graph(3000, 0.5, 4.0, 1.0);
     group.bench_with_input(
@@ -104,6 +104,6 @@ criterion_group! {
     name = benches;
     // This can be any expression that returns a `Criterion` object.
     config = Criterion::default().measurement_time(Duration::from_secs(15));
-    targets = dijkstra_benchmark, travelling_salesman_benchmark, connected_components_benchmark
+    targets = shortest_path_benchmark, travelling_salesman_benchmark, connected_components_benchmark
 }
 criterion_main!(benches);
