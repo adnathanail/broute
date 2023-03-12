@@ -48,12 +48,12 @@ fn shortest_path(
         longitude: end_longitude,
     });
 
-    let mut dj = Dijkstra::new(c_g, start_node_index);
+    let mut dj = Dijkstra::new(c_g, start_node_index, end_node_index);
     dj.run();
 
     println!("Dijkstra ran");
 
-    let p = dj.get_graph_path(end_node_index);
+    let p = dj.get_graph_path();
     // Form response
     let start_node_data = c_g.nodes_data().get_node_data_by_index(start_node_index);
     let end_node_data = c_g.nodes_data().get_node_data_by_index(end_node_index);
@@ -129,11 +129,11 @@ fn route_optimisation(
     let mut legs: Vec<Vec<(f64, f64)>> = vec![];
     for i in 0..(p_node_ids.len() - 1) {
         let from_node_index = c_g.nodes_data().get_node_index_by_id(p_node_ids[i]);
-        let mut dj = Dijkstra::new(c_g, *from_node_index);
+        let to_node_index = c_g.nodes_data().get_node_index_by_id(p_node_ids[i + 1]);
+        let mut dj = Dijkstra::new(c_g, *from_node_index, *to_node_index);
         dj.run();
 
-        let to_node_index = c_g.nodes_data().get_node_index_by_id(p_node_ids[i + 1]);
-        let leg_p = dj.get_graph_path(*to_node_index);
+        let leg_p = dj.get_graph_path();
 
         let mut leg: Vec<(f64, f64)> = vec![];
         for node_index in &leg_p.path {
