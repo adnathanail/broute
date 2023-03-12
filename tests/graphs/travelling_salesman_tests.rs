@@ -1,4 +1,4 @@
-use broute::graphs::algorithms::{form_abstracted_graph, SimulatedAnnealing, ConnectedComponents};
+use broute::graphs::algorithms::{form_abstracted_graph, ConnectedComponents, SimulatedAnnealing};
 use broute::graphs::datastructures::{Digraph, LatLng, NodeID, NodeIndex};
 use broute::graphs::input::load_pbf_file;
 

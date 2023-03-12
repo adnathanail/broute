@@ -6,11 +6,11 @@ use std::sync::{Arc, RwLock};
 
 use rocket::fairing::{Fairing, Info, Kind};
 use rocket::http::Header;
-use rocket::serde::{Deserialize, Serialize};
 use rocket::serde::json::Json;
+use rocket::serde::{Deserialize, Serialize};
 
 use broute::graphs::algorithms::{
-    ConnectedComponents, Dijkstra, form_abstracted_graph, SimulatedAnnealing,
+    form_abstracted_graph, ConnectedComponents, Dijkstra, SimulatedAnnealing,
 };
 use broute::graphs::datastructures::{ALDigraph, Digraph, LatLng, NodeID};
 use broute::graphs::input::load_pbf_file;
