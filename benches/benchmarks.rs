@@ -52,16 +52,15 @@ fn shortest_path_benchmark(c: &mut Criterion) {
     );
 
     let dimacs_g = load_xgmml_file("test_data/dimacs_shortest_path/USA-road-d.NY.gr").unwrap();
-    let mut rng = rand::thread_rng();
     group.bench_with_input(
         BenchmarkId::new("DIMACS USA-road-d.NY", &dimacs_g),
         &dimacs_g,
         |b, g| {
             b.iter(|| {
                 let mut dj =
-                    Dijkstra::new(g, NodeIndex(rng.gen_range(1..=dimacs_g.num_vertices())));
+                    Dijkstra::new(g, NodeIndex(0));
                 dj.run();
-                let p = dj.get_graph_path(NodeIndex(rng.gen_range(1..=dimacs_g.num_vertices())));
+                let p = dj.get_graph_path(NodeIndex(264345));
                 p.get_length_on_graph(&dimacs_g);
             })
         },
