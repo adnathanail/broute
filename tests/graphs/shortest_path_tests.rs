@@ -35,7 +35,7 @@ fn simple_dijkstra_test() {
     g.add_edge_by_id(NodeID(7), NodeID(2), 7.0);
     g.add_edge_by_id(NodeID(7), NodeID(5), 6.0);
 
-    let mut dj = Dijkstra::new(&g, NodeIndex(0));
+    let mut dj = Dijkstra::new(&g, NodeIndex(0), NodeIndex(7));
     dj.run();
 
     assert_eq!(
@@ -63,10 +63,10 @@ fn osm_dijkstra_test() {
         longitude: 7.4178794,
     });
     // Run Dijkstra
-    let mut dj = Dijkstra::new(&c_g, start_node_index);
+    let mut dj = Dijkstra::new(&c_g, start_node_index, end_node_index);
     dj.run();
     // Reverse engineer shortest path
-    let p = dj.get_graph_path(end_node_index);
+    let p = dj.get_graph_path();
     // Check path length
     assert_eq!(p.get_length_on_graph(&c_g), 1.416306768485833);
     // Check path points
@@ -181,10 +181,10 @@ fn dimacs_shortest_path_dijkstra_test() {
     // Load graph
     let dimacs_g = load_xgmml_file("test_data/dimacs_shortest_path/USA-road-d.NY.gr").unwrap();
     // Run Dijkstra
-    let mut dj = Dijkstra::new(&dimacs_g, NodeIndex(0));
+    let mut dj = Dijkstra::new(&dimacs_g, NodeIndex(0), NodeIndex(264345));
     dj.run();
     // Get shortest path length
-    let p = dj.get_graph_path(NodeIndex(264345));
+    let p = dj.get_graph_path();
     // Check path length
     assert_eq!(p.get_length_on_graph(&dimacs_g), 495306.0);
 }
