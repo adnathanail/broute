@@ -3,42 +3,30 @@ use rand::{thread_rng, Rng};
 use std::{cmp, fs, io::Cursor};
 use tsplib::NodeCoord;
 
-pub fn generate_random_tsplib_file(num_nodes: usize) -> String {
-    let mut rng = thread_rng();
-
-    let mut lines: Vec<String> = Vec::with_capacity(num_nodes);
-
-    lines.push("NAME : example".to_string());
-    lines.push("TYPE : TSP".to_string());
-    lines.push(format!("DIMENSION : {}", num_nodes + 1));
-    lines.push("EDGE_WEIGHT_TYPE: EUC_2D".to_string());
-    lines.push("NODE_COORD_SECTION".to_string());
-
-    let grid_size = num_nodes * 10;
-    for i in 0..num_nodes {
-        lines.push(format!(
-            "{} {} {}",
-            i,
-            rng.gen::<f32>() * (grid_size as f32),
-            rng.gen::<f32>() * (grid_size as f32)
-        ))
-    }
-
-    lines.push("EOF".to_string());
-
-    lines.join("\n")
+#[derive(Debug)]
+pub enum TSPLIBImportError {
+    IOError(std::io::Error),
+    OtherError(String),
 }
 
-pub fn load_tsplib_file(file_path: &str, num_nodes: usize) -> AMDigraph {
-    let tsp_string = fs::read_to_string(file_path).unwrap();
-    let instance = tsplib::parse(Cursor::new(&tsp_string[..])).unwrap();
+impl From<std::io::Error> for TSPLIBImportError {
+    fn from(err: std::io::Error) -> TSPLIBImportError {
+        TSPLIBImportError::IOError(err)
+    }
+}
+
+type Result<T> = std::result::Result<T, TSPLIBImportError>;
+
+pub fn load_tsplib_file(file_path: &str, num_nodes: usize) -> Result<AMDigraph> {
+    let tsp_string = fs::read_to_string(file_path)?;
+    let instance = tsplib::parse(Cursor::new(&tsp_string[..]))?;
 
     let actual_num_nodes = cmp::min(num_nodes, instance.dimension);
 
-    let coords = match instance.node_coord.unwrap() {
-        NodeCoord::Two(x) => x,
-        _ => panic!("Wrong format"),
-    };
+    let coords = match instance.node_coord.ok_or(TSPLIBImportError::OtherError("No node coords found".to_string()))? {
+        NodeCoord::Two(x) => Ok(x),
+        _ => Err(TSPLIBImportError::OtherError("No node coords found".to_string())),
+    }?;
 
     let mut g = AMDigraph::new(actual_num_nodes);
 
@@ -64,5 +52,31 @@ pub fn load_tsplib_file(file_path: &str, num_nodes: usize) -> AMDigraph {
         }
     }
 
-    g
+    Ok(g)
+}
+
+pub fn generate_random_tsplib_file(num_nodes: usize) -> String {
+    let mut rng = thread_rng();
+
+    let mut lines: Vec<String> = Vec::with_capacity(num_nodes);
+
+    lines.push("NAME : example".to_string());
+    lines.push("TYPE : TSP".to_string());
+    lines.push(format!("DIMENSION : {}", num_nodes + 1));
+    lines.push("EDGE_WEIGHT_TYPE: EUC_2D".to_string());
+    lines.push("NODE_COORD_SECTION".to_string());
+
+    let grid_size = num_nodes * 10;
+    for i in 0..num_nodes {
+        lines.push(format!(
+            "{} {} {}",
+            i,
+            rng.gen::<f32>() * (grid_size as f32),
+            rng.gen::<f32>() * (grid_size as f32)
+        ))
+    }
+
+    lines.push("EOF".to_string());
+
+    lines.join("\n")
 }
