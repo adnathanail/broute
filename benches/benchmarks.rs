@@ -7,7 +7,6 @@ use broute::graphs::datastructures::{Digraph, NodeIndex};
 use broute::graphs::input::{get_random_graph, load_pbf_file, load_tsplib_file, load_xgmml_file};
 use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion};
 use rand::seq::IteratorRandom;
-use rand::Rng;
 
 fn shortest_path_benchmark(c: &mut Criterion) {
     let mut group = c.benchmark_group("Shortest path");
