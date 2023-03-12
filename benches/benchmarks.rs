@@ -1,7 +1,7 @@
 use std::time::Duration;
 
 use broute::graphs::algorithms::{
-    form_abstracted_graph, SimulatedAnnealing, ConnectedComponents, Dijkstra,
+    form_abstracted_graph, ConnectedComponents, Dijkstra, SimulatedAnnealing,
 };
 use broute::graphs::datastructures::{Digraph, NodeIndex};
 use broute::graphs::input::{get_random_graph, load_pbf_file, load_tsplib_file, load_xgmml_file};
@@ -77,10 +77,12 @@ fn travelling_salesman_benchmark(c: &mut Criterion) {
     group.bench_with_input(
         BenchmarkId::new("DIMCAS d1291", &dimacs_g),
         &dimacs_g,
-        |b, g| b.iter(|| {
-            let mut sa = SimulatedAnnealing::new(g);
-            sa.run();
-        }),
+        |b, g| {
+            b.iter(|| {
+                let mut sa = SimulatedAnnealing::new(g);
+                sa.run();
+            })
+        },
     );
 
     let monaco_g = load_pbf_file("test_data/geofabrik/monaco-latest.osm.pbf").unwrap();
@@ -98,10 +100,12 @@ fn travelling_salesman_benchmark(c: &mut Criterion) {
     group.bench_with_input(
         BenchmarkId::new("OSM Monaco - 5 random nodes", &abstracted_graph),
         &abstracted_graph,
-        |b, g| b.iter(|| {
-            let mut sa = SimulatedAnnealing::new(g);
-            sa.run();
-        }),
+        |b, g| {
+            b.iter(|| {
+                let mut sa = SimulatedAnnealing::new(g);
+                sa.run();
+            })
+        },
     );
 
     group.finish();

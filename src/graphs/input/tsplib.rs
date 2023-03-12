@@ -23,9 +23,13 @@ pub fn load_tsplib_file(file_path: &str, num_nodes: usize) -> Result<AMDigraph> 
 
     let actual_num_nodes = cmp::min(num_nodes, instance.dimension);
 
-    let coords = match instance.node_coord.ok_or(TSPLIBImportError::OtherError("No node coords found".to_string()))? {
+    let coords = match instance.node_coord.ok_or(TSPLIBImportError::OtherError(
+        "No node coords found".to_string(),
+    ))? {
         NodeCoord::Two(x) => Ok(x),
-        _ => Err(TSPLIBImportError::OtherError("No node coords found".to_string())),
+        _ => Err(TSPLIBImportError::OtherError(
+            "No node coords found".to_string(),
+        )),
     }?;
 
     let mut g = AMDigraph::new(actual_num_nodes);
