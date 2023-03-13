@@ -2,16 +2,16 @@ use crate::algorithms::PriorityQueue;
 use crate::graphs::datastructures::GraphPath;
 use crate::graphs::datastructures::{Digraph, NodeIndex};
 
-pub struct Dijkstra<'a> {
-    g: &'a dyn Digraph,
+pub struct Dijkstra<'a, T: Digraph> {
+    g: &'a T,
     from_node: NodeIndex,
     from_node_to_current_node: Vec<f64>,
     parent: Vec<Option<usize>>,
     queue: PriorityQueue<usize, f64>,
 }
 
-impl<'a> Dijkstra<'a> {
-    pub fn new(g: &'a dyn Digraph, from_node: NodeIndex) -> Self {
+impl<'a, T: Digraph> Dijkstra<'a, T> {
+    pub fn new(g: &'a T, from_node: NodeIndex) -> Self {
         Dijkstra {
             g,
             from_node,

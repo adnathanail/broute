@@ -1,8 +1,8 @@
 use crate::graphs::datastructures::{ALDigraph, Digraph, NodeIndex};
 use std::cmp::min;
 
-pub struct ConnectedComponents<'a> {
-    g: &'a dyn Digraph,
+pub struct ConnectedComponents<'a, T: Digraph> {
+    g: &'a T,
     index: i32,
     node_stack: Vec<usize>,
     indexes: Vec<i32>,
@@ -10,12 +10,12 @@ pub struct ConnectedComponents<'a> {
     components: Vec<Vec<NodeIndex>>,
 }
 
-impl<'a> ConnectedComponents<'a> {
+impl<'a, T: Digraph> ConnectedComponents<'a, T> {
     /// Implements Tarjan's strongly connected component algorithm
     ///
     /// Original code based on pseudocode here
     ///   https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm#The_algorithm_in_pseudocode
-    pub fn new(g: &'a dyn Digraph) -> Self {
+    pub fn new(g: &'a T) -> Self {
         ConnectedComponents {
             g,
             index: 0,

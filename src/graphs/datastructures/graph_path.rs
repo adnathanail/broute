@@ -6,7 +6,7 @@ pub struct GraphPath {
 }
 
 impl GraphPath {
-    pub fn get_length_on_graph(&self, g: &dyn Digraph) -> f64 {
+    pub fn get_length_on_graph(&self, g: &impl Digraph) -> f64 {
         (0..(self.path.len() - 1)).fold(0f64, |total, i| {
             total + g.dist(self.path[i], self.path[i + 1])
         })

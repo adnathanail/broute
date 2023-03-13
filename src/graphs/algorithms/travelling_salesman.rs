@@ -8,7 +8,7 @@ use rand::rngs::ThreadRng;
 use rand::seq::SliceRandom;
 use rand::{thread_rng, Rng};
 
-pub fn form_abstracted_graph(g: &dyn Digraph, node_ids: &Vec<NodeID>) -> AMDigraph {
+pub fn form_abstracted_graph(g: &impl Digraph, node_ids: &Vec<NodeID>) -> AMDigraph {
     let mut abstracted_graph = AMDigraph::new(node_ids.len());
     for node_id in node_ids {
         let node_data = g.nodes_data().get_node_data_by_id(*node_id);
@@ -34,8 +34,8 @@ pub fn form_abstracted_graph(g: &dyn Digraph, node_ids: &Vec<NodeID>) -> AMDigra
     abstracted_graph
 }
 
-pub struct SimulatedAnnealing<'a> {
-    g: &'a dyn Digraph,
+pub struct SimulatedAnnealing<'a, T: Digraph> {
+    g: &'a T,
     result_data: Vec<(f64, f64)>,
     current_path: GraphPath,
     path_length: f64,
@@ -43,8 +43,8 @@ pub struct SimulatedAnnealing<'a> {
     rng: ThreadRng,
 }
 
-impl<'a> SimulatedAnnealing<'a> {
-    pub fn new(g: &'a dyn Digraph) -> Self {
+impl<'a, T: Digraph> SimulatedAnnealing<'a, T> {
+    pub fn new(g: &'a T) -> Self {
         let mut rng = thread_rng();
 
         let mut current_path = GraphPath {
