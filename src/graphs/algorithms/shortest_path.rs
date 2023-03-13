@@ -5,7 +5,7 @@ use crate::graphs::datastructures::{Digraph, NodeIndex};
 pub struct Dijkstra<'a> {
     g: &'a dyn Digraph,
     from_node: NodeIndex,
-    dist_to: Vec<f64>,
+    from_node_to_current_node: Vec<f64>,
     parent: Vec<Option<usize>>,
     queue: PriorityQueue,
 }
@@ -16,7 +16,7 @@ impl<'a> Dijkstra<'a> {
             g,
             from_node,
             // Initialise all distances to infinity
-            dist_to: vec![f64::INFINITY; g.num_vertices()],
+            from_node_to_current_node: vec![f64::INFINITY; g.num_vertices()],
             // Initialise all parents to none
             parent: vec![None; g.num_vertices()],
             queue: PriorityQueue::new(),
@@ -25,36 +25,36 @@ impl<'a> Dijkstra<'a> {
 
     pub fn run(&mut self) {
         // Add first vertex to queue
-        self.dist_to[self.from_node.0] = 0.0;
+        self.from_node_to_current_node[self.from_node.0] = 0.0;
         self.queue.push(0.0, self.from_node.0);
 
         // Take next closest node from the heap
         while let Some((v, cost)) = self.queue.pop() {
             // Short circuit
-            if cost > self.dist_to[v] {
+            if cost > self.from_node_to_current_node[v] {
                 continue;
             }
 
             // Check every node, u, reachable from v
             //   to see if a route via v is shorter than the current shortest path
-            for adjacency in self.g.adj(NodeIndex(v)).iter() {
-                let alt = self.dist_to[v] + adjacency.weight;
-                if alt < self.dist_to[adjacency.node_index.0] {
+            for edge in self.g.adj(NodeIndex(v)).iter() {
+                let new_dist_to_u = self.from_node_to_current_node[v] + edge.weight;
+                if new_dist_to_u < self.from_node_to_current_node[edge.node_index.0] {
                     // Add adjacent node to queue
-                    self.queue.push(alt, adjacency.node_index.0);
-                    self.dist_to[adjacency.node_index.0] = alt;
-                    self.parent[adjacency.node_index.0] = Some(v);
+                    self.queue.push(new_dist_to_u, edge.node_index.0);
+                    self.from_node_to_current_node[edge.node_index.0] = new_dist_to_u;
+                    self.parent[edge.node_index.0] = Some(v);
                 }
             }
         }
     }
 
     pub fn get_dist_to_vec(self) -> Vec<f64> {
-        self.dist_to
+        self.from_node_to_current_node
     }
 
-    pub fn get_dist_to(&self, to_node: NodeIndex) -> f64 {
-        self.dist_to[to_node.0]
+    pub fn get_dist_to_node(&self, to_node: NodeIndex) -> f64 {
+        self.from_node_to_current_node[to_node.0]
     }
 
     pub fn get_graph_path(self, to_node: NodeIndex) -> GraphPath {
