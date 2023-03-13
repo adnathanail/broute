@@ -7,7 +7,7 @@ pub struct Dijkstra<'a> {
     from_node: NodeIndex,
     from_node_to_current_node: Vec<f64>,
     parent: Vec<Option<usize>>,
-    queue: PriorityQueue<usize>,
+    queue: PriorityQueue<usize, f64>,
 }
 
 impl<'a> Dijkstra<'a> {
