@@ -1,5 +1,6 @@
+use broute::geography::datastructures::LatLng;
 use broute::graphs::algorithms::{form_abstracted_graph, ConnectedComponents, SimulatedAnnealing};
-use broute::graphs::datastructures::{Digraph, LatLng, NodeID, NodeIndex};
+use broute::graphs::datastructures::{Digraph, NodeID, NodeIndex};
 use broute::graphs::input::load_pbf_file;
 
 fn check_graph_adjacency(

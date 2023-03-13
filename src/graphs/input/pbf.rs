@@ -1,5 +1,6 @@
-use crate::algorithms::haversine;
-use crate::graphs::datastructures::{ALDigraph, LatLng};
+use crate::geography::algorithms::haversine;
+use crate::geography::datastructures::LatLng;
+use crate::graphs::datastructures::ALDigraph;
 use crate::graphs::datastructures::{Digraph, NodeID};
 use osmpbf::{Element, ElementReader};
 

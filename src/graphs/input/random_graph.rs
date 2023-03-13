@@ -1,4 +1,5 @@
-use crate::graphs::datastructures::{AMDigraph, Digraph, LatLng, NodeID};
+use crate::geography::datastructures::LatLng;
+use crate::graphs::datastructures::{AMDigraph, Digraph, NodeID};
 use rand::Rng;
 use rand_distr::{Distribution, Normal};
 
