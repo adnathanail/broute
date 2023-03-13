@@ -1,7 +1,8 @@
+use crate::geography::datastructures::LatLng;
 use std::fs::File;
 use std::io::BufRead;
 
-use crate::graphs::datastructures::{ALDigraph, Digraph, LatLng, NodeID, NodeIndex};
+use crate::graphs::datastructures::{ALDigraph, Digraph, NodeID, NodeIndex};
 
 #[derive(Debug)]
 pub enum XGMMLImportError {

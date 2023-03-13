@@ -1,4 +1,4 @@
-use crate::graphs::datastructures::LatLng;
+use crate::geography::datastructures::LatLng;
 
 pub fn haversine(start_point: LatLng, end_point: LatLng) -> f64 {
     let earth_radius = 6371.0;

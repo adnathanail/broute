@@ -1,5 +1,6 @@
+use broute::geography::datastructures::LatLng;
 use broute::graphs::algorithms::ConnectedComponents;
-use broute::graphs::datastructures::{ALDigraph, Digraph, LatLng, NodeID, NodeIndex};
+use broute::graphs::datastructures::{ALDigraph, Digraph, NodeID, NodeIndex};
 
 #[test]
 fn connected_components_test() {
