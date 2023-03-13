@@ -4,6 +4,7 @@ extern crate rocket;
 use std::ops::Deref;
 use std::sync::{Arc, RwLock};
 
+use broute::geography::datastructures::LatLng;
 use rocket::fairing::{Fairing, Info, Kind};
 use rocket::http::Header;
 use rocket::serde::json::Json;
@@ -12,7 +13,7 @@ use rocket::serde::{Deserialize, Serialize};
 use broute::graphs::algorithms::{
     form_abstracted_graph, ConnectedComponents, Dijkstra, SimulatedAnnealing,
 };
-use broute::graphs::datastructures::{ALDigraph, Digraph, LatLng, NodeID};
+use broute::graphs::datastructures::{ALDigraph, Digraph, NodeID};
 use broute::graphs::input::load_pbf_file;
 
 #[cfg(test)]

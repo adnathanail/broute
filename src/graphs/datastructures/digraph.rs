@@ -1,5 +1,5 @@
-use crate::algorithms::haversine;
-use crate::graphs::datastructures::LatLng;
+use crate::geography::algorithms::haversine;
+use crate::geography::datastructures::LatLng;
 use std::collections::HashMap;
 
 #[derive(Debug, Copy, Clone, PartialEq, Eq, Hash)]
