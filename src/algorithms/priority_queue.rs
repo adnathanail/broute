@@ -3,57 +3,47 @@ use std::cmp::Ordering::Equal;
 use std::collections::BinaryHeap;
 
 #[derive(Debug, Copy, Clone, PartialEq)]
-struct PriorityQueueItem {
+struct PriorityQueueItem<V: PartialEq> {
+    value: V,
     priority: f64,
-    value: usize,
 }
 
-impl Eq for PriorityQueueItem {}
+impl<V: PartialEq> Eq for PriorityQueueItem<V> {}
 
 // The priority queue depends on `Ord`.
-// Explicitly implement the trait so the queue becomes a min-heap
-// instead of a max-heap.
-impl Ord for PriorityQueueItem {
-    fn cmp(&self, other: &Self) -> Ordering {
-        // Notice that the we flip the ordering on costs.
-        // In case of a tie we compare positions - this step is necessary
-        // to make implementations of `PartialEq` and `Ord` consistent.
-        other
-            .priority
-            .partial_cmp(&self.priority)
-            .unwrap_or(Equal)
-            .then_with(|| self.value.cmp(&other.value))
-    }
-}
-
-// `PartialOrd` needs to be implemented as well.
-impl PartialOrd for PriorityQueueItem {
+// Explicitly implement the trait so the queue becomes a min-heap instead of a max-heap.
+impl<V: PartialEq> PartialOrd<Self> for PriorityQueueItem<V> {
     fn partial_cmp(&self, other: &Self) -> Option<Ordering> {
-        Some(self.cmp(other))
+        other.priority.partial_cmp(&self.priority)
     }
 }
 
-// TODO genericise
-#[derive(Debug)]
-pub struct PriorityQueue {
-    heap: BinaryHeap<PriorityQueueItem>,
+impl<V: PartialEq> Ord for PriorityQueueItem<V> {
+    fn cmp(&self, other: &Self) -> Ordering {
+        self.partial_cmp(&other).unwrap_or(Equal)
+    }
 }
 
-impl PriorityQueue {
+#[derive(Debug)]
+pub struct PriorityQueue<V: PartialEq> {
+    heap: BinaryHeap<PriorityQueueItem<V>>,
+}
+
+impl<V: PartialEq> PriorityQueue<V> {
     pub fn new() -> Self {
         Self {
             heap: BinaryHeap::new(),
         }
     }
-    pub fn push(&mut self, value: usize, priority: f64) {
+    pub fn push(&mut self, value: V, priority: f64) {
         self.heap.push(PriorityQueueItem { value, priority })
     }
-    pub fn pop(&mut self) -> Option<(usize, f64)> {
+    pub fn pop(&mut self) -> Option<(V, f64)> {
         self.heap.pop().map(|s| (s.value, s.priority))
     }
 }
 
-impl Default for PriorityQueue {
+impl<V: PartialEq> Default for PriorityQueue<V> {
     fn default() -> Self {
         Self::new()
     }
