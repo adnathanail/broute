@@ -18,7 +18,7 @@ fn check_graph_adjacency(
 }
 
 #[test]
-fn dijkstra_travelling_salesman_integration_test() {
+fn a_star_travelling_salesman_integration_test() {
     // Load graph
     let g = load_pbf_file("test_data/geofabrik/monaco-latest.osm.pbf").unwrap();
 
