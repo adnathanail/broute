@@ -3,7 +3,7 @@ use svg::node::element::path::Data;
 use svg::node::element::{Circle, Path};
 use svg::{Document, Node};
 
-fn get_points_bounds(g: &dyn Digraph) -> (f64, f64, f64, f64) {
+fn get_points_bounds(g: &impl Digraph) -> (f64, f64, f64, f64) {
     // Draw the locations of the node on the canvas, with longitudes and latitudes normalised
     // to the range 0-100
     let mut min_lon: f64 = f64::MAX;
@@ -46,7 +46,7 @@ fn normalise_point(
 }
 
 fn get_coords_from_node_index(
-    g: &dyn Digraph,
+    g: &impl Digraph,
     node_index: NodeIndex,
     min_lon: f64,
     min_lat: f64,
@@ -67,7 +67,7 @@ fn get_coords_from_node_index(
 const OUTPUT_WIDTH: f64 = 100.0;
 const OUTPUT_HEIGHT: f64 = 100.0;
 
-pub fn to_svg(g: &dyn Digraph, path: &GraphPath, output_path: &str) {
+pub fn to_svg(g: &impl Digraph, path: &GraphPath, output_path: &str) {
     let mut document = Document::new().set(
         "viewBox",
         (-50, -50, OUTPUT_WIDTH + 50.0, OUTPUT_HEIGHT + 50.0),

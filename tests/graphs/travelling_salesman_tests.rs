@@ -4,7 +4,7 @@ use broute::graphs::datastructures::{Digraph, NodeID, NodeIndex};
 use broute::graphs::input::load_pbf_file;
 
 fn check_graph_adjacency(
-    g: &dyn Digraph,
+    g: &impl Digraph,
     node_id: &NodeID,
     expected_adjacency: Vec<(NodeIndex, f64)>,
 ) {
