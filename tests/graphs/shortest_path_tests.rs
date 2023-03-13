@@ -1,11 +1,11 @@
 use broute::geography::datastructures::LatLng;
-use broute::graphs::algorithms::{ConnectedComponents, Dijkstra};
+use broute::graphs::algorithms::{ConnectedComponents, AStar};
 use broute::graphs::datastructures;
 use broute::graphs::datastructures::{Digraph, NodeID, NodeIndex};
 use broute::graphs::input::{load_pbf_file, load_xgmml_file};
 
 #[test]
-fn simple_dijkstra_test() {
+fn simple_a_star_test() {
     let mut g = datastructures::AMDigraph::new(8);
 
     for i in 0..8 {
@@ -35,39 +35,39 @@ fn simple_dijkstra_test() {
     g.add_edge_by_id(NodeID(7), NodeID(2), 7.0);
     g.add_edge_by_id(NodeID(7), NodeID(5), 6.0);
 
-    let mut dj = Dijkstra::new(&g, NodeIndex(0), vec![NodeIndex(1)]);
+    let mut dj = AStar::new(&g, NodeIndex(0), vec![NodeIndex(1)]);
     dj.run();
     assert_eq!(dj.get_dist_to_to_node(NodeIndex(1)), Some(5.0));
     // We didn't ask for it, so A* won't have prioritised it, so the answer will be bad
     assert_eq!(dj.get_dist_to_to_node(NodeIndex(2)), None);
 
-    let mut dj = Dijkstra::new(&g, NodeIndex(0), vec![NodeIndex(2)]);
+    let mut dj = AStar::new(&g, NodeIndex(0), vec![NodeIndex(2)]);
     dj.run();
     assert_eq!(dj.get_dist_to_to_node(NodeIndex(2)), Some(14.0));
 
-    let mut dj = Dijkstra::new(&g, NodeIndex(0), vec![NodeIndex(3)]);
+    let mut dj = AStar::new(&g, NodeIndex(0), vec![NodeIndex(3)]);
     dj.run();
     assert_eq!(dj.get_dist_to_to_node(NodeIndex(3)), Some(17.0));
 
-    let mut dj = Dijkstra::new(&g, NodeIndex(0), vec![NodeIndex(4)]);
+    let mut dj = AStar::new(&g, NodeIndex(0), vec![NodeIndex(4)]);
     dj.run();
     assert_eq!(dj.get_dist_to_to_node(NodeIndex(4)), Some(9.0));
 
-    let mut dj = Dijkstra::new(&g, NodeIndex(0), vec![NodeIndex(5)]);
+    let mut dj = AStar::new(&g, NodeIndex(0), vec![NodeIndex(5)]);
     dj.run();
     assert_eq!(dj.get_dist_to_to_node(NodeIndex(5)), Some(13.0));
 
-    let mut dj = Dijkstra::new(&g, NodeIndex(0), vec![NodeIndex(6)]);
+    let mut dj = AStar::new(&g, NodeIndex(0), vec![NodeIndex(6)]);
     dj.run();
     assert_eq!(dj.get_dist_to_to_node(NodeIndex(6)), Some(25.0));
 
-    let mut dj = Dijkstra::new(&g, NodeIndex(0), vec![NodeIndex(7)]);
+    let mut dj = AStar::new(&g, NodeIndex(0), vec![NodeIndex(7)]);
     dj.run();
     assert_eq!(dj.get_dist_to_to_node(NodeIndex(7)), Some(8.0));
 }
 
 #[test]
-fn osm_dijkstra_test() {
+fn osm_a_star_test() {
     // Load graph
     let g = load_pbf_file("test_data/geofabrik/monaco-latest.osm.pbf").unwrap();
     // Get largest connected subgraph
@@ -84,8 +84,8 @@ fn osm_dijkstra_test() {
         latitude: 43.7341524,
         longitude: 7.4178794,
     });
-    // Run Dijkstra
-    let mut dj = Dijkstra::new(&c_g, start_node_index, vec![end_node_index]);
+    // Run A*
+    let mut dj = AStar::new(&c_g, start_node_index, vec![end_node_index]);
     dj.run();
     // Reverse engineer shortest path
     let p = dj.get_graph_path(end_node_index).unwrap();
@@ -199,11 +199,11 @@ fn osm_dijkstra_test() {
 }
 
 #[test]
-fn dimacs_shortest_path_dijkstra_test() {
+fn dimacs_shortest_path_a_star_test() {
     // Load graph
     let dimacs_g = load_xgmml_file("test_data/dimacs_shortest_path/USA-road-d.NY.gr").unwrap();
-    // Run Dijkstra
-    let mut dj = Dijkstra::new(&dimacs_g, NodeIndex(0), vec![NodeIndex(264345)]);
+    // Run A*
+    let mut dj = AStar::new(&dimacs_g, NodeIndex(0), vec![NodeIndex(264345)]);
     dj.run();
     // Get shortest path length
     let p = dj.get_graph_path(NodeIndex(264345)).unwrap();

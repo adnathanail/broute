@@ -3,7 +3,7 @@ use crate::geography::algorithms::haversine;
 use crate::graphs::datastructures::GraphPath;
 use crate::graphs::datastructures::{Digraph, NodeIndex};
 
-pub struct Dijkstra<'a, T: Digraph> {
+pub struct AStar<'a, T: Digraph> {
     g: &'a T,
     from_node: NodeIndex,
     to_nodes: Vec<NodeIndex>,
@@ -14,13 +14,13 @@ pub struct Dijkstra<'a, T: Digraph> {
     queue: PriorityQueue<usize, f64>,
 }
 
-impl<'a, T: Digraph> Dijkstra<'a, T> {
+impl<'a, T: Digraph> AStar<'a, T> {
     pub fn new(g: &'a T, from_node: NodeIndex, to_nodes: Vec<NodeIndex>) -> Self {
         // let mut node_data_cache: HashMap<NodeIndex, NodeData> = HashMap::new();
         // let end_node_data = g.nodes_data().get_node_data_by_index(to_node);
         // node_data_cache.insert(to_node, *end_node_data);
 
-        Dijkstra {
+        AStar {
             g,
             from_node,
             to_nodes,
@@ -98,9 +98,9 @@ impl<'a, T: Digraph> Dijkstra<'a, T> {
             u_node_index.0,
             dist_to_u
                 + dists_to_to_nodes
-                    .iter()
-                    .min_by(|a, b| a.total_cmp(b))
-                    .unwrap(),
+                .iter()
+                .min_by(|a, b| a.total_cmp(b))
+                .unwrap(),
         );
     }
 

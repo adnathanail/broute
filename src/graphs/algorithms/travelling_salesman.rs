@@ -1,4 +1,4 @@
-use crate::graphs::algorithms::Dijkstra;
+use crate::graphs::algorithms::AStar;
 use crate::graphs::datastructures::{AMDigraph, Digraph, GraphPath, NodeID, NodeIndex};
 use plotlib::page::Page;
 use plotlib::repr::Plot;
@@ -22,7 +22,7 @@ pub fn form_abstracted_graph(g: &impl Digraph, node_ids: &Vec<NodeID>) -> AMDigr
     }
     for from_node_id in node_ids {
         let from_node_index = g.nodes_data().get_node_index_by_id(from_node_id);
-        let mut dj = Dijkstra::new(g, *from_node_index, node_indexes.clone());
+        let mut dj = AStar::new(g, *from_node_index, node_indexes.clone());
         dj.run();
         for to_node_id in node_ids {
             if to_node_id != from_node_id {

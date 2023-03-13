@@ -1,7 +1,7 @@
 use std::time::Duration;
 
 use broute::graphs::algorithms::{
-    form_abstracted_graph, ConnectedComponents, Dijkstra, SimulatedAnnealing,
+    form_abstracted_graph, ConnectedComponents, AStar, SimulatedAnnealing,
 };
 use broute::graphs::datastructures::{Digraph, NodeIndex};
 use broute::graphs::input::{get_random_graph, load_pbf_file, load_tsplib_file, load_xgmml_file};
@@ -17,7 +17,7 @@ fn shortest_path_benchmark(c: &mut Criterion) {
         &random_g,
         |b, g| {
             b.iter(|| {
-                let mut dj = Dijkstra::new(g, NodeIndex(0), vec![NodeIndex(2999)]);
+                let mut dj = AStar::new(g, NodeIndex(0), vec![NodeIndex(2999)]);
                 dj.run();
             })
         },
@@ -29,7 +29,7 @@ fn shortest_path_benchmark(c: &mut Criterion) {
         &dimacs_g,
         |b, g| {
             b.iter(|| {
-                let mut dj = Dijkstra::new(g, NodeIndex(0), vec![NodeIndex(1290)]);
+                let mut dj = AStar::new(g, NodeIndex(0), vec![NodeIndex(1290)]);
                 dj.run();
             })
         },
@@ -44,7 +44,7 @@ fn shortest_path_benchmark(c: &mut Criterion) {
         &monaco_largest_g,
         |b, g| {
             b.iter(|| {
-                let mut dj = Dijkstra::new(g, NodeIndex(0), vec![NodeIndex(9935)]);
+                let mut dj = AStar::new(g, NodeIndex(0), vec![NodeIndex(9935)]);
                 dj.run();
             })
         },
@@ -56,7 +56,7 @@ fn shortest_path_benchmark(c: &mut Criterion) {
         &dimacs_g,
         |b, g| {
             b.iter(|| {
-                let mut dj = Dijkstra::new(g, NodeIndex(0), vec![NodeIndex(264345)]);
+                let mut dj = AStar::new(g, NodeIndex(0), vec![NodeIndex(264345)]);
                 dj.run();
                 let p = dj.get_graph_path(NodeIndex(264345)).unwrap();
                 p.get_length_on_graph(&dimacs_g);
