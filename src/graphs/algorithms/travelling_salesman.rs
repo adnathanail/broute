@@ -9,6 +9,10 @@ use rand::seq::SliceRandom;
 use rand::{thread_rng, Rng};
 
 pub fn form_abstracted_graph(g: &impl Digraph, node_ids: &Vec<NodeID>) -> AMDigraph {
+    let node_indexes: Vec<NodeIndex> = node_ids
+        .iter()
+        .map(|node_id| *g.nodes_data().get_node_index_by_id(node_id))
+        .collect();
     let mut abstracted_graph = AMDigraph::new(node_ids.len());
     for node_id in node_ids {
         let node_data = g.nodes_data().get_node_data_by_id(*node_id);
@@ -18,12 +22,16 @@ pub fn form_abstracted_graph(g: &impl Digraph, node_ids: &Vec<NodeID>) -> AMDigr
     }
     for from_node_id in node_ids {
         let from_node_index = g.nodes_data().get_node_index_by_id(from_node_id);
-        let mut dj = Dijkstra::new(g, *from_node_index, *from_node_index);
+        let mut dj = Dijkstra::new(g, *from_node_index, node_indexes.clone());
         dj.run();
         for to_node_id in node_ids {
             if to_node_id != from_node_id {
                 let to_node_index = g.nodes_data().get_node_index_by_id(to_node_id);
-                abstracted_graph.add_edge_by_id(*from_node_id, *to_node_id, dj.get_dist_to_node())
+                abstracted_graph.add_edge_by_id(
+                    *from_node_id,
+                    *to_node_id,
+                    dj.get_dist_to_to_node(*to_node_index).unwrap(),
+                )
             }
         }
     }
