@@ -26,7 +26,7 @@ pub fn form_abstracted_graph(g: &dyn Digraph, node_ids: &Vec<NodeID>) -> AMDigra
                 abstracted_graph.add_edge_by_id(
                     *from_node_id,
                     *to_node_id,
-                    dj.get_dist_to(*to_node_index),
+                    dj.get_dist_to_node(*to_node_index),
                 )
             }
         }
