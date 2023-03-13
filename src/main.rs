@@ -11,7 +11,7 @@ use rocket::serde::json::Json;
 use rocket::serde::{Deserialize, Serialize};
 
 use broute::graphs::algorithms::{
-    form_abstracted_graph, ConnectedComponents, Dijkstra, SimulatedAnnealing,
+    form_abstracted_graph, ConnectedComponents, AStar, SimulatedAnnealing,
 };
 use broute::graphs::datastructures::{ALDigraph, Digraph, NodeID};
 use broute::graphs::input::load_pbf_file;
@@ -48,10 +48,10 @@ fn shortest_path(
         longitude: end_longitude,
     });
 
-    let mut dj = Dijkstra::new(c_g, start_node_index, vec![end_node_index]);
+    let mut dj = AStar::new(c_g, start_node_index, vec![end_node_index]);
     dj.run();
 
-    println!("Dijkstra ran");
+    println!("A* ran");
 
     let p = dj.get_graph_path(end_node_index).unwrap();
     // Form response
@@ -130,7 +130,7 @@ fn route_optimisation(
     for i in 0..(p_node_ids.len() - 1) {
         let from_node_index = c_g.nodes_data().get_node_index_by_id(p_node_ids[i]);
         let to_node_index = c_g.nodes_data().get_node_index_by_id(p_node_ids[i + 1]);
-        let mut dj = Dijkstra::new(c_g, *from_node_index, vec![*to_node_index]);
+        let mut dj = AStar::new(c_g, *from_node_index, vec![*to_node_index]);
         dj.run();
 
         let leg_p = dj.get_graph_path(*to_node_index).unwrap();
