@@ -20,7 +20,7 @@ impl<V: PartialEq, P: PartialEq + PartialOrd> PartialOrd<Self> for PriorityQueue
 
 impl<V: PartialEq, P: PartialEq + PartialOrd> Ord for PriorityQueueItem<V, P> {
     fn cmp(&self, other: &Self) -> Ordering {
-        self.partial_cmp(&other).unwrap_or(Equal)
+        self.partial_cmp(other).unwrap_or(Equal)
     }
 }
 
