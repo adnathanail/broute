@@ -26,7 +26,7 @@ impl<'a> Dijkstra<'a> {
     pub fn run(&mut self) {
         // Add first vertex to queue
         self.from_node_to_current_node[self.from_node.0] = 0.0;
-        self.queue.push(0.0, self.from_node.0);
+        self.queue.push(self.from_node.0, 0.0);
 
         // Take next closest node from the heap
         while let Some((v, cost)) = self.queue.pop() {
@@ -41,7 +41,7 @@ impl<'a> Dijkstra<'a> {
                 let new_dist_to_u = self.from_node_to_current_node[v] + edge.weight;
                 if new_dist_to_u < self.from_node_to_current_node[edge.node_index.0] {
                     // Add adjacent node to queue
-                    self.queue.push(new_dist_to_u, edge.node_index.0);
+                    self.queue.push(edge.node_index.0, new_dist_to_u);
                     self.from_node_to_current_node[edge.node_index.0] = new_dist_to_u;
                     self.parent[edge.node_index.0] = Some(v);
                 }
