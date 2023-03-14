@@ -1,8 +1,8 @@
-use std::collections::HashMap;
 use crate::algorithms::PriorityQueue;
 use crate::geography::algorithms::haversine;
-use crate::graphs::datastructures::{GraphPath, NodeData};
 use crate::graphs::datastructures::{Digraph, NodeIndex};
+use crate::graphs::datastructures::{GraphPath, NodeData};
+use std::collections::HashMap;
 
 pub struct AStar<'a, T: Digraph> {
     g: &'a T,
@@ -86,7 +86,10 @@ impl<'a, T: Digraph> AStar<'a, T> {
         let node_data = self.g.nodes_data().get_node_data_by_index(u_node_index);
         let mut dists_to_to_nodes = Vec::with_capacity(self.to_nodes.len());
         for to_node in &self.to_nodes {
-            dists_to_to_nodes.push(haversine(node_data.latlng, self.node_data_cache[to_node].latlng))
+            dists_to_to_nodes.push(haversine(
+                node_data.latlng,
+                self.node_data_cache[to_node].latlng,
+            ))
         }
 
         // Prioritise nodes that are closest to the closest to_node
@@ -94,9 +97,9 @@ impl<'a, T: Digraph> AStar<'a, T> {
             u_node_index.0,
             dist_to_u
                 + dists_to_to_nodes
-                .iter()
-                .min_by(|a, b| a.total_cmp(b))
-                .unwrap(),
+                    .iter()
+                    .min_by(|a, b| a.total_cmp(b))
+                    .unwrap(),
         );
     }
 
