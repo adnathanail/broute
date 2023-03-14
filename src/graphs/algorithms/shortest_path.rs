@@ -11,16 +11,12 @@ pub struct AStar<'a, T: Digraph> {
     from_node_to_current_node: Vec<f64>,
     current_node_to_closest_to_node: HashMap<NodeIndex, f64>,
     num_to_nodes_in_queue: usize,
-    // node_data_cache: HashMap<NodeIndex, NodeData>,
     parent: Vec<Option<usize>>,
     queue: PriorityQueue<usize, f64>,
 }
 
 impl<'a, T: Digraph> AStar<'a, T> {
     pub fn new(g: &'a T, from_node: NodeIndex, to_nodes: Vec<NodeIndex>) -> Self {
-        // let mut node_data_cache: HashMap<NodeIndex, NodeData> = HashMap::new();
-        // let end_node_data = g.nodes_data().get_node_data_by_index(to_node);
-        // node_data_cache.insert(to_node, *end_node_data);
         let mut current_node_to_closest_to_node: HashMap<NodeIndex, f64> = HashMap::new();
 
         for current_node in g.nodes_data().get_node_indexes() {
@@ -58,7 +54,6 @@ impl<'a, T: Digraph> AStar<'a, T> {
         // Add first vertex to queue
         self.from_node_to_current_node[self.from_node.0] = 0.0;
         if self.to_nodes.contains(&self.from_node) {
-            // println!("Adding {}", self.from_node.0);
             self.num_to_nodes_in_queue += 1;
         }
         self.queue.push(self.from_node.0, 0.0);
@@ -67,7 +62,6 @@ impl<'a, T: Digraph> AStar<'a, T> {
         while let Some((v, _cost)) = self.queue.pop() {
             // Search complete
             if self.to_nodes.contains(&NodeIndex(v)) {
-                // println!("Removing {}", v);
                 self.num_to_nodes_in_queue -= 1;
             }
             if self.num_to_nodes_in_queue == 0 {
@@ -99,10 +93,9 @@ impl<'a, T: Digraph> AStar<'a, T> {
 
     pub fn add_to_queue(&mut self, u_node_index: NodeIndex, dist_to_u: f64) {
         if self.to_nodes.contains(&u_node_index) {
-            // println!("Adding {}", u_node_index.0);
             self.num_to_nodes_in_queue += 1;
         }
-        // self.node_data_cache[&self.to_node].latlng
+
         self.queue.push(
             u_node_index.0,
             dist_to_u + self.current_node_to_closest_to_node[&u_node_index],
