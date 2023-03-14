@@ -3,13 +3,14 @@ use crate::geography::algorithms::haversine;
 use crate::graphs::datastructures::{Digraph, NodeIndex};
 use crate::graphs::datastructures::{GraphPath, NodeData};
 use std::collections::HashMap;
+use crate::geography::datastructures::LatLng;
 
 pub struct AStar<'a, T: Digraph> {
     g: &'a T,
     from_node: NodeIndex,
     to_nodes: Vec<NodeIndex>,
     from_node_to_current_node: Vec<f64>,
-    node_data_cache: HashMap<NodeIndex, NodeData>,
+    to_node_locations: Vec<LatLng>,
     num_to_nodes_in_queue: usize,
     parent: Vec<Option<usize>>,
     queue: PriorityQueue<usize, f64>,
@@ -17,10 +18,10 @@ pub struct AStar<'a, T: Digraph> {
 
 impl<'a, T: Digraph> AStar<'a, T> {
     pub fn new(g: &'a T, from_node: NodeIndex, to_nodes: Vec<NodeIndex>) -> Self {
-        let mut node_data_cache: HashMap<NodeIndex, NodeData> = HashMap::new();
+        let mut to_node_locations: Vec<LatLng> = Vec::new();
         for to_node in &to_nodes {
             let to_node_data = g.nodes_data().get_node_data_by_index(*to_node);
-            node_data_cache.insert(*to_node, *to_node_data);
+            to_node_locations.push(to_node_data.latlng);
         }
 
         AStar {
@@ -29,7 +30,7 @@ impl<'a, T: Digraph> AStar<'a, T> {
             to_nodes,
             // Initialise all distances to infinity
             from_node_to_current_node: vec![f64::INFINITY; g.num_vertices()],
-            node_data_cache,
+            to_node_locations,
             num_to_nodes_in_queue: 0,
             // Initialise all parents to none
             parent: vec![None; g.num_vertices()],
@@ -85,10 +86,10 @@ impl<'a, T: Digraph> AStar<'a, T> {
 
         let node_data = self.g.nodes_data().get_node_data_by_index(u_node_index);
         let mut shortest_distance = f64::INFINITY;
-        for to_node in &self.to_nodes {
+        for to_node_location in &self.to_node_locations {
             shortest_distance = f64::min(
                 shortest_distance,
-                haversine(node_data.latlng, self.node_data_cache[to_node].latlng),
+                haversine(node_data.latlng, *to_node_location),
             )
         }
 
