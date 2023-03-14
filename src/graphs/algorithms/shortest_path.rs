@@ -86,17 +86,15 @@ impl<'a, T: Digraph> AStar<'a, T> {
         let node_data = self.g.nodes_data().get_node_data_by_index(u_node_index);
         let mut shortest_distance = f64::INFINITY;
         for to_node in &self.to_nodes {
-            shortest_distance = f64::min(shortest_distance, haversine(
-                node_data.latlng,
-                self.node_data_cache[to_node].latlng,
-            ))
+            shortest_distance = f64::min(
+                shortest_distance,
+                haversine(node_data.latlng, self.node_data_cache[to_node].latlng),
+            )
         }
 
         // Prioritise nodes that are closest to the closest to_node
-        self.queue.push(
-            u_node_index.0,
-            dist_to_u + shortest_distance,
-        );
+        self.queue
+            .push(u_node_index.0, dist_to_u + shortest_distance);
     }
 
     pub fn get_dist_to_to_node(&self, to_node: NodeIndex) -> Option<f64> {
