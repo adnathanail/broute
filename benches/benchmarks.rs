@@ -1,7 +1,7 @@
 use std::time::Duration;
 
 use broute::graphs::algorithms::{
-    form_abstracted_graph, ConnectedComponents, AStar, SimulatedAnnealing,
+    form_abstracted_graph, AStar, ConnectedComponents, SimulatedAnnealing,
 };
 use broute::graphs::datastructures::{Digraph, NodeIndex};
 use broute::graphs::input::{load_pbf_file, load_tsplib_file, load_xgmml_file};

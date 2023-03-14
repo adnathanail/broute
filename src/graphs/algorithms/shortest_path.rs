@@ -1,9 +1,8 @@
 use crate::algorithms::PriorityQueue;
 use crate::geography::algorithms::haversine;
 use crate::geography::datastructures::LatLng;
+use crate::graphs::datastructures::GraphPath;
 use crate::graphs::datastructures::{Digraph, NodeIndex};
-use crate::graphs::datastructures::{GraphPath, NodeData};
-use std::collections::HashMap;
 
 pub struct AStar<'a, T: Digraph> {
     g: &'a T,
