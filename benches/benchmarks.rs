@@ -4,24 +4,12 @@ use broute::graphs::algorithms::{
     form_abstracted_graph, ConnectedComponents, AStar, SimulatedAnnealing,
 };
 use broute::graphs::datastructures::{Digraph, NodeIndex};
-use broute::graphs::input::{get_random_graph, load_pbf_file, load_tsplib_file, load_xgmml_file};
+use broute::graphs::input::{load_pbf_file, load_tsplib_file, load_xgmml_file};
 use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion};
 use rand::seq::IteratorRandom;
 
 fn shortest_path_benchmark(c: &mut Criterion) {
     let mut group = c.benchmark_group("Shortest path");
-
-    let random_g = get_random_graph(3000, 0.5, 4.0, 1.0);
-    group.bench_with_input(
-        BenchmarkId::new("Random graph", &random_g),
-        &random_g,
-        |b, g| {
-            b.iter(|| {
-                let mut dj = AStar::new(g, NodeIndex(0), vec![NodeIndex(2999)]);
-                dj.run();
-            })
-        },
-    );
 
     let dimacs_g = load_tsplib_file("test_data/dimacs_tsp/d1291.tsp", usize::MAX).unwrap();
     group.bench_with_input(
