@@ -9,8 +9,8 @@ pub struct AStar<'a, T: Digraph> {
     from_node: NodeIndex,
     to_nodes: Vec<NodeIndex>,
     from_node_to_current_node: Vec<f64>,
-    num_to_nodes_in_queue: usize,
     node_data_cache: HashMap<NodeIndex, NodeData>,
+    num_to_nodes_in_queue: usize,
     parent: Vec<Option<usize>>,
     queue: PriorityQueue<usize, f64>,
 }
@@ -29,8 +29,8 @@ impl<'a, T: Digraph> AStar<'a, T> {
             to_nodes,
             // Initialise all distances to infinity
             from_node_to_current_node: vec![f64::INFINITY; g.num_vertices()],
-            num_to_nodes_in_queue: 0,
             node_data_cache,
+            num_to_nodes_in_queue: 0,
             // Initialise all parents to none
             parent: vec![None; g.num_vertices()],
             queue: PriorityQueue::new(),
@@ -84,9 +84,9 @@ impl<'a, T: Digraph> AStar<'a, T> {
         }
 
         let node_data = self.g.nodes_data().get_node_data_by_index(u_node_index);
-        let mut dists_to_to_nodes = Vec::with_capacity(self.to_nodes.len());
+        let mut shortest_distance = f64::INFINITY;
         for to_node in &self.to_nodes {
-            dists_to_to_nodes.push(haversine(
+            shortest_distance = f64::min(shortest_distance, haversine(
                 node_data.latlng,
                 self.node_data_cache[to_node].latlng,
             ))
@@ -95,11 +95,7 @@ impl<'a, T: Digraph> AStar<'a, T> {
         // Prioritise nodes that are closest to the closest to_node
         self.queue.push(
             u_node_index.0,
-            dist_to_u
-                + dists_to_to_nodes
-                    .iter()
-                    .min_by(|a, b| a.total_cmp(b))
-                    .unwrap(),
+            dist_to_u + shortest_distance,
         );
     }
 
