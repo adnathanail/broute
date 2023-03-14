@@ -1,5 +1,5 @@
 use broute::geography::datastructures::LatLng;
-use broute::graphs::algorithms::{ConnectedComponents, AStar};
+use broute::graphs::algorithms::{AStar, ConnectedComponents};
 use broute::graphs::datastructures;
 use broute::graphs::datastructures::{Digraph, NodeID, NodeIndex};
 use broute::graphs::input::{load_pbf_file, load_xgmml_file};
