@@ -1,6 +1,7 @@
+use std::collections::HashMap;
 use crate::algorithms::PriorityQueue;
 use crate::geography::algorithms::haversine;
-use crate::graphs::datastructures::GraphPath;
+use crate::graphs::datastructures::{GraphPath};
 use crate::graphs::datastructures::{Digraph, NodeIndex};
 
 pub struct AStar<'a, T: Digraph> {
@@ -8,6 +9,7 @@ pub struct AStar<'a, T: Digraph> {
     from_node: NodeIndex,
     to_nodes: Vec<NodeIndex>,
     from_node_to_current_node: Vec<f64>,
+    current_node_to_closest_to_node: HashMap<NodeIndex, f64>,
     num_to_nodes_in_queue: usize,
     // node_data_cache: HashMap<NodeIndex, NodeData>,
     parent: Vec<Option<usize>>,
@@ -19,6 +21,23 @@ impl<'a, T: Digraph> AStar<'a, T> {
         // let mut node_data_cache: HashMap<NodeIndex, NodeData> = HashMap::new();
         // let end_node_data = g.nodes_data().get_node_data_by_index(to_node);
         // node_data_cache.insert(to_node, *end_node_data);
+        let mut current_node_to_closest_to_node: HashMap<NodeIndex, f64> = HashMap::new();
+
+        for current_node in g.nodes_data().get_node_indexes() {
+            let current_node_data = g.nodes_data().get_node_data_by_index(current_node);
+
+            let mut shortest_distance = f64::INFINITY;
+
+            // Prioritise nodes that are closest to the closest to_node
+            for to_node in &to_nodes {
+                let to_node_data = g.nodes_data().get_node_data_by_index(*to_node);
+                shortest_distance = f64::min(shortest_distance, haversine(current_node_data.latlng, to_node_data.latlng));
+            }
+            current_node_to_closest_to_node.insert(
+                current_node,
+                shortest_distance,
+            );
+        }
 
         AStar {
             g,
@@ -26,6 +45,7 @@ impl<'a, T: Digraph> AStar<'a, T> {
             to_nodes,
             // Initialise all distances to infinity
             from_node_to_current_node: vec![f64::INFINITY; g.num_vertices()],
+            current_node_to_closest_to_node,
             num_to_nodes_in_queue: 0,
             // node_data_cache,
             // Initialise all parents to none
@@ -82,25 +102,10 @@ impl<'a, T: Digraph> AStar<'a, T> {
             // println!("Adding {}", u_node_index.0);
             self.num_to_nodes_in_queue += 1;
         }
-
-        let node_data = self.g.nodes_data().get_node_data_by_index(u_node_index);
-
-        let mut dists_to_to_nodes = Vec::with_capacity(self.to_nodes.len());
-        for to_node in &self.to_nodes {
-            let to_node_data = self.g.nodes_data().get_node_data_by_index(*to_node);
-            dists_to_to_nodes.push(haversine(node_data.latlng, to_node_data.latlng))
-        }
-
-        // Prioritise nodes that are closest to the closest to_node
-
         // self.node_data_cache[&self.to_node].latlng
         self.queue.push(
             u_node_index.0,
-            dist_to_u
-                + dists_to_to_nodes
-                .iter()
-                .min_by(|a, b| a.total_cmp(b))
-                .unwrap(),
+            dist_to_u + self.current_node_to_closest_to_node[&u_node_index],
         );
     }
 
