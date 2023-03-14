@@ -11,7 +11,7 @@ use rocket::serde::json::Json;
 use rocket::serde::{Deserialize, Serialize};
 
 use broute::graphs::algorithms::{
-    form_abstracted_graph, ConnectedComponents, AStar, SimulatedAnnealing,
+    form_abstracted_graph, AStar, ConnectedComponents, SimulatedAnnealing,
 };
 use broute::graphs::datastructures::{ALDigraph, Digraph, NodeID};
 use broute::graphs::input::load_pbf_file;
