@@ -1,8 +1,8 @@
-use std::collections::HashMap;
 use crate::algorithms::PriorityQueue;
 use crate::geography::algorithms::haversine;
-use crate::graphs::datastructures::{GraphPath};
+use crate::graphs::datastructures::GraphPath;
 use crate::graphs::datastructures::{Digraph, NodeIndex};
+use std::collections::HashMap;
 
 pub struct AStar<'a, T: Digraph> {
     g: &'a T,
@@ -27,12 +27,12 @@ impl<'a, T: Digraph> AStar<'a, T> {
             // Prioritise nodes that are closest to the closest to_node
             for to_node in &to_nodes {
                 let to_node_data = g.nodes_data().get_node_data_by_index(*to_node);
-                shortest_distance = f64::min(shortest_distance, haversine(current_node_data.latlng, to_node_data.latlng));
+                shortest_distance = f64::min(
+                    shortest_distance,
+                    haversine(current_node_data.latlng, to_node_data.latlng),
+                );
             }
-            current_node_to_closest_to_node.insert(
-                current_node,
-                shortest_distance,
-            );
+            current_node_to_closest_to_node.insert(current_node, shortest_distance);
         }
 
         AStar {
