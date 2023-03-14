@@ -17,8 +17,8 @@ fn shortest_path_benchmark(c: &mut Criterion) {
         &dimacs_g,
         |b, g| {
             b.iter(|| {
-                let mut dj = AStar::new(g, NodeIndex(0), vec![NodeIndex(1290)]);
-                dj.run();
+                let mut astar = AStar::new(g, NodeIndex(0), vec![NodeIndex(1290)]);
+                astar.run();
             })
         },
     );
@@ -32,8 +32,8 @@ fn shortest_path_benchmark(c: &mut Criterion) {
         &monaco_largest_g,
         |b, g| {
             b.iter(|| {
-                let mut dj = AStar::new(g, NodeIndex(0), vec![NodeIndex(9935)]);
-                dj.run();
+                let mut astar = AStar::new(g, NodeIndex(0), vec![NodeIndex(9935)]);
+                astar.run();
             })
         },
     );
@@ -44,9 +44,9 @@ fn shortest_path_benchmark(c: &mut Criterion) {
         &dimacs_g,
         |b, g| {
             b.iter(|| {
-                let mut dj = AStar::new(g, NodeIndex(0), vec![NodeIndex(264345)]);
-                dj.run();
-                let p = dj.get_graph_path(NodeIndex(264345)).unwrap();
+                let mut astar = AStar::new(g, NodeIndex(0), vec![NodeIndex(264345)]);
+                astar.run();
+                let p = astar.get_graph_path(NodeIndex(264345)).unwrap();
                 p.get_length_on_graph(&dimacs_g);
             })
         },

@@ -35,35 +35,35 @@ fn simple_a_star_test() {
     g.add_edge_by_id(NodeID(7), NodeID(2), 7.0);
     g.add_edge_by_id(NodeID(7), NodeID(5), 6.0);
 
-    let mut dj = AStar::new(&g, NodeIndex(0), vec![NodeIndex(1)]);
-    dj.run();
-    assert_eq!(dj.get_dist_to_to_node(NodeIndex(1)), Some(5.0));
+    let mut astar1 = AStar::new(&g, NodeIndex(0), vec![NodeIndex(1)]);
+    astar1.run();
+    assert_eq!(astar1.get_dist_to_to_node(NodeIndex(1)), Some(5.0));
     // We didn't ask for it, so A* won't have prioritised it, so the answer will be bad
-    assert_eq!(dj.get_dist_to_to_node(NodeIndex(2)), None);
+    assert_eq!(astar1.get_dist_to_to_node(NodeIndex(2)), None);
 
-    let mut dj = AStar::new(&g, NodeIndex(0), vec![NodeIndex(2)]);
-    dj.run();
-    assert_eq!(dj.get_dist_to_to_node(NodeIndex(2)), Some(14.0));
+    let mut astar2 = AStar::new(&g, NodeIndex(0), vec![NodeIndex(2)]);
+    astar2.run();
+    assert_eq!(astar2.get_dist_to_to_node(NodeIndex(2)), Some(14.0));
 
-    let mut dj = AStar::new(&g, NodeIndex(0), vec![NodeIndex(3)]);
-    dj.run();
-    assert_eq!(dj.get_dist_to_to_node(NodeIndex(3)), Some(17.0));
+    let mut astar3 = AStar::new(&g, NodeIndex(0), vec![NodeIndex(3)]);
+    astar3.run();
+    assert_eq!(astar3.get_dist_to_to_node(NodeIndex(3)), Some(17.0));
 
-    let mut dj = AStar::new(&g, NodeIndex(0), vec![NodeIndex(4)]);
-    dj.run();
-    assert_eq!(dj.get_dist_to_to_node(NodeIndex(4)), Some(9.0));
+    let mut astar4 = AStar::new(&g, NodeIndex(0), vec![NodeIndex(4)]);
+    astar4.run();
+    assert_eq!(astar4.get_dist_to_to_node(NodeIndex(4)), Some(9.0));
 
-    let mut dj = AStar::new(&g, NodeIndex(0), vec![NodeIndex(5)]);
-    dj.run();
-    assert_eq!(dj.get_dist_to_to_node(NodeIndex(5)), Some(13.0));
+    let mut astar5 = AStar::new(&g, NodeIndex(0), vec![NodeIndex(5)]);
+    astar5.run();
+    assert_eq!(astar5.get_dist_to_to_node(NodeIndex(5)), Some(13.0));
 
-    let mut dj = AStar::new(&g, NodeIndex(0), vec![NodeIndex(6)]);
-    dj.run();
-    assert_eq!(dj.get_dist_to_to_node(NodeIndex(6)), Some(25.0));
+    let mut astar6 = AStar::new(&g, NodeIndex(0), vec![NodeIndex(6)]);
+    astar6.run();
+    assert_eq!(astar6.get_dist_to_to_node(NodeIndex(6)), Some(25.0));
 
-    let mut dj = AStar::new(&g, NodeIndex(0), vec![NodeIndex(7)]);
-    dj.run();
-    assert_eq!(dj.get_dist_to_to_node(NodeIndex(7)), Some(8.0));
+    let mut astar7 = AStar::new(&g, NodeIndex(0), vec![NodeIndex(7)]);
+    astar7.run();
+    assert_eq!(astar7.get_dist_to_to_node(NodeIndex(7)), Some(8.0));
 }
 
 #[test]
@@ -85,10 +85,10 @@ fn osm_a_star_test() {
         longitude: 7.4178794,
     });
     // Run A*
-    let mut dj = AStar::new(&c_g, start_node_index, vec![end_node_index]);
-    dj.run();
+    let mut astar = AStar::new(&c_g, start_node_index, vec![end_node_index]);
+    astar.run();
     // Reverse engineer shortest path
-    let p = dj.get_graph_path(end_node_index).unwrap();
+    let p = astar.get_graph_path(end_node_index).unwrap();
     // Check path length
     assert_eq!(p.get_length_on_graph(&c_g), 1.416306768485833);
     // Check path points
@@ -203,10 +203,10 @@ fn dimacs_shortest_path_a_star_test() {
     // Load graph
     let dimacs_g = load_xgmml_file("test_data/dimacs_shortest_path/USA-road-d.NY.gr").unwrap();
     // Run A*
-    let mut dj = AStar::new(&dimacs_g, NodeIndex(0), vec![NodeIndex(264345)]);
-    dj.run();
+    let mut astar = AStar::new(&dimacs_g, NodeIndex(0), vec![NodeIndex(264345)]);
+    astar.run();
     // Get shortest path length
-    let p = dj.get_graph_path(NodeIndex(264345)).unwrap();
+    let p = astar.get_graph_path(NodeIndex(264345)).unwrap();
     // Check path length
     assert_eq!(p.get_length_on_graph(&dimacs_g), 495306.0);
 }
