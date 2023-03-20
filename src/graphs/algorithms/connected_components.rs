@@ -100,13 +100,13 @@ impl<'a, T: Digraph> ConnectedComponents<'a, T> {
 
     pub fn get_largest_connected_subgraphs(self) -> ALDigraph {
         let mut largest_graph_size = 0;
-        let mut largest_component: Option<Vec<NodeIndex>> = None;
-        for component in &self.components {
+        let mut largest_component_index: Option<usize> = None;
+        for (index, component) in self.components.iter().enumerate() {
             if component.len() > largest_graph_size {
                 largest_graph_size = component.len();
-                largest_component = Some(component.clone());
+                largest_component_index = Some(index);
             }
         }
-        self.get_subgraph_from_node_ids(&largest_component.unwrap())
+        self.get_subgraph_from_node_ids(&self.components[largest_component_index.unwrap()])
     }
 }
