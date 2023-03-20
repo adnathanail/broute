@@ -20,14 +20,20 @@
         integrity="sha256-WBkoXOwTeyKclOHuWtc+i2uENFpDZ9YPdf5Hf+D7ewM="
         crossorigin=""></script>
 <script>
-    let map = L.map('map').setView([43.7284765, 7.415138], 15);
+    var bounds = [[51.526952, -0.151246], [51.518898, -0.121154]];
+
+    let map = L.map('map').setView([(bounds[0][0] + bounds[1][0]), (bounds[0][1] + bounds[1][1])], 15);
+
+    L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}', {
+        maxZoom: 20,
+        subdomains: ['mt0', 'mt1', 'mt2', 'mt3']
+    }).addTo(map);
+
+    // L.rectangle(bounds, {color: "#ff7800", weight: 1, fill: false}).addTo(map);
+
+    map.fitBounds(bounds);
 
     let colors = ["red", "yellow", "green", "blue"];
-
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(map);
 
     let polylines = [];
 
@@ -41,6 +47,9 @@
         let points_str = points_list.join("|");
         for (let polyline of polylines) {
             polyline.remove();
+        }
+        if (points_str === "") {
+            return;
         }
         document.getElementById("map").classList.add("map-loading");
         let url = `http://localhost:8000/route_optimisation/${points_str}/`;

@@ -8,6 +8,9 @@ osmium cat leicestershire-latest.osm.pbf -o leicestershire-latest.osm
 ## Cut out a geographic region
 ```
 osmium extract -b -1.263095,52.769673,-1.224116,52.755050 leicestershire-latest.osm -o theoffice-latest.osm
+osmium extract -b -0.154422,51.526099,-0.068233,51.487372 greater-london-latest.osm.pbf -o central-london-latest.osm --overwrite
+osmium extract -b -0.206417,51.546525,-0.154422,51.526099 greater-london-latest.osm.pbf -o central-london-latest.osm --overwrite
+osmium extract -b -0.151246,51.526952,-0.121154,51.518898 greater-london-latest.osm.pbf -o central-london-latest.osm --overwrite
 ```
 
 ## Links
