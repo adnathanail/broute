@@ -1,29 +1,29 @@
-use broute::geography::datastructures::LatLng;
 use broute::graphs::algorithms::{form_abstracted_graph, ConnectedComponents, SimulatedAnnealing};
-use broute::graphs::datastructures::{Digraph, NodeID, NodeIndex};
+use broute::graphs::datastructures::Digraph;
 use broute::graphs::input::{load_pbf_file, load_tsplib_file};
 use rand::seq::IteratorRandom;
 
 #[test]
 fn travelling_salesman_dimacs_test() {
-    let dimacs_g = load_tsplib_file("test_data/dimacs_tsp/d1291.tsp", usize::MAX);
+    let dimacs_g = load_tsplib_file("test_data/dimacs_tsp/d1291.tsp", usize::MAX).unwrap();
 
-    travelling_salesman(&dimacs_g, true);
+    let mut sa = SimulatedAnnealing::new(&dimacs_g);
+    sa.run(100.0, 0.99, 100);
 }
 
-fn check_graph_adjacency(
-    g: &impl Digraph,
-    node_id: &NodeID,
-    expected_adjacency: Vec<(NodeIndex, f64)>,
-) {
-    let node_index = *g.nodes_data().get_node_index_by_id(node_id);
-    let actual_adjacency: Vec<(NodeIndex, f64)> = g
-        .adj(node_index)
-        .into_iter()
-        .map(|adjacency| (adjacency.node_index, adjacency.weight))
-        .collect();
-    assert_eq!(actual_adjacency, expected_adjacency);
-}
+// fn check_graph_adjacency(
+//     g: &impl Digraph,
+//     node_id: &NodeID,
+//     expected_adjacency: Vec<(NodeIndex, f64)>,
+// ) {
+//     let node_index = *g.nodes_data().get_node_index_by_id(node_id);
+//     let actual_adjacency: Vec<(NodeIndex, f64)> = g
+//         .adj(node_index)
+//         .into_iter()
+//         .map(|adjacency| (adjacency.node_index, adjacency.weight))
+//         .collect();
+//     assert_eq!(actual_adjacency, expected_adjacency);
+// }
 
 #[test]
 fn a_star_travelling_salesman_integration_test() {
