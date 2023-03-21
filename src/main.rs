@@ -5,21 +5,14 @@ use std::ops::Deref;
 use std::sync::{Arc, RwLock};
 
 use broute::geography::datastructures::LatLng;
-use broute::graphs::algorithms::{
-    form_abstracted_graph, travelling_salesman, ConnectedComponents, Dijkstra,
-};
-use broute::graphs::datastructures::{ALDigraph, Digraph, LatLng, NodeID};
+use broute::graphs::algorithms::{form_abstracted_graph, ConnectedComponents, AStar, SimulatedAnnealing};
+use broute::graphs::datastructures::{ALDigraph, Digraph, NodeID};
 use broute::graphs::input::{load_pbf_file, load_tsplib_file};
 use rocket::fairing::{Fairing, Info, Kind};
 use rocket::http::Header;
 use rocket::serde::json::Json;
 use rocket::serde::{Deserialize, Serialize};
 
-use broute::graphs::algorithms::{
-    form_abstracted_graph, AStar, ConnectedComponents, SimulatedAnnealing,
-};
-use broute::graphs::datastructures::{ALDigraph, Digraph, NodeID};
-use broute::graphs::input::load_pbf_file;
 use std::time::SystemTime;
 
 #[cfg(test)]
@@ -211,24 +204,9 @@ async fn rocket() -> Result<rocket::Rocket<rocket::Ignite>, rocket::Error> {
         .await
 }
 
-// #[rocket::main]
-// async fn main() -> Result<(), rocket::Error> {
-//     let _rocket = rocket().await?.launch().await?;
-//
-//     Ok(())
-// }
+#[rocket::main]
+async fn main() -> Result<(), rocket::Error> {
+    let _rocket = rocket().await?.launch().await?;
 
-fn main() {
-    let dimacs_g = load_tsplib_file("test_data/dimacs_tsp/d1291.tsp", usize::MAX);
-
-    for a in [0.9995] {
-        for i in [50, 100, 500, 1000] {
-            println!("100 {a} {i}");
-            let start = SystemTime::now();
-            travelling_salesman(&dimacs_g, false, 100.0, a, i);
-            let end = SystemTime::now();
-            let duration = end.duration_since(start).unwrap();
-            println!("\t{} seconds", duration.as_secs());
-        }
-    }
+    Ok(())
 }

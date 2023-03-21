@@ -10,7 +10,7 @@ fn main() {
             println!("100 {a} {i}");
             let start = SystemTime::now();
             let mut sa = SimulatedAnnealing::new(&dimacs_g);
-            sa.run();
+            sa.run(100.0, a, i);
             let end = SystemTime::now();
             let duration = end.duration_since(start).unwrap();
             println!("\t{} seconds", duration.as_secs());
