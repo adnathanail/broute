@@ -1,6 +1,6 @@
-use std::time::SystemTime;
 use broute::graphs::algorithms::SimulatedAnnealing;
 use broute::graphs::input::load_tsplib_file;
+use std::time::SystemTime;
 
 fn main() {
     let dimacs_g = load_tsplib_file("test_data/dimacs_tsp/d1291.tsp", usize::MAX).unwrap();
