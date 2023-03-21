@@ -8,7 +8,7 @@ fn travelling_salesman_dimacs_test() {
     let dimacs_g = load_tsplib_file("test_data/dimacs_tsp/d1291.tsp", usize::MAX).unwrap();
 
     let mut sa = SimulatedAnnealing::new(&dimacs_g);
-    sa.run(100.0, 0.99, 100);
+    sa.run(100.0, 0.995, 500);
 }
 
 fn check_graph_adjacency(
@@ -140,7 +140,7 @@ fn a_star_travelling_salesman_integration_test() {
     let mut path_lengths: Vec<f64> = vec![];
     for _ in 0..100 {
         let mut sa = SimulatedAnnealing::new(&abstracted_graph);
-        sa.run(100.0, 0.99, 100);
+        sa.run(100.0, 0.995, 500);
         path_lengths.push(sa.get_best_path().get_length_on_graph(&abstracted_graph));
     }
 
