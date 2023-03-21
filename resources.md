@@ -31,12 +31,6 @@ Graph implementation
 Concurrency
 Storage medium (db? File? Binary file? Memory?)
 
-## OSM
-
-https://towardsdatascience.com/connecting-datapoints-to-a-road-graph-with-python-efficiently-cb8c6795ad5f
-https://github.com/gboeing/osmnx
-https://wiki.openstreetmap.org/wiki/Overpass_API
-https://help.openstreetmap.org/questions/42740/how-to-maintain-a-local-copy-of-a-specific-area-of-the-osm-database
 
 # Unsorted
 
