@@ -1,5 +1,3 @@
-use std::cmp::{max, min};
-use std::f64::consts::E;
 use crate::graphs::algorithms::AStar;
 use crate::graphs::datastructures::{AMDigraph, Digraph, GraphPath, NodeID, NodeIndex};
 use plotlib::page::Page;
@@ -9,6 +7,8 @@ use plotlib::view::ContinuousView;
 use rand::rngs::ThreadRng;
 use rand::seq::SliceRandom;
 use rand::{thread_rng, Rng};
+use std::cmp::{max, min};
+use std::f64::consts::E;
 
 pub fn form_abstracted_graph(g: &impl Digraph, node_ids: &Vec<NodeID>) -> AMDigraph {
     let node_indexes: Vec<NodeIndex> = node_ids
@@ -71,7 +71,12 @@ impl<'a, T: Digraph> SimulatedAnnealing<'a, T> {
         }
     }
 
-    pub fn run(&mut self, initial_temperature: f64, cooling_rate: f64, iterations_per_temperature: usize) {
+    pub fn run(
+        &mut self,
+        initial_temperature: f64,
+        cooling_rate: f64,
+        iterations_per_temperature: usize,
+    ) {
         // No meaningful permutations for 0, 1, 2 nodes
         if self.current_path.path.len() < 3 {
             return;
