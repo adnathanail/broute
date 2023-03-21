@@ -1,11 +1,8 @@
 use broute::geography::datastructures::LatLng;
 use broute::graphs::algorithms::{form_abstracted_graph, ConnectedComponents, SimulatedAnnealing};
 use broute::graphs::datastructures::{Digraph, NodeID, NodeIndex};
-use broute::graphs::input::load_pbf_file;
-use rand::seq::IteratorRandom;
-use broute::graphs::algorithms::{form_abstracted_graph, travelling_salesman, ConnectedComponents};
-use broute::graphs::datastructures::{Digraph, LatLng, NodeID, NodeIndex};
 use broute::graphs::input::{load_pbf_file, load_tsplib_file};
+use rand::seq::IteratorRandom;
 
 #[test]
 fn travelling_salesman_dimacs_test() {
@@ -57,7 +54,7 @@ fn a_star_travelling_salesman_integration_test() {
     let mut path_lengths: Vec<f64> = vec![];
     for _ in 0..100 {
         let mut sa = SimulatedAnnealing::new(&abstracted_graph);
-        sa.run();
+        sa.run(100.0, 0.99, 100);
         path_lengths.push(sa.get_best_path().get_length_on_graph(&abstracted_graph));
     }
 
