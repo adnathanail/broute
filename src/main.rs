@@ -9,13 +9,11 @@ use broute::graphs::algorithms::{
     form_abstracted_graph, AStar, ConnectedComponents, SimulatedAnnealing,
 };
 use broute::graphs::datastructures::{ALDigraph, Digraph, NodeID};
-use broute::graphs::input::{load_pbf_file, load_tsplib_file};
+use broute::graphs::input::{load_pbf_file};
 use rocket::fairing::{Fairing, Info, Kind};
 use rocket::http::Header;
 use rocket::serde::json::Json;
 use rocket::serde::{Deserialize, Serialize};
-
-use std::time::SystemTime;
 
 #[cfg(test)]
 mod tests;
