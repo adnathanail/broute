@@ -81,7 +81,7 @@ impl<'a, T: Digraph> SimulatedAnnealing<'a, T> {
         while temp > 1e-5 {
             for _ in 0..iterations_per_temperature {
                 let new_path = self.get_potential_new_path();
-                let new_path_length = new_path.get_length_on_graph(g);
+                let new_path_length = new_path.get_length_on_graph(self.g);
                 let delta_cost = new_path_length - self.path_length;
 
                 if delta_cost < 0.0 || self.rng.gen::<f64>() < E.powf(-delta_cost / temp) {
@@ -94,7 +94,7 @@ impl<'a, T: Digraph> SimulatedAnnealing<'a, T> {
             }
 
             temp *= cooling_rate;
-            result_data.push((temp, current_path_length));
+            self.result_data.push((temp, self.path_length));
         }
     }
 
