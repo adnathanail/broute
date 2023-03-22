@@ -6,12 +6,12 @@ use std::sync::{Arc, RwLock};
 
 use rocket::fairing::{Fairing, Info, Kind};
 use rocket::http::Header;
-use rocket::serde::{Deserialize, Serialize};
 use rocket::serde::json::Json;
+use rocket::serde::{Deserialize, Serialize};
 
 use broute::geography::datastructures::LatLng;
 use broute::graphs::algorithms::{
-    AStar, ConnectedComponents, form_abstracted_graph, SimulatedAnnealing,
+    form_abstracted_graph, AStar, ConnectedComponents, SimulatedAnnealing,
 };
 use broute::graphs::datastructures::{ALDigraph, Digraph, NodeID};
 use broute::graphs::input::load_pbf_file;
