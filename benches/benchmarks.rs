@@ -65,7 +65,7 @@ fn travelling_salesman_benchmark(c: &mut Criterion) {
         |b, g| {
             b.iter(|| {
                 let mut sa = SimulatedAnnealing::new(g);
-                sa.run(100.0, 0.995, 500);
+                sa.run();
             })
         },
     );
@@ -88,7 +88,7 @@ fn travelling_salesman_benchmark(c: &mut Criterion) {
         |b, g| {
             b.iter(|| {
                 let mut sa = SimulatedAnnealing::new(g);
-                sa.run(100.0, 0.995, 500);
+                sa.run();
             })
         },
     );

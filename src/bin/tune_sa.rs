@@ -9,8 +9,8 @@ fn main() {
         for i in [50, 100, 500, 1000] {
             println!("100 {a} {i}");
             let start = SystemTime::now();
-            let mut sa = SimulatedAnnealing::new(&dimacs_g);
-            sa.run(100.0, a, i);
+            let mut sa = SimulatedAnnealing::new_with_custom_parameters(&dimacs_g, 100.0, a, i);
+            sa.run();
             let end = SystemTime::now();
             let duration = end.duration_since(start).unwrap();
             println!("\t{} seconds", duration.as_secs());
