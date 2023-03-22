@@ -13,7 +13,7 @@ use broute::geography::datastructures::LatLng;
 use broute::graphs::algorithms::{
     form_abstracted_graph, AStar, ConnectedComponents, SimulatedAnnealing,
 };
-use broute::graphs::datastructures::{ALDigraph, Digraph, NodeID, NodeIndex};
+use broute::graphs::datastructures::{ALDigraph, Digraph, NodeID};
 use broute::graphs::input::load_pbf_file;
 
 #[cfg(test)]
