@@ -111,7 +111,7 @@ fn route_optimisation(
     println!("Abstracted graph constructed");
 
     let mut sa = SimulatedAnnealing::new(&abstracted_graph);
-    sa.run(100.0, 0.995, 500);
+    sa.run();
 
     println!("TSP ran");
 

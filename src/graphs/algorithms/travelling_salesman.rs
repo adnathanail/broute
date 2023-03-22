@@ -42,6 +42,9 @@ pub fn form_abstracted_graph(g: &impl Digraph, node_ids: &Vec<NodeID>) -> AMDigr
 
 pub struct SimulatedAnnealing<'a, T: Digraph> {
     g: &'a T,
+    initial_temperature: f64,
+    cooling_rate: f64,
+    iterations_per_temperature: usize,
     result_data: Vec<(f64, f64)>,
     current_path: GraphPath,
     path_length: f64,
@@ -51,6 +54,15 @@ pub struct SimulatedAnnealing<'a, T: Digraph> {
 
 impl<'a, T: Digraph> SimulatedAnnealing<'a, T> {
     pub fn new(g: &'a T) -> Self {
+        Self::new_with_custom_parameters(g, 100.0, 0.9995, 1000)
+    }
+
+    pub fn new_with_custom_parameters(
+        g: &'a T,
+        initial_temperature: f64,
+        cooling_rate: f64,
+        iterations_per_temperature: usize,
+    ) -> Self {
         let mut rng = thread_rng();
 
         let mut current_path = GraphPath {
@@ -63,6 +75,9 @@ impl<'a, T: Digraph> SimulatedAnnealing<'a, T> {
         let best_path = current_path.clone();
         SimulatedAnnealing {
             g,
+            initial_temperature,
+            cooling_rate,
+            iterations_per_temperature,
             result_data: vec![],
             current_path,
             path_length,
@@ -71,20 +86,15 @@ impl<'a, T: Digraph> SimulatedAnnealing<'a, T> {
         }
     }
 
-    pub fn run(
-        &mut self,
-        initial_temperature: f64,
-        cooling_rate: f64,
-        iterations_per_temperature: usize,
-    ) {
+    pub fn run(&mut self) {
         // No meaningful permutations for 0, 1, 2 nodes
         if self.current_path.path.len() < 3 {
             return;
         }
 
-        let mut temp = initial_temperature;
+        let mut temp = self.initial_temperature;
         while temp > 1e-5 {
-            for _ in 0..iterations_per_temperature {
+            for _ in 0..self.iterations_per_temperature {
                 let new_path = self.get_potential_new_path();
                 let new_path_length = new_path.get_length_on_graph(self.g);
                 let delta_cost = new_path_length - self.path_length;
@@ -98,7 +108,7 @@ impl<'a, T: Digraph> SimulatedAnnealing<'a, T> {
                 }
             }
 
-            temp *= cooling_rate;
+            temp *= self.cooling_rate;
             self.result_data.push((temp, self.path_length));
         }
     }
