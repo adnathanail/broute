@@ -80,6 +80,11 @@ pub fn load_pbf_file(pbf_path: &str) -> Result<ALDigraph> {
                     NodeID(node_ids[i + 1] as usize),
                     weight,
                 );
+                g.add_edge_by_id(
+                    NodeID(node_ids[i + 1] as usize),
+                    NodeID(node_ids[i] as usize),
+                    weight,
+                );
             }
             ways += 1;
         }
