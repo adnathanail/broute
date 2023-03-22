@@ -54,7 +54,7 @@ pub struct SimulatedAnnealing<'a, T: Digraph> {
 
 impl<'a, T: Digraph> SimulatedAnnealing<'a, T> {
     pub fn new(g: &'a T) -> Self {
-        Self::new_with_custom_parameters(g, 100.0, 0.9995, 1000)
+        Self::new_with_custom_parameters(g, 100.0, 0.99, 100)
     }
 
     pub fn new_with_custom_parameters(
