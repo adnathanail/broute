@@ -1,5 +1,5 @@
 use broute::geography::datastructures::LatLng;
-use broute::graphs::algorithms::{ConnectedComponents, form_abstracted_graph, SimulatedAnnealing};
+use broute::graphs::algorithms::{form_abstracted_graph, ConnectedComponents, SimulatedAnnealing};
 use broute::graphs::datastructures::{Digraph, NodeID, NodeIndex};
 use broute::graphs::input::{load_pbf_file, load_tsplib_file};
 
