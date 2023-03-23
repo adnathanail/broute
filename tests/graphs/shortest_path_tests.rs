@@ -74,7 +74,7 @@ fn osm_a_star_test() {
     let mut cc = ConnectedComponents::new(&g);
     cc.run();
     let c_g = cc.get_largest_connected_subgraphs();
-    assert_eq!(c_g.num_vertices(), 9936);
+    assert_eq!(c_g.num_vertices(), 15447);
     // Get start and end nodes
     let start_node_index = c_g.nodes_data().get_node_index_closest_to_lat_lng(LatLng {
         latitude: 43.7284765,

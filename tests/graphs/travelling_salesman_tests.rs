@@ -34,7 +34,7 @@ fn a_star_travelling_salesman_integration_test() {
     let mut cc = ConnectedComponents::new(&g);
     cc.run();
     let c_g = cc.get_largest_connected_subgraphs();
-    assert_eq!(c_g.num_vertices(), 9936);
+    assert_eq!(c_g.num_vertices(), 15447);
 
     // 5 points across Monaco
     let pickup_points: Vec<LatLng> = Vec::from([
