@@ -70,11 +70,11 @@ fn a_star_travelling_salesman_integration_test() {
     assert_eq!(
         pickup_node_ids,
         [
-            NodeID(1074585047),
-            NodeID(252362113),
+            NodeID(6481411791),
+            NodeID(1096589580),
             NodeID(1204303590),
             NodeID(1573112159),
-            NodeID(1736929694)
+            NodeID(1736929694),
         ]
     );
 
@@ -84,50 +84,50 @@ fn a_star_travelling_salesman_integration_test() {
         &abstracted_graph,
         &pickup_node_ids[0],
         vec![
-            (NodeIndex(1), 1.377158916250499),
-            (NodeIndex(2), 0.9789951317313738),
-            (NodeIndex(3), 1.755917633260777),
-            (NodeIndex(4), 2.6659932095468),
+            (NodeIndex(1), 0.840397472251362),
+            (NodeIndex(2), 1.2553293767937947),
+            (NodeIndex(3), 1.3997895536765643),
+            (NodeIndex(4), 2.110387455814518),
         ],
     );
     check_graph_adjacency(
         &abstracted_graph,
         &pickup_node_ids[1],
         vec![
-            (NodeIndex(0), 1.980472813282169),
-            (NodeIndex(2), 2.4817146592249784),
-            (NodeIndex(3), 1.455229434276506),
-            (NodeIndex(4), 2.0888624885817397),
+            (NodeIndex(0), 0.840397472251362),
+            (NodeIndex(2), 0.8693174301431682),
+            (NodeIndex(3), 0.8866103580347413),
+            (NodeIndex(4), 1.4913841189321089),
         ],
     );
     check_graph_adjacency(
         &abstracted_graph,
         &pickup_node_ids[2],
         vec![
-            (NodeIndex(0), 2.075826825805118),
-            (NodeIndex(1), 2.1511220126275212),
-            (NodeIndex(3), 1.8695162433680703),
-            (NodeIndex(4), 2.4192915795174095),
+            (NodeIndex(0), 1.2553293767937947),
+            (NodeIndex(1), 0.8693174301431683),
+            (NodeIndex(3), 1.2416255386102428),
+            (NodeIndex(4), 2.062933904435471),
         ],
     );
     check_graph_adjacency(
         &abstracted_graph,
         &pickup_node_ids[3],
         vec![
-            (NodeIndex(0), 7.835010613747839),
-            (NodeIndex(1), 7.604014959490413),
-            (NodeIndex(2), 8.336252459690652),
-            (NodeIndex(4), 6.42873712450868),
+            (NodeIndex(0), 1.3997895536765645),
+            (NodeIndex(1), 0.8866103580347408),
+            (NodeIndex(2), 1.2416255386102426),
+            (NodeIndex(4), 1.4367179661286307),
         ],
     );
     check_graph_adjacency(
         &abstracted_graph,
         &pickup_node_ids[4],
         vec![
-            (NodeIndex(0), 3.3510388777275084),
-            (NodeIndex(1), 3.0842902626239828),
-            (NodeIndex(2), 3.850361636228818),
-            (NodeIndex(3), 2.921153828236195),
+            (NodeIndex(0), 2.1103874558145184),
+            (NodeIndex(1), 1.4913841189321084),
+            (NodeIndex(2), 2.0629339044354715),
+            (NodeIndex(3), 1.4367179661286307),
         ],
     );
 
