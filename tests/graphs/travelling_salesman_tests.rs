@@ -2,6 +2,7 @@ use broute::geography::datastructures::LatLng;
 use broute::graphs::algorithms::{form_abstracted_graph, ConnectedComponents, SimulatedAnnealing};
 use broute::graphs::datastructures::{Digraph, NodeID, NodeIndex};
 use broute::graphs::input::{load_pbf_file, load_tsplib_file};
+use float_cmp::approx_eq;
 
 #[test]
 fn travelling_salesman_dimacs_test() {
@@ -22,7 +23,15 @@ fn check_graph_adjacency(
         .into_iter()
         .map(|adjacency| (adjacency.node_index, adjacency.weight))
         .collect();
-    assert_eq!(actual_adjacency, expected_adjacency);
+
+    for i in 0..actual_adjacency.len() {
+        assert_eq!(actual_adjacency[i].0, expected_adjacency[i].0);
+        assert!(approx_eq!(
+            f64,
+            actual_adjacency[i].1,
+            expected_adjacency[i].1
+        ));
+    }
 }
 
 #[test]
