@@ -1,4 +1,4 @@
-**This project is not to be copied and/or distributed without the express permission of Alexander Nathanail. See [LICENSE.md](./license.md)**
+**This project is not to be copied and/or distributed without the express permission of Alexander Nathanail. See [LICENSE.md](./LICENSE.md)**
 
 # Broute
 
