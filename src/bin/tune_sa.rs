@@ -1,4 +1,3 @@
-use std::cmp::min;
 use broute::graphs::algorithms::SimulatedAnnealing;
 use broute::graphs::input::load_tsplib_file;
 use std::time::SystemTime;
