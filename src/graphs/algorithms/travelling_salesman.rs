@@ -8,7 +8,6 @@ use rand::rngs::ThreadRng;
 use rand::seq::SliceRandom;
 use rand::{thread_rng, Rng};
 use std::cmp::{max, min};
-use std::f64::consts::E;
 
 pub fn form_abstracted_graph(g: &impl Digraph, node_ids: &Vec<NodeID>) -> AMDigraph {
     let node_indexes: Vec<NodeIndex> = node_ids
@@ -71,7 +70,7 @@ impl<'a, T: Digraph> SimulatedAnnealing<'a, T> {
 
     pub fn run(&mut self) {
         let mut temp = 100.0;
-        let mut iterations = 0;
+
         while temp > 1e-9_f64 {
             let potential_new_path = self.get_potential_new_path();
 
@@ -88,39 +87,18 @@ impl<'a, T: Digraph> SimulatedAnnealing<'a, T> {
             }
 
             temp *= 0.999;
-            iterations += 1;
             self.result_data.push((temp, self.path_length));
         }
     }
 
     fn get_potential_new_path(&mut self) -> GraphPath {
-        let mut potential_new_path = self.current_path.clone();
+        let mut new_path = self.current_path.clone();
 
-        let node_index_to_mutate = self.rng.gen_range(0..(self.g.num_vertices() - 1));
+        let i = self.rng.gen_range(1..new_path.path.len() - 1);
+        let j = self.rng.gen_range(1..new_path.path.len() - 1);
+        new_path.path[min(i, j)..max(i, j)].reverse();
 
-        let reverse_or_transport: bool = self.rng.gen();
-
-        if reverse_or_transport {
-            let node_index_to_swap_with = if node_index_to_mutate < (self.g.num_vertices() - 1) {
-                node_index_to_mutate + 1
-            } else {
-                0
-            };
-            potential_new_path
-                .path
-                .swap(node_index_to_mutate, node_index_to_swap_with);
-        } else {
-            // Cyclic permutation
-            let node_to_move = potential_new_path.path[node_index_to_mutate];
-            // -2 because we are looking for new position with 1 node missing
-            let new_node_position = self.rng.gen_range(0..(self.g.num_vertices() - 2));
-            potential_new_path.path.remove(node_index_to_mutate);
-            potential_new_path
-                .path
-                .insert(new_node_position, node_to_move)
-        }
-
-        potential_new_path
+        new_path
     }
 
     pub fn get_best_path(&self) -> &GraphPath {
