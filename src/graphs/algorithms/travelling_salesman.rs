@@ -8,6 +8,7 @@ use rand::rngs::ThreadRng;
 use rand::seq::SliceRandom;
 use rand::{thread_rng, Rng};
 use std::cmp::{max, min};
+use std::f64::consts::E;
 
 pub fn form_abstracted_graph(g: &impl Digraph, node_ids: &Vec<NodeID>) -> AMDigraph {
     let node_indexes: Vec<NodeIndex> = node_ids
@@ -41,6 +42,10 @@ pub fn form_abstracted_graph(g: &impl Digraph, node_ids: &Vec<NodeID>) -> AMDigr
 
 pub struct SimulatedAnnealing<'a, T: Digraph> {
     g: &'a T,
+    initial_temperature: f64,
+    iterations_per_temperature: usize,
+    cooling_rate: f64,
+    minimum_temperature: f64,
     result_data: Vec<(f64, f64)>,
     current_path: GraphPath,
     path_length: f64,
@@ -50,16 +55,32 @@ pub struct SimulatedAnnealing<'a, T: Digraph> {
 
 impl<'a, T: Digraph> SimulatedAnnealing<'a, T> {
     pub fn new(g: &'a T) -> Self {
+        Self::new_with_custom_parameters(g, 100.0, 1, 0.999, 1e-9_f64)
+    }
+
+    pub fn new_with_custom_parameters(
+        g: &'a T,
+        initial_temperature: f64,
+        iterations_per_temperature: usize,
+        cooling_rate: f64,
+        minimum_temperature: f64,
+    ) -> Self {
         let mut rng = thread_rng();
 
         let mut current_path = GraphPath {
             path: (0..g.num_vertices()).map(NodeIndex).collect(),
         };
         current_path.path.shuffle(&mut rng);
+
         let path_length = current_path.get_length_on_graph(g);
+
         let best_path = current_path.clone();
         SimulatedAnnealing {
             g,
+            initial_temperature,
+            iterations_per_temperature,
+            cooling_rate,
+            minimum_temperature,
             result_data: vec![],
             current_path,
             path_length,
@@ -69,24 +90,28 @@ impl<'a, T: Digraph> SimulatedAnnealing<'a, T> {
     }
 
     pub fn run(&mut self) {
-        let mut temp = 100.0;
+        // No meaningful permutations for 0, 1, 2 nodes
+        if self.current_path.path.len() < 3 {
+            return;
+        }
 
-        while temp > 1e-9_f64 {
-            let potential_new_path = self.get_potential_new_path();
+        let mut temp = self.initial_temperature;
+        while temp > self.minimum_temperature {
+            for _ in 0..self.iterations_per_temperature {
+                let new_path = self.get_potential_new_path();
+                let new_path_length = new_path.get_length_on_graph(self.g);
+                let delta_cost = new_path_length - self.path_length;
 
-            let new_path_length = potential_new_path.get_length_on_graph(self.g);
-            if new_path_length < self.path_length {
-                self.current_path = potential_new_path;
-                self.best_path.clone_from(&self.current_path);
-                self.path_length = new_path_length;
-            } else {
-                if f64::exp(-(new_path_length - self.path_length) / temp) > self.rng.gen::<f64>() {
-                    self.current_path = potential_new_path;
+                if delta_cost < 0.0 || self.rng.gen::<f64>() < E.powf(-delta_cost / temp) {
+                    self.current_path = new_path;
                     self.path_length = new_path_length;
+                }
+                if delta_cost < 0.0 {
+                    self.best_path.clone_from(&self.current_path);
                 }
             }
 
-            temp *= 0.999;
+            temp *= self.cooling_rate;
             self.result_data.push((temp, self.path_length));
         }
     }
