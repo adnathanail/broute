@@ -19,6 +19,7 @@ fn main() {
 
         tour_lengths.push(sa.get_best_path().get_length_on_graph(&dimacs_g));
         durations.push((duration.as_millis() as f64) / 1000.0);
+        println!("\t{} {}s", tour_lengths[tour_lengths.len() - 1], durations[durations.len() - 1]);
     }
     println!("Min tour length: {:?}", tour_lengths.iter().min_by(|a, b| a.total_cmp(b)).unwrap());
     let mean_length: f64 = tour_lengths.iter().sum::<f64>() / (tour_lengths.len() as f64);
