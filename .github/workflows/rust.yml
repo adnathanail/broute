@@ -25,6 +25,7 @@ jobs:
       if: ${{ (success() || failure()) && github.event.pull_request }}
       uses: thollander/actions-comment-pull-request@v2
       with:
+        GITHUB_TOKEN: ${{ secrets.COMMENT_ON_PR_TOKEN }}
         message: |
           _(execution **${{ github.run_id }}** / attempt **${{ github.run_attempt }}**)_
           Awaiting PR run
