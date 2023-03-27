@@ -62,5 +62,6 @@ jobs:
       if: ${{ (success() || failure()) && github.event.pull_request }}
       uses: thollander/actions-comment-pull-request@v2
       with:
+        GITHUB_TOKEN: ${{ secrets.COMMENT_ON_PR_TOKEN }}
         filePath: benchmark_output.txt
         comment_tag: benchmark_output
