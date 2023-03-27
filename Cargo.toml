@@ -34,4 +34,8 @@ harness = false
 
 [[bin]]
 name = "tune_sa"
+path = "src/bin/tune_sa.rs"
+
+[[bin]]
+name = "sa_statistics"
 path = "src/bin/sa_statistics.rs"
