@@ -3,14 +3,14 @@ name: Lint, build, & test
 on:
   push:
     branches:
-    - master
+    - main
   pull_request:
 
 concurrency:
   # Cancel if I push to the same branch
   cancel-in-progress: true
-  # Don't cancel on master
-  group: ${{ github.ref == 'refs/heads/master' && format('ci-master-{0}', github.sha) || format('ci-{0}', github.ref) }}
+  # Don't cancel on main
+  group: ${{ github.ref == 'refs/heads/main' && format('ci-main-{0}', github.sha) || format('ci-{0}', github.ref) }}
 
 env:
   CARGO_TERM_COLOR: always
@@ -47,8 +47,8 @@ jobs:
       if: ${{ (success() || failure()) && github.event.pull_request }}
       # https://github.com/bheisler/criterion.rs/issues/193#issuecomment-415740713
       run: |
-        git fetch origin master --depth 1
-        git checkout master
+        git fetch origin main --depth 1
+        git checkout main
         cargo bench --bench benchmarks -- --save-baseline base
         git checkout refs/remotes/pull/${{ github.event.pull_request.number }}/merge
         cargo bench --bench benchmarks -- --baseline base | tee benchmark_output.txt
