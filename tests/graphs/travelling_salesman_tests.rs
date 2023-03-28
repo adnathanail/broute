@@ -1,5 +1,5 @@
 use broute::geography::datastructures::LatLng;
-use broute::graphs::algorithms::{form_abstracted_graph, ConnectedComponents, SimulatedAnnealing};
+use broute::graphs::algorithms::{form_abstracted_graph, ConnectedComponents, HillClimbing};
 use broute::graphs::datastructures::{Digraph, NodeID, NodeIndex};
 use broute::graphs::input::{load_pbf_file, load_tsplib_file};
 use float_cmp::approx_eq;
@@ -8,7 +8,7 @@ use float_cmp::approx_eq;
 fn travelling_salesman_dimacs_test() {
     let dimacs_g = load_tsplib_file("test_data/dimacs_tsp/d1291.tsp", usize::MAX).unwrap();
 
-    let mut sa = SimulatedAnnealing::new(&dimacs_g);
+    let mut sa = HillClimbing::new(&dimacs_g);
     sa.run();
 }
 
@@ -143,7 +143,7 @@ fn a_star_travelling_salesman_integration_test() {
     // Run TSP
     let mut path_lengths: Vec<f64> = vec![];
     for _ in 0..100 {
-        let mut sa = SimulatedAnnealing::new(&abstracted_graph);
+        let mut sa = HillClimbing::new(&abstracted_graph);
         sa.run();
         path_lengths.push(sa.get_best_path().get_length_on_graph(&abstracted_graph));
     }

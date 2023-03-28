@@ -10,9 +10,7 @@ use rocket::serde::json::Json;
 use rocket::serde::{Deserialize, Serialize};
 
 use broute::geography::datastructures::LatLng;
-use broute::graphs::algorithms::{
-    form_abstracted_graph, AStar, ConnectedComponents, SimulatedAnnealing,
-};
+use broute::graphs::algorithms::{form_abstracted_graph, AStar, ConnectedComponents, HillClimbing};
 use broute::graphs::datastructures::{ALDigraph, Digraph, NodeID};
 use broute::graphs::input::load_pbf_file;
 
@@ -110,7 +108,7 @@ fn route_optimisation(
 
     println!("Abstracted graph constructed");
 
-    let mut sa = SimulatedAnnealing::new(&abstracted_graph);
+    let mut sa = HillClimbing::new(&abstracted_graph);
     sa.run();
 
     println!("TSP ran");

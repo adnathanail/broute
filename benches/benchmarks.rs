@@ -1,8 +1,6 @@
 use std::time::Duration;
 
-use broute::graphs::algorithms::{
-    form_abstracted_graph, AStar, ConnectedComponents, SimulatedAnnealing,
-};
+use broute::graphs::algorithms::{form_abstracted_graph, AStar, ConnectedComponents, HillClimbing};
 use broute::graphs::datastructures::{Digraph, NodeIndex};
 use broute::graphs::input::{load_pbf_file, load_tsplib_file, load_xgmml_file};
 use criterion::{criterion_group, criterion_main, BenchmarkId, Criterion};
@@ -64,7 +62,7 @@ fn travelling_salesman_benchmark(c: &mut Criterion) {
         &dimacs_g,
         |b, g| {
             b.iter(|| {
-                let mut sa = SimulatedAnnealing::new(g);
+                let mut sa = HillClimbing::new(g);
                 sa.run();
             })
         },
@@ -87,7 +85,7 @@ fn travelling_salesman_benchmark(c: &mut Criterion) {
         &abstracted_graph,
         |b, g| {
             b.iter(|| {
-                let mut sa = SimulatedAnnealing::new(g);
+                let mut sa = HillClimbing::new(g);
                 sa.run();
             })
         },
