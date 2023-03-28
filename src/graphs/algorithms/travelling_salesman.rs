@@ -1,5 +1,5 @@
-use crate::graphs::algorithms::AStar;
-use crate::graphs::datastructures::{AMDigraph, Digraph, GraphPath, NodeID, NodeIndex};
+use std::cmp::{max, min};
+
 use plotlib::page::Page;
 use plotlib::repr::Plot;
 use plotlib::style::LineStyle;
@@ -7,8 +7,9 @@ use plotlib::view::ContinuousView;
 use rand::rngs::ThreadRng;
 use rand::seq::SliceRandom;
 use rand::{thread_rng, Rng};
-use std::cmp::{max, min};
-use std::f64::consts::E;
+
+use crate::graphs::algorithms::AStar;
+use crate::graphs::datastructures::{AMDigraph, Digraph, GraphPath, NodeID, NodeIndex};
 
 pub fn form_abstracted_graph(g: &impl Digraph, node_ids: &Vec<NodeID>) -> AMDigraph {
     let node_indexes: Vec<NodeIndex> = node_ids
@@ -40,31 +41,21 @@ pub fn form_abstracted_graph(g: &impl Digraph, node_ids: &Vec<NodeID>) -> AMDigr
     abstracted_graph
 }
 
-pub struct SimulatedAnnealing<'a, T: Digraph> {
+pub struct HillClimbing<'a, T: Digraph> {
     g: &'a T,
-    initial_temperature: f64,
-    iterations_per_temperature: usize,
-    cooling_rate: f64,
-    minimum_temperature: f64,
+    num_iterations: usize,
     result_data: Vec<(f64, f64)>,
-    current_path: GraphPath,
-    path_length: f64,
     best_path: GraphPath,
+    path_length: f64,
     rng: ThreadRng,
 }
 
-impl<'a, T: Digraph> SimulatedAnnealing<'a, T> {
+impl<'a, T: Digraph> HillClimbing<'a, T> {
     pub fn new(g: &'a T) -> Self {
-        Self::new_with_custom_parameters(g, 100.0, 1, 0.999, 1e-9_f64)
+        Self::new_with_custom_parameters(g, 70000)
     }
 
-    pub fn new_with_custom_parameters(
-        g: &'a T,
-        initial_temperature: f64,
-        iterations_per_temperature: usize,
-        cooling_rate: f64,
-        minimum_temperature: f64,
-    ) -> Self {
+    pub fn new_with_custom_parameters(g: &'a T, num_iterations: usize) -> Self {
         let mut rng = thread_rng();
 
         let mut current_path = GraphPath {
@@ -74,50 +65,40 @@ impl<'a, T: Digraph> SimulatedAnnealing<'a, T> {
 
         let path_length = current_path.get_length_on_graph(g);
 
-        let best_path = current_path.clone();
-        SimulatedAnnealing {
+        HillClimbing {
             g,
-            initial_temperature,
-            iterations_per_temperature,
-            cooling_rate,
-            minimum_temperature,
+            num_iterations,
             result_data: vec![],
-            current_path,
+            best_path: current_path,
             path_length,
-            best_path,
             rng,
         }
     }
 
     pub fn run(&mut self) {
         // No meaningful permutations for 0, 1, 2 nodes
-        if self.current_path.path.len() < 3 {
+        if self.best_path.path.len() < 3 {
             return;
         }
 
-        let mut temp = self.initial_temperature;
-        while temp > self.minimum_temperature {
-            for _ in 0..self.iterations_per_temperature {
-                let new_path = self.get_potential_new_path();
-                let new_path_length = new_path.get_length_on_graph(self.g);
-                let delta_cost = new_path_length - self.path_length;
+        let mut num_iterations = 0;
+        while num_iterations < self.num_iterations {
+            let new_path = self.get_potential_new_path();
+            let new_path_length = new_path.get_length_on_graph(self.g);
 
-                if delta_cost < 0.0 || self.rng.gen::<f64>() < E.powf(-delta_cost / temp) {
-                    self.current_path = new_path;
-                    self.path_length = new_path_length;
-                }
-                if delta_cost < 0.0 {
-                    self.best_path.clone_from(&self.current_path);
-                }
+            if new_path_length < self.path_length {
+                self.best_path = new_path;
+                self.path_length = new_path_length;
             }
+            num_iterations += 1;
 
-            temp *= self.cooling_rate;
-            self.result_data.push((temp, self.path_length));
+            self.result_data
+                .push((num_iterations as f64, self.path_length));
         }
     }
 
     fn get_potential_new_path(&mut self) -> GraphPath {
-        let mut new_path = self.current_path.clone();
+        let mut new_path = self.best_path.clone();
 
         let i = self.rng.gen_range(1..new_path.path.len() - 1);
         let j = self.rng.gen_range(1..new_path.path.len() - 1);
