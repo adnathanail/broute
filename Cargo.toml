@@ -27,6 +27,8 @@ rocket = { version = "0.5.0-rc.2", features = ["json"] }
 serde = "1.0.158"
 # Comparing floats in tests
 float-cmp = "0.9.0"
+# Profiling
+pprof = { git = "https://github.com/tikv/pprof-rs.git", features = ["frame-pointer", "flamegraph"] }
 
 [[bench]]
 name = "benchmarks"
@@ -39,3 +41,7 @@ path = "src/bin/tune_sa.rs"
 [[bin]]
 name = "sa_statistics"
 path = "src/bin/sa_statistics.rs"
+
+[[bin]]
+name = "hc_profiling"
+path = "src/bin/hc_profiling.rs"

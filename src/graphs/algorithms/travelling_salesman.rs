@@ -81,8 +81,7 @@ impl<'a, T: Digraph> HillClimbing<'a, T> {
             return;
         }
 
-        let mut num_iterations = 0;
-        while num_iterations < self.num_iterations {
+        for i in 0..self.num_iterations {
             let new_path = self.get_potential_new_path();
             let new_path_length = new_path.get_length_on_graph(self.g);
 
@@ -90,10 +89,9 @@ impl<'a, T: Digraph> HillClimbing<'a, T> {
                 self.best_path = new_path;
                 self.path_length = new_path_length;
             }
-            num_iterations += 1;
 
             self.result_data
-                .push((num_iterations as f64, self.path_length));
+                .push((i as f64, self.path_length));
         }
     }
 
