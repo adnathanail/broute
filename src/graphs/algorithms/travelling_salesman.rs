@@ -44,7 +44,7 @@ pub fn form_abstracted_graph(g: &impl Digraph, node_ids: &Vec<NodeID>) -> AMDigr
 pub struct HillClimbing<'a, T: Digraph> {
     g: &'a T,
     num_iterations: usize,
-    result_data: Vec<(f64, f64)>,
+    // result_data: Vec<(f64, f64)>,
     best_path: GraphPath,
     path_length: f64,
     rng: ThreadRng,
@@ -52,7 +52,7 @@ pub struct HillClimbing<'a, T: Digraph> {
 
 impl<'a, T: Digraph> HillClimbing<'a, T> {
     pub fn new(g: &'a T) -> Self {
-        Self::new_with_custom_parameters(g, 70000)
+        Self::new_with_custom_parameters(g, g.num_vertices().pow(2))
     }
 
     pub fn new_with_custom_parameters(g: &'a T, num_iterations: usize) -> Self {
@@ -68,7 +68,7 @@ impl<'a, T: Digraph> HillClimbing<'a, T> {
         HillClimbing {
             g,
             num_iterations,
-            result_data: vec![],
+            // result_data: vec![],
             best_path: current_path,
             path_length,
             rng,
@@ -81,7 +81,7 @@ impl<'a, T: Digraph> HillClimbing<'a, T> {
             return;
         }
 
-        for i in 0..self.num_iterations {
+        for _i in 0..self.num_iterations {
             let new_path = self.get_potential_new_path();
             let new_path_length = new_path.get_length_on_graph(self.g);
 
@@ -89,9 +89,7 @@ impl<'a, T: Digraph> HillClimbing<'a, T> {
                 self.best_path = new_path;
                 self.path_length = new_path_length;
             }
-
-            self.result_data
-                .push((i as f64, self.path_length));
+            // self.result_data.push((i as f64, self.path_length));
         }
     }
 
@@ -109,19 +107,16 @@ impl<'a, T: Digraph> HillClimbing<'a, T> {
         &self.best_path
     }
 
-    pub fn output_graph(&self) {
-        // We create our scatter plot from the data
-        let s1: Plot =
-            Plot::new(self.result_data.clone()).line_style(LineStyle::new().colour("#DD3355"));
-
-        // The 'view' describes what set of data is drawn
-        let v = ContinuousView::new()
-            .add(s1)
-            .x_label("Temperature")
-            .y_label("Path length")
-            .y_range(0.0, self.result_data[0].1 + 100.0);
-
-        // A page with a single view is then saved to an SVG file
-        Page::single(&v).save("out/tsp_test_1.svg").unwrap();
-    }
+    // pub fn output_graph(&self, path: &str) {
+    //     let s1: Plot =
+    //         Plot::new(self.result_data.clone()).line_style(LineStyle::new().colour("#DD3355"));
+    //
+    //     let v = ContinuousView::new()
+    //         .add(s1)
+    //         .x_label("Iterations")
+    //         .y_label("Path length")
+    //         .y_range(0.0, self.result_data[0].1 + 100.0);
+    //
+    //     Page::single(&v).save(path).unwrap();
+    // }
 }

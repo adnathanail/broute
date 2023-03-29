@@ -35,12 +35,8 @@ name = "benchmarks"
 harness = false
 
 [[bin]]
-name = "tune_sa"
-path = "src/bin/tune_sa.rs"
-
-[[bin]]
-name = "sa_statistics"
-path = "src/bin/sa_statistics.rs"
+name = "hc_statistics"
+path = "src/bin/hc_statistics.rs"
 
 [[bin]]
 name = "hc_profiling"
