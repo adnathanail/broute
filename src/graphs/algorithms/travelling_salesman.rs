@@ -1,9 +1,9 @@
 use std::cmp::{max, min};
 
-use plotlib::page::Page;
-use plotlib::repr::Plot;
-use plotlib::style::LineStyle;
-use plotlib::view::ContinuousView;
+// use plotlib::page::Page;
+// use plotlib::repr::Plot;
+// use plotlib::style::LineStyle;
+// use plotlib::view::ContinuousView;
 use rand::rngs::ThreadRng;
 use rand::seq::SliceRandom;
 use rand::{thread_rng, Rng};

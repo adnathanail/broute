@@ -117,15 +117,15 @@ fn route_optimisation(
         .get_best_path()
         .path
         .iter()
-        .map(|node_index| *g.nodes_data().get_node_id_by_index(node_index))
+        .map(|node_index| *c_g.nodes_data().get_node_id_by_index(node_index))
         .collect();
 
     println!("Original graph node ID's extracted");
 
     let mut legs: Vec<Vec<(f64, f64)>> = vec![];
     for i in 0..(p_node_ids.len() - 1) {
-        let from_node_index = c_g.nodes_data().get_node_index_by_id(*p_node_ids[i]);
-        let to_node_index = c_g.nodes_data().get_node_index_by_id(*p_node_ids[i + 1]);
+        let from_node_index = c_g.nodes_data().get_node_index_by_id(&p_node_ids[i]);
+        let to_node_index = c_g.nodes_data().get_node_index_by_id(&p_node_ids[i + 1]);
         let mut astar = AStar::new(c_g, *from_node_index, vec![*to_node_index]);
         astar.run();
 

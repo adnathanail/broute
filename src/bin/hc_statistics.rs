@@ -30,7 +30,7 @@ fn main() {
         tour_lengths.iter().min_by(|a, b| a.total_cmp(b)).unwrap()
     );
     let mean_length: f64 = tour_lengths.iter().sum::<f64>() / (tour_lengths.len() as f64);
-    println!("Mean tour length: {:?}", mean_length);
+    println!("Mean tour length: {mean_length:?}");
     let mean_duration: f64 = durations.iter().sum::<f64>() / (durations.len() as f64);
-    println!("Mean duration: {:?}", mean_duration);
+    println!("Mean duration: {mean_duration:?}");
 }
