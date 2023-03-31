@@ -57,6 +57,19 @@ pub fn two_opt(p: &GraphPath, first: usize, second: usize) -> GraphPath {
     new_path
 }
 
+pub fn tsp_with_repeats<T: Digraph>(g: &T, repeats: usize) -> GraphPath {
+    let mut sa = HillClimbing::new(g);
+    sa.run();
+    let mut best_path = sa.get_best_path().clone();
+    for _ in 0..repeats {
+        sa.run();
+        if sa.get_best_path().get_length_on_graph(g) < best_path.get_length_on_graph(g) {
+            best_path = sa.get_best_path().clone();
+        }
+    }
+    best_path
+}
+
 pub struct HillClimbing<'a, T: Digraph> {
     g: &'a T,
     num_iterations: usize,
