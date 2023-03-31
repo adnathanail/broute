@@ -1,10 +1,7 @@
-use std::cmp::{max, min};
-
 // use plotlib::page::Page;
 // use plotlib::repr::Plot;
 // use plotlib::style::LineStyle;
 // use plotlib::view::ContinuousView;
-use rand::rngs::ThreadRng;
 use rand::seq::SliceRandom;
 use rand::{Rng, SeedableRng};
 use rand_pcg::Pcg64Mcg;
@@ -42,9 +39,7 @@ pub fn form_abstracted_graph(g: &impl Digraph, node_ids: &Vec<NodeID>) -> AMDigr
     abstracted_graph
 }
 
-pub fn two_opt_cost<T: Digraph>(g: &T, p: &GraphPath, i: usize, j: usize) -> f64 {
-    let first = min(i, j);
-    let second = max(i, j);
+pub fn two_opt_cost<T: Digraph>(g: &T, p: &GraphPath, first: usize, second: usize) -> f64 {
     let a = p.path[first];
     let b = p.path[(first + 1) % p.path.len()];
     let c = p.path[second];
@@ -56,11 +51,9 @@ pub fn two_opt_cost<T: Digraph>(g: &T, p: &GraphPath, i: usize, j: usize) -> f64
     length_delta
 }
 
-pub fn two_opt(p: &GraphPath, i: usize, j: usize) -> GraphPath {
-    let first = min(i, j);
-    let second = max(i, j);
+pub fn two_opt(p: &GraphPath, first: usize, second: usize) -> GraphPath {
     let mut new_path = p.clone();
-    new_path.path[(min(first, second) + 1)..(max(first, second) + 1)].reverse();
+    new_path.path[(first + 1)..(second + 1)].reverse();
     new_path
 }
 
@@ -105,8 +98,11 @@ impl<'a, T: Digraph> HillClimbing<'a, T> {
         }
 
         for _i in 0..self.num_iterations {
-            let i = self.rng.gen_range(1..self.best_path.path.len() - 1);
-            let j = self.rng.gen_range(1..self.best_path.path.len() - 1);
+            let mut i = self.rng.gen_range(1..self.best_path.path.len() - 1);
+            let mut j = self.rng.gen_range(1..self.best_path.path.len() - 1);
+            if i > j {
+                (i, j) = (j, i);
+            }
             let length_delta = two_opt_cost::<T>(self.g, &self.best_path, i, j);
             if length_delta < 0.0 {
                 // self.path_length += length_delta;
