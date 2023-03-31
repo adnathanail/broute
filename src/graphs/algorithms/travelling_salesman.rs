@@ -41,6 +41,21 @@ pub fn form_abstracted_graph(g: &impl Digraph, node_ids: &Vec<NodeID>) -> AMDigr
     abstracted_graph
 }
 
+pub fn two_opt(p: &GraphPath, v1: NodeIndex, v2: NodeIndex) -> GraphPath {
+    let mut new_path = p.path.clone();
+    let mut i = v1.0;
+    let mut j = v2.0;
+    while i != j {
+        new_path.swap(i, j);
+        i = (i + 1) % new_path.len();
+        if i == j {
+            break;
+        }
+        j = if j == 0 { new_path.len() - 1 } else { j - 1 };
+    }
+    GraphPath { path: new_path }
+}
+
 pub struct HillClimbing<'a, T: Digraph> {
     g: &'a T,
     num_iterations: usize,
@@ -91,16 +106,14 @@ impl<'a, T: Digraph> HillClimbing<'a, T> {
             }
             // self.result_data.push((i as f64, self.path_length));
         }
+        //     TODO realign best_path so that the longest edge is removed
     }
 
     fn get_potential_new_path(&mut self) -> GraphPath {
-        let mut new_path = self.best_path.clone();
+        let i = self.rng.gen_range(1..self.best_path.path.len() - 1);
+        let j = self.rng.gen_range(1..self.best_path.path.len() - 1);
 
-        let i = self.rng.gen_range(1..new_path.path.len() - 1);
-        let j = self.rng.gen_range(1..new_path.path.len() - 1);
-        new_path.path[min(i, j)..max(i, j)].reverse();
-
-        new_path
+        two_opt(&self.best_path, NodeIndex(i), NodeIndex(j))
     }
 
     pub fn get_best_path(&self) -> &GraphPath {

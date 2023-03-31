@@ -106,6 +106,9 @@ pub fn to_svg(g: &impl Digraph, path: &GraphPath, output_path: &str) {
             data = data.line_to((x, y));
         }
     }
+    let (x, y) =
+        get_coords_from_node_index(g, path.path[0], min_lon, min_lat, lon_range, lat_range);
+    data = data.line_to((x, y));
 
     let path = Path::new()
         .set("fill", "none")
