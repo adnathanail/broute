@@ -117,7 +117,11 @@ fn route_optimisation(
         .get_best_path()
         .path
         .iter()
-        .map(|node_index| *c_g.nodes_data().get_node_id_by_index(node_index))
+        .map(|node_index| {
+            *abstracted_graph
+                .nodes_data()
+                .get_node_id_by_index(node_index)
+        })
         .collect();
 
     println!("Original graph node ID's extracted");
