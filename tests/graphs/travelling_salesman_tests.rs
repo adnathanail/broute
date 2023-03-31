@@ -6,7 +6,7 @@ use float_cmp::approx_eq;
 
 #[test]
 fn travelling_salesman_dimacs_test() {
-    let dimacs_g = load_tsplib_file("test_data/dimacs_tsp/d1291.tsp", usize::MAX).unwrap();
+    let dimacs_g = load_tsplib_file("test_data/dimacs_tsp/dj38.tsp", usize::MAX).unwrap();
 
     let mut sa = HillClimbing::new(&dimacs_g);
     sa.run();
