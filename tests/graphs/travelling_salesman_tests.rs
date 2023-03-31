@@ -1,8 +1,11 @@
 use broute::geography::datastructures::LatLng;
-use broute::graphs::algorithms::{form_abstracted_graph, ConnectedComponents, HillClimbing};
-use broute::graphs::datastructures::{Digraph, NodeID, NodeIndex};
+use broute::graphs::algorithms::{
+    form_abstracted_graph, two_opt, ConnectedComponents, HillClimbing,
+};
+use broute::graphs::datastructures::{Digraph, GraphPath, NodeID, NodeIndex};
 use broute::graphs::input::{load_pbf_file, load_tsplib_file};
 use float_cmp::approx_eq;
+use rand_distr::num_traits::abs;
 
 #[test]
 fn travelling_salesman_dimacs_test() {
@@ -149,4 +152,34 @@ fn a_star_travelling_salesman_integration_test() {
     }
 
     assert!(path_lengths.iter().fold(f64::INFINITY, |a, &b| a.min(b)) < 8.0);
+}
+
+#[test]
+fn two_opt_test() {
+    let g = load_tsplib_file("test_data/dimacs_tsp/test.tsp", usize::MAX).unwrap();
+    let path = GraphPath {
+        path: vec![
+            NodeIndex(0),
+            NodeIndex(1),
+            NodeIndex(2),
+            NodeIndex(3),
+            NodeIndex(4),
+            NodeIndex(5),
+            NodeIndex(6),
+            NodeIndex(7),
+            NodeIndex(8),
+            NodeIndex(9),
+        ],
+    };
+    for i in 0..10 {
+        for j in 0..10 {
+            if i != j {
+                let (new_path, new_path_length) = two_opt(&g, &path, i, j);
+                let actual_new_path_length =
+                    new_path.get_length_on_graph(&g) - path.get_length_on_graph(&g);
+                // Close enough
+                assert!(abs(new_path_length - actual_new_path_length) < 0.0000000000002);
+            }
+        }
+    }
 }

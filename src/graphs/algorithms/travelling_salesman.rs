@@ -41,19 +41,21 @@ pub fn form_abstracted_graph(g: &impl Digraph, node_ids: &Vec<NodeID>) -> AMDigr
     abstracted_graph
 }
 
-pub fn two_opt(p: &GraphPath, v1: NodeIndex, v2: NodeIndex) -> GraphPath {
-    let mut new_path = p.path.clone();
-    let mut i = v1.0;
-    let mut j = v2.0;
-    while i != j {
-        new_path.swap(i, j);
-        i = (i + 1) % new_path.len();
-        if i == j {
-            break;
-        }
-        j = if j == 0 { new_path.len() - 1 } else { j - 1 };
+pub fn two_opt<T: Digraph>(g: &T, p: &GraphPath, mut i: usize, mut j: usize) -> (GraphPath, f64) {
+    let mut new_path = p.clone();
+    (i, j) = (min(i, j), max(i, j));
+    new_path.path[(i + 1)..(j + 1)].reverse();
+
+    let mut length_delta =
+        -g.dist(p.path[i], p.path[(i + 1) % p.path.len()]) + g.dist(p.path[i], p.path[j]);
+    if j < p.path.len() - 1 {
+        length_delta += -g.dist(p.path[j], p.path[(j + 1) % p.path.len()])
+            + g.dist(
+                p.path[(i + 1) % p.path.len()],
+                p.path[(j + 1) % p.path.len()],
+            )
     }
-    GraphPath { path: new_path }
+    (new_path, length_delta)
 }
 
 pub struct HillClimbing<'a, T: Digraph> {
@@ -97,23 +99,22 @@ impl<'a, T: Digraph> HillClimbing<'a, T> {
         }
 
         for _i in 0..self.num_iterations {
-            let new_path = self.get_potential_new_path();
-            let new_path_length = new_path.get_length_on_graph(self.g);
+            let (new_path, length_delta) = self.get_potential_new_path();
 
-            if new_path_length < self.path_length {
+            if length_delta < 0.0 {
                 self.best_path = new_path;
-                self.path_length = new_path_length;
+                self.path_length += length_delta;
             }
             // self.result_data.push((i as f64, self.path_length));
         }
         //     TODO realign best_path so that the longest edge is removed
     }
 
-    fn get_potential_new_path(&mut self) -> GraphPath {
+    fn get_potential_new_path(&mut self) -> (GraphPath, f64) {
         let i = self.rng.gen_range(1..self.best_path.path.len() - 1);
         let j = self.rng.gen_range(1..self.best_path.path.len() - 1);
 
-        two_opt(&self.best_path, NodeIndex(i), NodeIndex(j))
+        two_opt::<T>(&self.g, &self.best_path, i, j)
     }
 
     pub fn get_best_path(&self) -> &GraphPath {

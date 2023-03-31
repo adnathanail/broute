@@ -45,7 +45,3 @@ path = "src/bin/hc_profiling.rs"
 [[bin]]
 name = "hc_profiling"
 path = "src/bin/hc_profiling.rs"
-
-[[bin]]
-name = "2_opt_testing"
-path = "src/bin/2_opt_testing.rs"
