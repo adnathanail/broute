@@ -113,31 +113,34 @@ fn route_optimisation(
 
     println!("TSP ran");
 
-    let mut p_node_ids = vec![];
-    for p_node_index in &sa.get_best_path().path {
-        p_node_ids.push(
-            abstracted_graph
-                .nodes_data()
-                .get_node_id_by_index(p_node_index),
-        )
-    }
+    let p_node_ids: Vec<NodeID> = sa
+        .get_best_path()
+        .path
+        .iter()
+        .map(|node_index| *g.nodes_data().get_node_id_by_index(node_index))
+        .collect();
 
     println!("Original graph node ID's extracted");
 
     let mut legs: Vec<Vec<(f64, f64)>> = vec![];
     for i in 0..(p_node_ids.len() - 1) {
-        let from_node_index = c_g.nodes_data().get_node_index_by_id(p_node_ids[i]);
-        let to_node_index = c_g.nodes_data().get_node_index_by_id(p_node_ids[i + 1]);
+        let from_node_index = c_g.nodes_data().get_node_index_by_id(*p_node_ids[i]);
+        let to_node_index = c_g.nodes_data().get_node_index_by_id(*p_node_ids[i + 1]);
         let mut astar = AStar::new(c_g, *from_node_index, vec![*to_node_index]);
         astar.run();
 
         let leg_p = astar.get_graph_path(*to_node_index).unwrap();
 
-        let mut leg: Vec<(f64, f64)> = vec![];
-        for node_index in &leg_p.path {
-            let node_data = c_g.nodes_data().get_node_data_by_index(*node_index);
-            leg.push(node_data.latlng.as_lat_lng_tuple())
-        }
+        let leg: Vec<(f64, f64)> = leg_p
+            .path
+            .iter()
+            .map(|node_index| {
+                c_g.nodes_data()
+                    .get_node_data_by_index(*node_index)
+                    .latlng
+                    .as_lat_lng_tuple()
+            })
+            .collect();
         legs.push(leg)
     }
     println!("Legs reconstructed");
