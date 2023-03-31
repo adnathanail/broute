@@ -45,14 +45,13 @@ pub fn form_abstracted_graph(g: &impl Digraph, node_ids: &Vec<NodeID>) -> AMDigr
 pub fn two_opt_cost<T: Digraph>(g: &T, p: &GraphPath, i: usize, j: usize) -> f64 {
     let first = min(i, j);
     let second = max(i, j);
-    let mut length_delta = -g.dist(p.path[first], p.path[(first + 1) % p.path.len()])
-        + g.dist(p.path[first], p.path[second]);
+    let a = p.path[first];
+    let b = p.path[(first + 1) % p.path.len()];
+    let c = p.path[second];
+    let d = p.path[(second + 1) % p.path.len()];
+    let mut length_delta = -g.dist(a, b) + g.dist(a, c);
     if second < p.path.len() - 1 {
-        length_delta += -g.dist(p.path[second], p.path[(second + 1) % p.path.len()])
-            + g.dist(
-                p.path[(first + 1) % p.path.len()],
-                p.path[(second + 1) % p.path.len()],
-            )
+        length_delta += -g.dist(c, d) + g.dist(b, d)
     }
     length_delta
 }
