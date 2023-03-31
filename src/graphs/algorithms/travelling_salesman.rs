@@ -41,11 +41,7 @@ pub fn form_abstracted_graph(g: &impl Digraph, node_ids: &Vec<NodeID>) -> AMDigr
     abstracted_graph
 }
 
-pub fn two_opt<T: Digraph>(g: &T, p: &GraphPath, mut i: usize, mut j: usize) -> (GraphPath, f64) {
-    let mut new_path = p.clone();
-    (i, j) = (min(i, j), max(i, j));
-    new_path.path[(i + 1)..(j + 1)].reverse();
-
+pub fn two_opt_cost<T: Digraph>(g: &T, p: &GraphPath, i: usize, j: usize) -> f64 {
     let mut length_delta =
         -g.dist(p.path[i], p.path[(i + 1) % p.path.len()]) + g.dist(p.path[i], p.path[j]);
     if j < p.path.len() - 1 {
@@ -55,7 +51,13 @@ pub fn two_opt<T: Digraph>(g: &T, p: &GraphPath, mut i: usize, mut j: usize) -> 
                 p.path[(j + 1) % p.path.len()],
             )
     }
-    (new_path, length_delta)
+    length_delta
+}
+
+pub fn two_opt(p: &GraphPath, i: usize, j: usize) -> GraphPath {
+    let mut new_path = p.clone();
+    new_path.path[(min(i, j) + 1)..(max(i, j) + 1)].reverse();
+    new_path
 }
 
 pub struct HillClimbing<'a, T: Digraph> {
@@ -63,7 +65,7 @@ pub struct HillClimbing<'a, T: Digraph> {
     num_iterations: usize,
     // result_data: Vec<(f64, f64)>,
     best_path: GraphPath,
-    path_length: f64,
+    // path_length: f64,
     rng: ThreadRng,
 }
 
@@ -80,14 +82,14 @@ impl<'a, T: Digraph> HillClimbing<'a, T> {
         };
         current_path.path.shuffle(&mut rng);
 
-        let path_length = current_path.get_length_on_graph(g);
+        // let path_length = current_path.get_length_on_graph(g);
 
         HillClimbing {
             g,
             num_iterations,
             // result_data: vec![],
             best_path: current_path,
-            path_length,
+            // path_length,
             rng,
         }
     }
@@ -99,22 +101,15 @@ impl<'a, T: Digraph> HillClimbing<'a, T> {
         }
 
         for _i in 0..self.num_iterations {
-            let (new_path, length_delta) = self.get_potential_new_path();
-
+            let i = self.rng.gen_range(1..self.best_path.path.len() - 1);
+            let j = self.rng.gen_range(1..self.best_path.path.len() - 1);
+            let length_delta = two_opt_cost::<T>(self.g, &self.best_path, i, j);
             if length_delta < 0.0 {
-                self.best_path = new_path;
-                self.path_length += length_delta;
+                // self.path_length += length_delta;
+                self.best_path = two_opt(&self.best_path, i, j);
             }
             // self.result_data.push((i as f64, self.path_length));
         }
-        //     TODO realign best_path so that the longest edge is removed
-    }
-
-    fn get_potential_new_path(&mut self) -> (GraphPath, f64) {
-        let i = self.rng.gen_range(1..self.best_path.path.len() - 1);
-        let j = self.rng.gen_range(1..self.best_path.path.len() - 1);
-
-        two_opt::<T>(&self.g, &self.best_path, i, j)
     }
 
     pub fn get_best_path(&self) -> &GraphPath {
