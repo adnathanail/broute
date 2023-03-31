@@ -8,7 +8,7 @@ fn main() {
     let mut tour_lengths: Vec<f64> = vec![];
     let mut durations: Vec<f64> = vec![];
 
-    for a in 0..10 {
+    for a in 0..25 {
         println!("{a}");
         let start = SystemTime::now();
         let mut sa = HillClimbing::new(&dimacs_g);
@@ -18,9 +18,9 @@ fn main() {
         let duration = end.duration_since(start).unwrap();
 
         tour_lengths.push(sa.get_best_path().get_length_on_graph(&dimacs_g));
-        durations.push((duration.as_millis() as f64) / 1000.0);
+        durations.push(duration.as_millis() as f64);
         println!(
-            "\t{} {}s",
+            "\t{} {} ms",
             tour_lengths[tour_lengths.len() - 1],
             durations[durations.len() - 1]
         );
@@ -32,5 +32,5 @@ fn main() {
     let mean_length: f64 = tour_lengths.iter().sum::<f64>() / (tour_lengths.len() as f64);
     println!("Mean tour length: {mean_length:?}");
     let mean_duration: f64 = durations.iter().sum::<f64>() / (durations.len() as f64);
-    println!("Mean duration: {mean_duration:?}");
+    println!("Mean duration: {mean_duration:?} ms");
 }
