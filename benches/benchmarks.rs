@@ -56,9 +56,9 @@ fn shortest_path_benchmark(c: &mut Criterion) {
 fn travelling_salesman_benchmark(c: &mut Criterion) {
     let mut group = c.benchmark_group("Travelling salesman");
 
-    let dimacs_g = load_tsplib_file("test_data/dimacs_tsp/d1291.tsp", usize::MAX).unwrap();
+    let dimacs_g = load_tsplib_file("test_data/dimacs_tsp/dj38.tsp", usize::MAX).unwrap();
     group.bench_with_input(
-        BenchmarkId::new("DIMCAS d1291", &dimacs_g),
+        BenchmarkId::new("DIMCAS dj38", &dimacs_g),
         &dimacs_g,
         |b, g| {
             b.iter(|| {
