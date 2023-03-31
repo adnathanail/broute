@@ -6,6 +6,7 @@ use broute::graphs::datastructures::{Digraph, GraphPath, NodeID, NodeIndex};
 use broute::graphs::input::{load_pbf_file, load_tsplib_file};
 use float_cmp::approx_eq;
 use rand_distr::num_traits::abs;
+use std::cmp::{max, min};
 
 #[test]
 fn travelling_salesman_dimacs_test() {
@@ -174,8 +175,9 @@ fn two_opt_test() {
     for i in 0..10 {
         for j in 0..10 {
             if i != j {
-                let new_path = two_opt(&path, i, j);
-                let new_path_length = two_opt_cost(&g, &path, i, j);
+                let (first, second) = (min(i, j), max(i, j));
+                let new_path = two_opt(&path, first, second);
+                let new_path_length = two_opt_cost(&g, &path, first, second);
                 let actual_new_path_length =
                     new_path.get_length_on_graph(&g) - path.get_length_on_graph(&g);
                 // Close enough
