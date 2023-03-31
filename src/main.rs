@@ -10,7 +10,9 @@ use rocket::serde::json::Json;
 use rocket::serde::{Deserialize, Serialize};
 
 use broute::geography::datastructures::LatLng;
-use broute::graphs::algorithms::{form_abstracted_graph, AStar, ConnectedComponents, HillClimbing};
+use broute::graphs::algorithms::{
+    form_abstracted_graph, tsp_with_repeats, AStar, ConnectedComponents,
+};
 use broute::graphs::datastructures::{ALDigraph, Digraph, NodeID};
 use broute::graphs::input::load_pbf_file;
 
@@ -108,13 +110,11 @@ fn route_optimisation(
 
     println!("Abstracted graph constructed");
 
-    let mut sa = HillClimbing::new(&abstracted_graph);
-    sa.run();
+    let best_path = tsp_with_repeats(&abstracted_graph, 5);
 
     println!("TSP ran");
 
-    let p_node_ids: Vec<NodeID> = sa
-        .get_best_path()
+    let p_node_ids: Vec<NodeID> = best_path
         .path
         .iter()
         .map(|node_index| {
