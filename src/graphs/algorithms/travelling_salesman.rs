@@ -42,21 +42,25 @@ pub fn form_abstracted_graph(g: &impl Digraph, node_ids: &Vec<NodeID>) -> AMDigr
 }
 
 pub fn two_opt_cost<T: Digraph>(g: &T, p: &GraphPath, i: usize, j: usize) -> f64 {
-    let mut length_delta =
-        -g.dist(p.path[i], p.path[(i + 1) % p.path.len()]) + g.dist(p.path[i], p.path[j]);
-    if j < p.path.len() - 1 {
-        length_delta += -g.dist(p.path[j], p.path[(j + 1) % p.path.len()])
+    let first = min(i, j);
+    let second = max(i, j);
+    let mut length_delta = -g.dist(p.path[first], p.path[(first + 1) % p.path.len()])
+        + g.dist(p.path[first], p.path[second]);
+    if second < p.path.len() - 1 {
+        length_delta += -g.dist(p.path[second], p.path[(second + 1) % p.path.len()])
             + g.dist(
-                p.path[(i + 1) % p.path.len()],
-                p.path[(j + 1) % p.path.len()],
+                p.path[(first + 1) % p.path.len()],
+                p.path[(second + 1) % p.path.len()],
             )
     }
     length_delta
 }
 
 pub fn two_opt(p: &GraphPath, i: usize, j: usize) -> GraphPath {
+    let first = min(i, j);
+    let second = max(i, j);
     let mut new_path = p.clone();
-    new_path.path[(min(i, j) + 1)..(max(i, j) + 1)].reverse();
+    new_path.path[(min(first, second) + 1)..(max(first, second) + 1)].reverse();
     new_path
 }
 
