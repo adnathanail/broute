@@ -6,7 +6,8 @@ use std::cmp::{max, min};
 // use plotlib::view::ContinuousView;
 use rand::rngs::ThreadRng;
 use rand::seq::SliceRandom;
-use rand::{thread_rng, Rng};
+use rand::{Rng, SeedableRng};
+use rand_pcg::Pcg64Mcg;
 
 use crate::graphs::algorithms::AStar;
 use crate::graphs::datastructures::{AMDigraph, Digraph, GraphPath, NodeID, NodeIndex};
@@ -70,7 +71,7 @@ pub struct HillClimbing<'a, T: Digraph> {
     // result_data: Vec<(f64, f64)>,
     best_path: GraphPath,
     // path_length: f64,
-    rng: ThreadRng,
+    rng: Pcg64Mcg,
 }
 
 impl<'a, T: Digraph> HillClimbing<'a, T> {
@@ -79,7 +80,7 @@ impl<'a, T: Digraph> HillClimbing<'a, T> {
     }
 
     pub fn new_with_custom_parameters(g: &'a T, num_iterations: usize) -> Self {
-        let mut rng = thread_rng();
+        let mut rng = Pcg64Mcg::from_entropy();
 
         let mut current_path = GraphPath {
             path: (0..g.num_vertices()).map(NodeIndex).collect(),
