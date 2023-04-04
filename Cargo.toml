@@ -42,3 +42,7 @@ path = "src/bin/hc_statistics.rs"
 [[bin]]
 name = "hc_profiling"
 path = "src/bin/hc_profiling.rs"
+
+[[bin]]
+name = "sp_statistics"
+path = "src/bin/sp_statistics.rs"
