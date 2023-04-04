@@ -7,11 +7,11 @@ use graphviz_rust::{
 };
 
 #[derive(Debug)]
-struct GraphStringBody {
-    graph_string: String,
+pub struct GraphStringBody {
+    pub graph_string: String,
 }
 
-fn graph_to_graphviz_body(g: &impl Digraph, color: String, with_label: bool) -> GraphStringBody {
+pub fn graph_to_graphviz_body(g: &impl Digraph, color: &str, with_label: bool) -> GraphStringBody {
     let all_node_list: Vec<String> = (0..g.num_vertices()).map(|i| format!("{i}")).collect();
     let all_node_string = all_node_list.join("\n");
     let all_node_edges_list: Vec<String> = (0..g.num_vertices())
@@ -38,7 +38,7 @@ fn graph_to_graphviz_body(g: &impl Digraph, color: String, with_label: bool) -> 
     }
 }
 
-fn path_to_graphviz_body(g: &impl Digraph, path: &GraphPath) -> GraphStringBody {
+pub fn path_to_graphviz_body(g: &impl Digraph, path: &GraphPath) -> GraphStringBody {
     let path_nodes_list: Vec<String> = (0..(path.path.len() - 1))
         .map(|i| {
             format!(
@@ -54,7 +54,7 @@ fn path_to_graphviz_body(g: &impl Digraph, path: &GraphPath) -> GraphStringBody 
     }
 }
 
-fn graph_string_to_file(graph_string_body: GraphStringBody, output_path: String) {
+fn graph_string_to_file(graph_string_body: GraphStringBody, output_path: &str) {
     // If you see an error like this
     //    thread 'main' panicked at 'called `Result::unwrap()` on an `Err` value: Os { code: 2, kind: NotFound, message: "No such file or directory" }', src/graphs/output.rs:11:8
     // You need to install the graphviz package
@@ -67,25 +67,22 @@ fn graph_string_to_file(graph_string_body: GraphStringBody, output_path: String)
         &mut PrinterContext::default(),
         vec![
             CommandArg::Format(Format::Svg),
-            CommandArg::Output(output_path),
+            CommandArg::Output(output_path.to_string()),
             CommandArg::Custom("-Ksfdp".to_string()),
         ],
     )
     .unwrap();
 }
 
-pub fn output_graph_to_file(g: &impl Digraph, output_path: String) {
-    graph_string_to_file(
-        graph_to_graphviz_body(g, "black".to_string(), true),
-        output_path,
-    );
+pub fn output_graph_to_file(g: &impl Digraph, output_path: &str) {
+    graph_string_to_file(graph_to_graphviz_body(g, "black", true), output_path);
 }
 
-pub fn output_graph_to_file_with_path(g: &impl Digraph, path: &GraphPath, output_path: String) {
+pub fn output_graph_to_file_with_path(g: &impl Digraph, path: &GraphPath, output_path: &str) {
     let graph_string_body = GraphStringBody {
         graph_string: format!(
             "{}\n{}",
-            graph_to_graphviz_body(g, "transparent".to_string(), false).graph_string,
+            graph_to_graphviz_body(g, "transparent", false).graph_string,
             path_to_graphviz_body(g, path).graph_string
         ),
     };
