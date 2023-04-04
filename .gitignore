@@ -6,3 +6,7 @@ out/*
 .idea/*
 .fleet/*
 target/*
+test_data/*
+!test_data/dimacs_shortest_path
+test_data/dimacs_shortest_path/*
+!test_data/dimacs_shortest_path/USA-road-d.NY.gr
