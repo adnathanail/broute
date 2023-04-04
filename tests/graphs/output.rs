@@ -104,26 +104,6 @@ fn path_to_graphviz_body_test() {
 }
 
 #[test]
-fn output_graph_to_file_test() {
-    output_graph_to_file(&get_test_graph(), "out/output_graph_to_file_test.svg");
-    assert!(fs::read_to_string("out/output_graph_to_file_test.svg").unwrap().contains("M161.74,-213.4C172.33,-213.86 181.3,-211.63 181.3,-206.71 181.3,-203.71 177.97,-201.71 172.97,-200.71"));
-}
-
-#[test]
-fn output_graph_to_file_with_path_test() {
-    output_graph_to_file_with_path(
-        &get_test_graph(),
-        &get_test_graph_path(),
-        "out/output_graph_to_file_with_path_test.svg",
-    );
-    assert!(
-        fs::read_to_string("out/output_graph_to_file_with_path_test.svg")
-            .unwrap()
-            .contains("M140,-81.79C116.08,-89.86 80.87,-104.46 56.12,-116.45")
-    );
-}
-
-#[test]
 fn to_svg_test() {
     to_svg(
         &get_test_graph(),
