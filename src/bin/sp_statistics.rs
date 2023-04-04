@@ -1,6 +1,6 @@
-use broute::graphs::algorithms::{AStar, HillClimbing};
+use broute::graphs::algorithms::AStar;
 use broute::graphs::datastructures::{Digraph, NodeIndex};
-use broute::graphs::input::{load_tsplib_file, load_xgmml_file};
+use broute::graphs::input::load_xgmml_file;
 use rand::{Rng, SeedableRng};
 use rand_pcg::Pcg64Mcg;
 use std::time::SystemTime;
