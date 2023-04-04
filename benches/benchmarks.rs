@@ -21,7 +21,7 @@ fn shortest_path_benchmark(c: &mut Criterion) {
         },
     );
 
-    let monaco_g = load_pbf_file("test_data/geofabrik/monaco-latest.osm.pbf").unwrap();
+    let monaco_g = load_pbf_file("test_data/osm/monaco-latest.osm.pbf").unwrap();
     let mut monaco_cc = ConnectedComponents::new(&monaco_g);
     monaco_cc.run();
     let monaco_largest_g = monaco_cc.get_largest_connected_subgraphs();
@@ -68,7 +68,7 @@ fn travelling_salesman_benchmark(c: &mut Criterion) {
         },
     );
 
-    let monaco_g = load_pbf_file("test_data/geofabrik/monaco-latest.osm.pbf").unwrap();
+    let monaco_g = load_pbf_file("test_data/osm/monaco-latest.osm.pbf").unwrap();
 
     let mut monaco_cc = ConnectedComponents::new(&monaco_g);
     monaco_cc.run();
@@ -95,7 +95,7 @@ fn travelling_salesman_benchmark(c: &mut Criterion) {
 }
 
 fn connected_components_benchmark(c: &mut Criterion) {
-    let g = load_pbf_file("test_data/geofabrik/monaco-latest.osm.pbf").unwrap();
+    let g = load_pbf_file("test_data/osm/monaco-latest.osm.pbf").unwrap();
 
     let mut group = c.benchmark_group("Connected components");
 

@@ -6,3 +6,5 @@ dimacs_shortest_path/*
 dimacs_tsp/*
 !dimacs_tsp/d1291.tsp
 !dimacs_tsp/test.tsp
+
+!osm

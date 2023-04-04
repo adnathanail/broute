@@ -41,7 +41,7 @@ fn check_graph_adjacency(
 #[test]
 fn a_star_travelling_salesman_integration_test() {
     // Load graph
-    let g = load_pbf_file("test_data/geofabrik/monaco-latest.osm.pbf").unwrap();
+    let g = load_pbf_file("test_data/osm/monaco-latest.osm.pbf").unwrap();
 
     // Get largest connected subgraph
     let mut cc = ConnectedComponents::new(&g);
