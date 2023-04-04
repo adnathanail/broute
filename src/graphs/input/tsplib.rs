@@ -1,6 +1,5 @@
 use crate::geography::datastructures::LatLng;
 use crate::graphs::datastructures::{AMDigraph, Digraph, NodeID};
-use rand::{thread_rng, Rng};
 use std::{cmp, fs, io::Cursor};
 use tsplib::NodeCoord;
 
