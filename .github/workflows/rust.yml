@@ -55,7 +55,7 @@ jobs:
     - name: Create coverage report
       if: ${{ success() || failure() }}
       run: |
-        grcov ./target/coverage/data --binary-path ./target/debug/deps/ -s . -t lcov --branch --ignore-not-existing --ignore '../*' --ignore "/*" --ignore "**/target/**" -o target/coverage/tests.lcov
+        grcov ./target/coverage/data --binary-path ./target/debug/deps/ -s . -t lcov --branch --ignore-not-existing --ignore '../*' --ignore "/*" --ignore "**/target/**" --ignore "**/src/bin/**" -o target/coverage/tests.lcov
     - name: Upload coverage report to Codecov
       if: ${{ success() || failure() }}
       uses: codecov/codecov-action@v3
