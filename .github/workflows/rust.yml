@@ -36,8 +36,6 @@ jobs:
       with:
         toolchain: stable
         profile: minimal
-        target: x86_64-unknown-linux-musl
-        override: true
         components: llvm-tools-preview
     - name: Cache cargo dependencies
       uses: Swatinem/rust-cache@v2
@@ -46,11 +44,15 @@ jobs:
     - name: Build
       if: ${{ success() || failure() }}
       run: cargo build
-    - name: Test
-      if: ${{ success() || failure() }}
+    - name: Install grcov
       run: |
         cargo install grcov
+    - name: Test
+      run: |
         CARGO_INCREMENTAL=0 RUSTFLAGS='-Cinstrument-coverage' LLVM_PROFILE_FILE='target/coverage/data/cargo-test-%p-%m.profraw' cargo test
+    - name: Create lcov
+      if: ${{ success() || failure() }}
+      run: |
         grcov ./target/coverage/data --binary-path ./target/debug/deps/ -s . -t lcov --branch --ignore-not-existing --ignore '../*' --ignore "/*" --ignore "**/target/**" -o target/coverage/tests.lcov
     - name: Upload coverage reports to Codecov
       if: ${{ success() || failure() }}
