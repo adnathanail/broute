@@ -1,4 +1,4 @@
-use crate::{rocket, ShortestPathResponse};
+use crate::{rocket, RouteOptimisationResponse, ShortestPathResponse};
 use rocket::http::Status;
 use rocket::local::asynchronous::Client;
 
@@ -63,5 +63,25 @@ async fn test_shortest_path_api() {
             ],
             path_length: 0.5373216843627054,
         }
+    );
+}
+
+#[async_test]
+async fn test_route_optimisation_api() {
+    let client = Client::tracked(rocket().await.unwrap())
+        .await
+        .expect("valid rocket instance");
+    let response = client
+        .get("/route_optimisation/51.523283898620925,-0.14876604080200198%7C51.52169511505159,-0.14775753021240237%7C51.52102754239191,-0.1446032524108887%7C51.52393808750874,-0.143122673034668%7C51.52415169817137,-0.13750076293945315%7C51.523457459854065,-0.1336169242858887%7C51.5212411667077,-0.13121366500854495%7C51.51887789193976,-0.1326084136962891%7C51.52246948707708,-0.12533426284790042%7C51.52533988919283,-0.12640714645385745%7C51.52620764956154,-0.12958288192749026/")
+        .dispatch()
+        .await;
+    assert_eq!(response.status(), Status::Ok);
+    assert!(
+        response
+            .into_json::<RouteOptimisationResponse>()
+            .await
+            .unwrap()
+            .total_path_length
+            < 7.0
     );
 }
