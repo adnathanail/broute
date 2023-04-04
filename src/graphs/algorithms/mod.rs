@@ -1,3 +1,5 @@
+//! Shortest path, connected components, and travelling salesman problem solvers
+
 mod connected_components;
 mod shortest_path;
 mod travelling_salesman;

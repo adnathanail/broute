@@ -1,3 +1,5 @@
+//! Adjacency list- and adjacency matrix-based graph implementations
+
 mod al_digraph;
 mod am_digraph;
 mod digraph;

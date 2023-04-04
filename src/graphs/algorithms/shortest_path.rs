@@ -4,6 +4,17 @@ use crate::geography::datastructures::LatLng;
 use crate::graphs::datastructures::GraphPath;
 use crate::graphs::datastructures::{Digraph, NodeIndex};
 
+/// A* based Shortest Path solver
+/// ```rust
+/// use broute::graphs::algorithms::AStar;
+/// use broute::graphs::datastructures::NodeIndex;
+/// use broute::graphs::input::load_tsplib_file;
+/// let g = load_tsplib_file("test_data/dimacs_tsp/d1291.tsp", usize::MAX).unwrap();
+/// let mut astar = AStar::new(&g, NodeIndex(0), vec![NodeIndex(1290)]);
+/// astar.run();
+///
+/// println!("Shortest distance: {}", astar.get_dist_to_to_node(NodeIndex(1290)).unwrap());
+/// ```
 pub struct AStar<'a, T: Digraph> {
     g: &'a T,
     from_node: NodeIndex,
@@ -16,6 +27,7 @@ pub struct AStar<'a, T: Digraph> {
 }
 
 impl<'a, T: Digraph> AStar<'a, T> {
+    /// Create a new instance of the solver
     pub fn new(g: &'a T, from_node: NodeIndex, to_nodes: Vec<NodeIndex>) -> Self {
         let mut to_node_locations: Vec<LatLng> = Vec::new();
         for to_node in &to_nodes {
@@ -37,6 +49,7 @@ impl<'a, T: Digraph> AStar<'a, T> {
         }
     }
 
+    /// Run the solver
     pub fn run(&mut self) {
         // Add first vertex to queue
         self.from_node_to_current_node[self.from_node.0] = 0.0;
@@ -78,7 +91,7 @@ impl<'a, T: Digraph> AStar<'a, T> {
         }
     }
 
-    pub fn add_to_queue(&mut self, u_node_index: NodeIndex, dist_to_u: f64) {
+    fn add_to_queue(&mut self, u_node_index: NodeIndex, dist_to_u: f64) {
         if self.to_nodes.contains(&u_node_index) {
             self.num_to_nodes_in_queue += 1;
         }
@@ -97,6 +110,8 @@ impl<'a, T: Digraph> AStar<'a, T> {
             .push(u_node_index.0, dist_to_u + shortest_distance);
     }
 
+    /// Get the the shortest distance from the instance's `from_node` to the given `to_node`
+    /// (provided the `to_node` is in the instance's `to_nodes`, and the solver has been run).
     pub fn get_dist_to_to_node(&self, to_node: NodeIndex) -> Option<f64> {
         if self.to_nodes.contains(&to_node) {
             Some(self.from_node_to_current_node[to_node.0])
@@ -105,6 +120,8 @@ impl<'a, T: Digraph> AStar<'a, T> {
         }
     }
 
+    /// Get a `GraphPath` with the shortest path from the instance's `from_node` to the given `to_node`
+    /// (provided the `to_node` is in the instance's `to_nodes`, and the solver has been run).
     pub fn get_graph_path(self, to_node: NodeIndex) -> Option<GraphPath> {
         if !self.to_nodes.contains(&to_node) {
             return None;

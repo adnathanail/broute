@@ -1,5 +1,6 @@
 use crate::geography::datastructures::LatLng;
 
+/// Find the distance between two `LatLng`s using the Haversine formula
 pub fn haversine(start_point: LatLng, end_point: LatLng) -> f64 {
     let earth_radius = 6371.0;
 

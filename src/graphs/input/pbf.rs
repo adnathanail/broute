@@ -4,8 +4,10 @@ use crate::graphs::datastructures::ALDigraph;
 use crate::graphs::datastructures::{Digraph, NodeID};
 use osmpbf::{Element, ElementReader};
 
+/// Possible errors when importing a PBF file
 #[derive(Debug)]
 pub enum PBFImportError {
+    /// Error from the underlying PBF parser
     OSMPBFError(osmpbf::Error),
 }
 
@@ -17,6 +19,7 @@ impl From<osmpbf::Error> for PBFImportError {
 
 type Result<T> = std::result::Result<T, PBFImportError>;
 
+/// Load a PBF file (OpenStreetMap) to an adjacency list-based graph
 pub fn load_pbf_file(pbf_path: &str) -> Result<ALDigraph> {
     let reader = ElementReader::from_path(pbf_path)?;
 

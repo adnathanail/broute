@@ -1,6 +1,7 @@
 use crate::graphs::datastructures::digraph::{Digraph, DigraphAdjacency, NodeIndex, NodesData};
 use std::fmt;
 
+/// Struct representating a graph as an adjacency matrix
 #[derive(Debug)]
 pub struct AMDigraph {
     // Because this struct has at least one private field, whilst it itself is pub(lic), it cannot
@@ -18,6 +19,7 @@ impl fmt::Display for AMDigraph {
 }
 
 impl AMDigraph {
+    /// Create a new `AMDigraph` with a given number of nodes
     pub fn new(num_vertices: usize) -> Self {
         Self {
             num_vertices,

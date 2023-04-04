@@ -74,10 +74,12 @@ fn graph_string_to_file(graph_string_body: GraphStringBody, output_path: &str) {
     .unwrap();
 }
 
+/// Export just a Digraph to a GraphViz processed SVG file at the specified output_path
 pub fn output_graph_to_file(g: &impl Digraph, output_path: &str) {
     graph_string_to_file(graph_to_graphviz_body(g, "black", true), output_path);
 }
 
+/// Export a Digraph and GraphPath to a GraphViz processed SVG file at the specified output_path
 pub fn output_graph_to_file_with_path(g: &impl Digraph, path: &GraphPath, output_path: &str) {
     let graph_string_body = GraphStringBody {
         graph_string: format!(

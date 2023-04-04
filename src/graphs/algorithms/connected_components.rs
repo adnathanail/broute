@@ -1,6 +1,10 @@
 use crate::graphs::datastructures::{ALDigraph, Digraph, NodeIndex};
 use std::cmp::min;
 
+/// Implements Tarjan's strongly connected component algorithm
+///
+/// Original code based on pseudocode here
+///   <https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm#The_algorithm_in_pseudocode>
 pub struct ConnectedComponents<'a, T: Digraph> {
     g: &'a T,
     index: i32,
@@ -11,10 +15,7 @@ pub struct ConnectedComponents<'a, T: Digraph> {
 }
 
 impl<'a, T: Digraph> ConnectedComponents<'a, T> {
-    /// Implements Tarjan's strongly connected component algorithm
-    ///
-    /// Original code based on pseudocode here
-    ///   https://en.wikipedia.org/wiki/Tarjan%27s_strongly_connected_components_algorithm#The_algorithm_in_pseudocode
+    /// Create a new instance of the solver
     pub fn new(g: &'a T) -> Self {
         ConnectedComponents {
             g,
@@ -26,6 +27,7 @@ impl<'a, T: Digraph> ConnectedComponents<'a, T> {
         }
     }
 
+    /// Run the solver
     pub fn run(&mut self) {
         for i in 0..self.g.num_vertices() {
             if self.indexes[i] == -1 {
@@ -82,10 +84,12 @@ impl<'a, T: Digraph> ConnectedComponents<'a, T> {
         g
     }
 
+    /// Get a 2D vector representing the connected components (only valid after running the solver)
     pub fn get_components(&self) -> &Vec<Vec<NodeIndex>> {
         &self.components
     }
 
+    /// Get all connected subgraphs (only valid after running the solver)
     pub fn get_connected_subgraphs(self, min_graph_size: usize) -> Vec<ALDigraph> {
         let mut out = vec![];
         for component in &self.components {
@@ -98,6 +102,7 @@ impl<'a, T: Digraph> ConnectedComponents<'a, T> {
         out
     }
 
+    /// Get the largest connected subgraph (only valid after running the solver)
     pub fn get_largest_connected_subgraphs(self) -> ALDigraph {
         let mut largest_graph_size = 0;
         let mut largest_component_index: Option<usize> = None;

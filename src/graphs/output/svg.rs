@@ -67,6 +67,7 @@ fn get_coords_from_node_index(
 const OUTPUT_WIDTH: f64 = 100.0;
 const OUTPUT_HEIGHT: f64 = 100.0;
 
+/// Export a Digraph and GraphPath to an SVG file at the specified output_path
 pub fn to_svg(g: &impl Digraph, path: &GraphPath, output_path: &str) {
     let mut document = Document::new().set(
         "viewBox",
