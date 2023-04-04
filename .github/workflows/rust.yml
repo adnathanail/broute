@@ -47,6 +47,7 @@ jobs:
     - name: Run tests
       if: ${{ success() || failure() }}
       run: |
+        mkdir out
         CARGO_INCREMENTAL=0 RUSTFLAGS='-Cinstrument-coverage' LLVM_PROFILE_FILE='target/coverage/data/cargo-test-%p-%m.profraw' cargo test
     - name: Create coverage report
       if: ${{ success() || failure() }}
