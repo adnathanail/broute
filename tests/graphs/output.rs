@@ -1,9 +1,6 @@
 use broute::geography::datastructures::LatLng;
 use broute::graphs::datastructures::{ALDigraph, Digraph, GraphPath, NodeID, NodeIndex};
-use broute::graphs::output::{
-    graph_to_graphviz_body, output_graph_to_file, output_graph_to_file_with_path,
-    path_to_graphviz_body, to_svg,
-};
+use broute::graphs::output::{graph_to_graphviz_body, path_to_graphviz_body, to_svg};
 use std::fs;
 
 fn get_test_graph() -> ALDigraph {
