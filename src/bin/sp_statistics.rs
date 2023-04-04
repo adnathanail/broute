@@ -45,7 +45,9 @@ fn main() {
         "USA-road-d.USA.gr",
     ] {
         let loading_start = SystemTime::now();
-        let g = load_xgmml_file(&format!("test_data/dimacs_shortest_path/{}", &filename)).unwrap();
+        let g = load_xgmml_file(&format!("test_data/dimacs_shortest_path/{}", &filename)).expect(
+            "Download test data from https://www.diag.uniroma1.it/~challenge9/download.shtml",
+        );
         let loading_end = SystemTime::now();
         let loading_duration = loading_end.duration_since(loading_start).unwrap();
 
