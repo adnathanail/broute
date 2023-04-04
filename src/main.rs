@@ -77,6 +77,7 @@ fn shortest_path(
 #[derive(Debug, PartialEq, Serialize, Deserialize)]
 struct RouteOptimisationResponse {
     legs: Vec<Vec<(f64, f64)>>,
+    total_path_length: f64,
 }
 
 #[get("/route_optimisation/<points_str>")]
@@ -126,6 +127,7 @@ fn route_optimisation(
 
     println!("Original graph node ID's extracted");
 
+    let mut total_path_length = 0_f64;
     let mut legs: Vec<Vec<(f64, f64)>> = vec![];
     for i in 0..(p_node_ids.len() - 1) {
         let from_node_index = c_g.nodes_data().get_node_index_by_id(&p_node_ids[i]);
@@ -134,6 +136,8 @@ fn route_optimisation(
         astar.run();
 
         let leg_p = astar.get_graph_path(*to_node_index).unwrap();
+
+        total_path_length += leg_p.get_length_on_graph(c_g);
 
         let leg: Vec<(f64, f64)> = leg_p
             .path
@@ -149,7 +153,10 @@ fn route_optimisation(
     }
     println!("Legs reconstructed");
 
-    Json(RouteOptimisationResponse { legs })
+    Json(RouteOptimisationResponse {
+        legs,
+        total_path_length,
+    })
 }
 
 pub struct CORS;
