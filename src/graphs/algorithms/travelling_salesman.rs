@@ -10,6 +10,9 @@ use rand_pcg::Pcg64Mcg;
 use crate::graphs::algorithms::AStar;
 use crate::graphs::datastructures::{AMDigraph, Digraph, GraphPath, NodeID, NodeIndex};
 
+/// Given a graph and a subset of the `NodeID`s of that graph,
+/// produce a new graph containing just those nodes,
+/// with all distances between the nodes calculated with A*
 pub fn form_abstracted_graph(g: &impl Digraph, node_ids: &Vec<NodeID>) -> AMDigraph {
     let node_indexes: Vec<NodeIndex> = node_ids
         .iter()
@@ -40,7 +43,7 @@ pub fn form_abstracted_graph(g: &impl Digraph, node_ids: &Vec<NodeID>) -> AMDigr
     abstracted_graph
 }
 
-pub fn two_opt_cost<T: Digraph>(g: &T, p: &GraphPath, first: usize, second: usize) -> f64 {
+fn two_opt_cost<T: Digraph>(g: &T, p: &GraphPath, first: usize, second: usize) -> f64 {
     let a = p.path[first];
     let b = p.path[(first + 1) % p.path.len()];
     let c = p.path[second];
@@ -52,12 +55,13 @@ pub fn two_opt_cost<T: Digraph>(g: &T, p: &GraphPath, first: usize, second: usiz
     length_delta
 }
 
-pub fn two_opt(p: &GraphPath, first: usize, second: usize) -> GraphPath {
+fn two_opt(p: &GraphPath, first: usize, second: usize) -> GraphPath {
     let mut new_path = p.clone();
     new_path.path[(first + 1)..(second + 1)].reverse();
     new_path
 }
 
+/// Run the TSP solver multiple times, taking the best result
 pub fn tsp_with_repeats<T: Digraph>(g: &T, repeats: usize) -> GraphPath {
     let mut sa = HillClimbing::new(g);
     sa.run();
@@ -71,6 +75,15 @@ pub fn tsp_with_repeats<T: Digraph>(g: &T, repeats: usize) -> GraphPath {
     best_path
 }
 
+/// Hill climbing based Travelling Salesman Problem solver
+/// ```rust
+/// use broute::graphs::algorithms::HillClimbing;
+/// use broute::graphs::input::load_tsplib_file;
+/// let g = load_tsplib_file("test_data/dimacs_tsp/d1291.tsp", usize::MAX).unwrap();
+/// let mut hc = HillClimbing::new(&g);
+/// hc.run();
+/// println!("Best path length: {}", hc.get_best_path().get_length_on_graph(&g));
+/// ```
 pub struct HillClimbing<'a, T: Digraph> {
     g: &'a T,
     num_iterations: usize,
@@ -81,10 +94,12 @@ pub struct HillClimbing<'a, T: Digraph> {
 }
 
 impl<'a, T: Digraph> HillClimbing<'a, T> {
+    /// Create a new instance of the solver
     pub fn new(g: &'a T) -> Self {
         Self::new_with_custom_parameters(g, max(g.num_vertices().pow(2), 100))
     }
 
+    /// Create a new instance of the solver
     pub fn new_with_custom_parameters(g: &'a T, num_iterations: usize) -> Self {
         let mut rng = Pcg64Mcg::from_entropy();
 
@@ -105,6 +120,7 @@ impl<'a, T: Digraph> HillClimbing<'a, T> {
         }
     }
 
+    /// Run the solver
     pub fn run(&mut self) {
         // No meaningful permutations for 0, 1, 2 nodes
         if self.best_path.path.len() < 3 {
@@ -126,6 +142,7 @@ impl<'a, T: Digraph> HillClimbing<'a, T> {
         }
     }
 
+    /// Get the best path found by the algorithm (only valid after running the algorithm)
     pub fn get_best_path(&self) -> &GraphPath {
         &self.best_path
     }

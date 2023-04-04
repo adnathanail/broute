@@ -3,9 +3,12 @@ use crate::graphs::datastructures::{AMDigraph, Digraph, NodeID};
 use std::{cmp, fs, io::Cursor};
 use tsplib::NodeCoord;
 
+/// Possible errors when importing a TSPLIB file
 #[derive(Debug)]
 pub enum TSPLIBImportError {
+    /// Error when reading file
     IOError(std::io::Error),
+    /// Any other error
     OtherError(String),
 }
 
@@ -17,6 +20,7 @@ impl From<std::io::Error> for TSPLIBImportError {
 
 type Result<T> = std::result::Result<T, TSPLIBImportError>;
 
+/// Load a TSPLIB file (DIMACS 8 challenge) to an adjacency matrix-based graph
 pub fn load_tsplib_file(file_path: &str, num_nodes: usize) -> Result<AMDigraph> {
     let tsp_string = fs::read_to_string(file_path)?;
     let instance = tsplib::parse(Cursor::new(&tsp_string[..]))?;

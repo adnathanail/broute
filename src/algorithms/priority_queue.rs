@@ -24,20 +24,24 @@ impl<V: PartialEq, P: PartialEq + PartialOrd> Ord for PriorityQueueItem<V, P> {
     }
 }
 
+/// Struct representing a min-heap priority queue
 #[derive(Debug)]
 pub struct PriorityQueue<V: PartialEq, P: PartialEq + PartialOrd> {
     heap: BinaryHeap<PriorityQueueItem<V, P>>,
 }
 
 impl<V: PartialEq, P: PartialEq + PartialOrd> PriorityQueue<V, P> {
+    /// Create a new priority queue
     pub fn new() -> Self {
         Self {
             heap: BinaryHeap::new(),
         }
     }
+    /// Add an item to the queue with the given priority
     pub fn push(&mut self, value: V, priority: P) {
         self.heap.push(PriorityQueueItem { value, priority })
     }
+    /// Remove and return the next item from the queue
     pub fn pop(&mut self) -> Option<(V, P)> {
         self.heap.pop().map(|s| (s.value, s.priority))
     }

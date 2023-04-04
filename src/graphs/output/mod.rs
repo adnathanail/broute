@@ -1,3 +1,5 @@
+//! Graph exporters to graphviz diagrams, or rough SVG's
+
 mod graphviz;
 mod svg;
 

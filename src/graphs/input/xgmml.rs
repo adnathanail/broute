@@ -4,11 +4,16 @@ use std::io::BufRead;
 
 use crate::graphs::datastructures::{ALDigraph, Digraph, NodeID, NodeIndex};
 
+/// Possible errors when importing an XGMML file
 #[derive(Debug)]
 pub enum XGMMLImportError {
+    /// Error when reading file
     IOError(std::io::Error),
+    /// Error when parsing an integer in the file
     ParseInt(std::num::ParseIntError),
+    /// Error when parsing a float
     ParseFloat(std::num::ParseFloatError),
+    /// Any other error
     OtherError(String),
 }
 
@@ -32,6 +37,7 @@ impl From<std::num::ParseFloatError> for XGMMLImportError {
 
 type Result<T> = std::result::Result<T, XGMMLImportError>;
 
+/// Load an XGMML file (DIMACS 9 challenge) to an adjacency list-based graph
 pub fn load_xgmml_file(file_path: &str) -> Result<ALDigraph> {
     let mut opt_num_nodes: Option<usize> = None;
     let file = File::open(file_path)?;

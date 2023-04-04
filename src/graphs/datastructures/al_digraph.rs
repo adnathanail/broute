@@ -7,6 +7,7 @@ struct ALDigraphEdge {
     weight: f64,
 }
 
+/// Struct representating a graph as an adjacency list
 #[derive(Debug)]
 pub struct ALDigraph {
     num_vertices: usize,
@@ -21,6 +22,7 @@ impl fmt::Display for ALDigraph {
 }
 
 impl ALDigraph {
+    /// Create a new `ALDigraph` with a given number of nodes
     pub fn new(num_vertices: usize) -> Self {
         Self {
             num_vertices,
