@@ -11,5 +11,5 @@ A travelling salesman solver for DRT applications.
 ```shell
 rm -rf target/coverage
 CARGO_INCREMENTAL=0 RUSTFLAGS='-Cinstrument-coverage' LLVM_PROFILE_FILE='target/coverage/data/cargo-test-%p-%m.profraw' cargo test
-grcov ./target/coverage/data --binary-path ./target/debug/deps/ -s . -t html --branch --ignore-not-existing --ignore '../*' --ignore "/*" --ignore "**/target/**" -o target/coverage/html
+grcov ./target/coverage/data --binary-path ./target/debug/deps/ -s . -t html --branch --ignore-not-existing --ignore '../*' --ignore "/*" --ignore "**/target/**" --ignore "**/src/bin/**" -o target/coverage/html
 ```
