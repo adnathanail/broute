@@ -143,3 +143,44 @@ impl<'a, T: Digraph> HillClimbing<'a, T> {
     //     Page::single(&v).save(path).unwrap();
     // }
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::graphs::algorithms::travelling_salesman::{two_opt, two_opt_cost};
+    use crate::graphs::datastructures::{GraphPath, NodeIndex};
+    use crate::graphs::input::load_tsplib_file;
+    use rand_distr::num_traits::abs;
+    use std::cmp::{max, min};
+
+    #[test]
+    fn two_opt_test() {
+        let g = load_tsplib_file("test_data/dimacs_tsp/test.tsp", usize::MAX).unwrap();
+        let path = GraphPath {
+            path: vec![
+                NodeIndex(0),
+                NodeIndex(1),
+                NodeIndex(2),
+                NodeIndex(3),
+                NodeIndex(4),
+                NodeIndex(5),
+                NodeIndex(6),
+                NodeIndex(7),
+                NodeIndex(8),
+                NodeIndex(9),
+            ],
+        };
+        for i in 0..10 {
+            for j in 0..10 {
+                if i != j {
+                    let (first, second) = (min(i, j), max(i, j));
+                    let new_path = two_opt(&path, first, second);
+                    let new_path_length = two_opt_cost(&g, &path, first, second);
+                    let actual_new_path_length =
+                        new_path.get_length_on_graph(&g) - path.get_length_on_graph(&g);
+                    // Close enough
+                    assert!(abs(new_path_length - actual_new_path_length) < 0.0000000000002);
+                }
+            }
+        }
+    }
+}
