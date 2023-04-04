@@ -7,6 +7,4 @@ out/*
 .fleet/*
 target/*
 test_data/*
-!test_data/dimacs_shortest_path
-test_data/dimacs_shortest_path/*
-!test_data/dimacs_shortest_path/USA-road-d.NY.gr
+!test_data/.gitignore

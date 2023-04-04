@@ -1,0 +1,8 @@
+!dimacs_shortest_path
+dimacs_shortest_path/*
+!dimacs_shortest_path/USA-road-d.NY.gr
+
+!dimacs_tsp
+dimacs_tsp/*
+!dimacs_tsp/d1291.tsp
+!dimacs_tsp/test.tsp
