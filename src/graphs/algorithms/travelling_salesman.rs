@@ -1,3 +1,4 @@
+use std::cmp::max;
 // use plotlib::page::Page;
 // use plotlib::repr::Plot;
 // use plotlib::style::LineStyle;
@@ -81,7 +82,7 @@ pub struct HillClimbing<'a, T: Digraph> {
 
 impl<'a, T: Digraph> HillClimbing<'a, T> {
     pub fn new(g: &'a T) -> Self {
-        Self::new_with_custom_parameters(g, g.num_vertices().pow(2))
+        Self::new_with_custom_parameters(g, max(g.num_vertices().pow(2), 100))
     }
 
     pub fn new_with_custom_parameters(g: &'a T, num_iterations: usize) -> Self {
