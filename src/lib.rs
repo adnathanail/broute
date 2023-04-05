@@ -2,5 +2,6 @@
 #![warn(missing_docs)]
 
 pub mod algorithms;
+pub mod api_docs;
 pub mod geography;
 pub mod graphs;
