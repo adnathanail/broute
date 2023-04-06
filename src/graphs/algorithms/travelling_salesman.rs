@@ -127,7 +127,7 @@ impl<'a, T: Digraph> HillClimbing<'a, T> {
             return;
         }
 
-        for _i in 0..self.num_iterations {
+        for _ in 0..self.num_iterations {
             let mut i = self.rng.gen_range(1..self.best_path.path.len() - 1);
             let mut j = self.rng.gen_range(1..self.best_path.path.len() - 1);
             if i > j {

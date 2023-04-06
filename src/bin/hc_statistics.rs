@@ -1,10 +1,6 @@
-use broute::graphs::algorithms::{AStar, HillClimbing};
-use broute::graphs::datastructures::{Digraph, NodeIndex};
-use broute::graphs::input::{load_tsplib_file, load_xgmml_file};
-use rand::{Rng, SeedableRng};
-use rand_pcg::Pcg64Mcg;
-use std::fs;
-use std::io::BufRead;
+use broute::graphs::algorithms::HillClimbing;
+use broute::graphs::datastructures::Digraph;
+use broute::graphs::input::load_tsplib_file;
 use std::time::SystemTime;
 
 fn mean(data: &[f64]) -> f64 {
@@ -78,7 +74,6 @@ fn main() {
         "d15112.tsp",
         "d18512.tsp",
         "pla33810.tsp",
-        "pla85900.tsp",
     ] {
         let loading_start = SystemTime::now();
         let g = load_tsplib_file(&format!("test_data/dimacs_tsp/big/{}", &filename), usize::MAX).expect(
