@@ -19,14 +19,16 @@ fn graph_to_graphviz_body(g: &impl Digraph, color: &str, with_label: bool) -> Gr
             let edges_this_node_list: Vec<String> = g
                 .adj(NodeIndex(i))
                 .iter()
-                .enumerate()
-                .map(|(to, adjacency)| {
+                .map(|adjacency| {
                     let label_str = if with_label {
-                        format!(",headlabel=\"{}\"", adjacency.weight)
+                        format!(",headlabel=\"{:.2}\"", adjacency.weight)
                     } else {
                         "".to_string()
                     };
-                    format!("{i} -> {to}[color=\"{color}\"{label_str}]")
+                    format!(
+                        "{i} -> {}[color=\"{color}\"{label_str}]",
+                        adjacency.node_index.0
+                    )
                 })
                 .collect();
             edges_this_node_list.join("\n")
