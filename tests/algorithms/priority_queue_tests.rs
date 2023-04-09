@@ -1,4 +1,4 @@
-use broute::algorithms::PriorityQueue;
+use broute::utils::PriorityQueue;
 
 #[test]
 fn test_priority_queue() {

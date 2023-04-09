@@ -1,4 +1,4 @@
-//! Graph representations, algorithms, and I/O
+//! Graph representations, utils, and I/O
 
 pub mod algorithms;
 pub mod datastructures;
