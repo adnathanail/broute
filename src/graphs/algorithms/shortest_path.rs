@@ -1,8 +1,8 @@
-use crate::algorithms::PriorityQueue;
 use crate::geography::algorithms::haversine;
 use crate::geography::datastructures::LatLng;
 use crate::graphs::datastructures::GraphPath;
 use crate::graphs::datastructures::{Digraph, NodeIndex};
+use crate::utils::PriorityQueue;
 
 /// A* based Shortest Path solver
 /// ```rust
