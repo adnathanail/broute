@@ -16,13 +16,13 @@ fn main() {
         for _ in 0..NUM_ITERATIONS {
             let lat_lng_list = get_random_lat_lngs(num_nodes, &mut rng);
 
-            let start = SystemTime::now();
-
             let lat_lng_string = lat_lng_list
                 .iter()
                 .map(|ll| format!("{},{}", ll.latitude, ll.longitude))
                 .collect::<Vec<String>>()
                 .join("|");
+
+            let start = SystemTime::now();
 
             reqwest::blocking::get(format!(
                 "http://localhost:8000/route_optimisation/{lat_lng_string}/"
