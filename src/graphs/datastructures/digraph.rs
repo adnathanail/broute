@@ -100,6 +100,17 @@ impl NodesData {
         }
         closest_node_index
     }
+
+    /// Get a vector of `NodeID`s of the nodes closest to the given list of `LatLng`s
+    pub fn get_node_ids_closest_to_lat_lngs(&self, lat_lngs: Vec<LatLng>) -> Vec<NodeID> {
+        lat_lngs
+            .iter()
+            .map(|lat_lng| {
+                self.get_node_id_by_index(&self.get_node_index_closest_to_lat_lng(*lat_lng))
+                    .clone()
+            })
+            .collect()
+    }
 }
 
 impl Default for NodesData {

@@ -30,19 +30,29 @@ serde = "1.0.158"
 float-cmp = "0.9.0"
 # Profiling
 pprof = { git = "https://github.com/tikv/pprof-rs.git", features = ["frame-pointer", "flamegraph"] }
+# HTTP requests for statistics
+reqwest = { version = "0.11.16", features = ["blocking"] }
 
 [[bench]]
 name = "benchmarks"
 harness = false
 
 [[bin]]
-name = "hc_statistics"
-path = "src/bin/hc_statistics.rs"
+name = "sp_statistics"
+path = "src/bin/sp_statistics.rs"
 
 [[bin]]
 name = "hc_profiling"
 path = "src/bin/hc_profiling.rs"
 
 [[bin]]
-name = "sp_statistics"
-path = "src/bin/sp_statistics.rs"
+name = "hc_statistics"
+path = "src/bin/hc_statistics.rs"
+
+[[bin]]
+name = "hc_osm_statistics"
+path = "src/bin/hc_osm_statistics.rs"
+
+[[bin]]
+name = "hc_osm_api_statistics"
+path = "src/bin/hc_osm_api_statistics.rs"

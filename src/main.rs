@@ -101,11 +101,11 @@ fn route_optimisation(
 
     println!("Coords parsed");
 
-    let mut node_id_list: Vec<NodeID> = vec![];
-    for lat_lng in lat_lng_list {
-        let node_index = c_g.nodes_data().get_node_index_closest_to_lat_lng(lat_lng);
-        node_id_list.push(*c_g.nodes_data().get_node_id_by_index(&node_index));
-    }
+    let node_id_list = c_g
+        .nodes_data()
+        .get_node_ids_closest_to_lat_lngs(lat_lng_list);
+
+    println!("Coords geocoded");
 
     let abstracted_graph = form_abstracted_graph(c_g, &node_id_list);
 
