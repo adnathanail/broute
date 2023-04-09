@@ -5,21 +5,6 @@ use broute::utils::{mean, std_deviation};
 use std::time::SystemTime;
 
 fn main() {
-    // let paths = fs::read_dir("test_data/dimacs_tsp/big").unwrap();
-    //
-    // for path in paths {
-    //     println!(
-    //         "{:?},",
-    //         path.unwrap()
-    //             .path()
-    //             .display()
-    //             .to_string()
-    //             .split("/")
-    //             .last()
-    //             .unwrap()
-    //     );
-    // }
-
     println!("filename,loading_time,graph_num_nodes,num_iterations,path_length_mean,path_lengths_std_deviation,duration_mean,duration_std_deviation");
     for filename in [
         "dsj1000.tsp",
