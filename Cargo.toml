@@ -56,3 +56,7 @@ path = "src/bin/hc_osm_statistics.rs"
 [[bin]]
 name = "hc_osm_api_statistics"
 path = "src/bin/hc_osm_api_statistics.rs"
+
+[[bin]]
+name = "sp_osm_api_statistics"
+path = "src/bin/sp_osm_api_statistics.rs"

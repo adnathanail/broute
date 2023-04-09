@@ -8,3 +8,6 @@ dimacs_tsp/*
 !dimacs_tsp/test.tsp
 
 !osm
+osm/*
+!osm/monaco-latest.osm.pbf
+!osm/central-london-latest.osm.pbf
