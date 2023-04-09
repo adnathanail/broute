@@ -2,19 +2,10 @@ use broute::geography::datastructures::LatLng;
 use broute::graphs::algorithms::{form_abstracted_graph, tsp_with_repeats, ConnectedComponents};
 use broute::graphs::datastructures::{Digraph, NodeID};
 use broute::graphs::input::load_pbf_file;
-use broute::utils::{mean, std_deviation};
+use broute::utils::{get_random_lat_lngs, mean, std_deviation};
 use rand::{Rng, SeedableRng};
 use rand_pcg::Pcg64Mcg;
 use std::time::SystemTime;
-
-fn get_random_lat_lngs(num_lls: usize, rng: &mut Pcg64Mcg) -> Vec<LatLng> {
-    (0..num_lls)
-        .map(|_| LatLng {
-            latitude: rng.gen_range(51.518898..51.526952),
-            longitude: rng.gen_range(-0.151246..-0.121154),
-        })
-        .collect()
-}
 
 fn run_full_tsp<T: Digraph>(g: &T, lat_lng_list: Vec<LatLng>) {
     let node_id_list = g
@@ -50,8 +41,7 @@ fn main() {
     let mut rng = Pcg64Mcg::from_entropy();
 
     println!("graph_num_nodes,duration_mean,duration_std_deviation");
-    // for num_nodes in [5, 10, 25, 50, 100, 250, 500, 1000] {
-    for num_nodes in [500, 1000] {
+    for num_nodes in [5, 10, 25, 50, 100, 250, 500, 1000] {
         let mut durations: Vec<f64> = vec![];
 
         const NUM_ITERATIONS: i32 = 5;
