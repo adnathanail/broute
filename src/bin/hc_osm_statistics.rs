@@ -2,30 +2,10 @@ use broute::geography::datastructures::LatLng;
 use broute::graphs::algorithms::{form_abstracted_graph, tsp_with_repeats, ConnectedComponents};
 use broute::graphs::datastructures::{Digraph, NodeID};
 use broute::graphs::input::load_pbf_file;
+use broute::utils::{mean, std_deviation};
 use rand::{Rng, SeedableRng};
 use rand_pcg::Pcg64Mcg;
 use std::time::SystemTime;
-
-fn mean(data: &[f64]) -> f64 {
-    let sum = data.iter().sum::<f64>();
-    let count = data.len() as f64;
-
-    sum / count
-}
-
-fn std_deviation(data: &[f64]) -> f64 {
-    let variance = data
-        .iter()
-        .map(|value| {
-            let diff = mean(data) - *value;
-
-            diff * diff
-        })
-        .sum::<f64>()
-        / data.len() as f64;
-
-    variance.sqrt()
-}
 
 fn get_random_lat_lngs(num_lls: usize, rng: &mut Pcg64Mcg) -> Vec<LatLng> {
     (0..num_lls)

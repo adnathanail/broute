@@ -1,28 +1,8 @@
 use broute::graphs::algorithms::HillClimbing;
 use broute::graphs::datastructures::Digraph;
 use broute::graphs::input::load_tsplib_file;
+use broute::utils::{mean, std_deviation};
 use std::time::SystemTime;
-
-fn mean(data: &[f64]) -> f64 {
-    let sum = data.iter().sum::<f64>();
-    let count = data.len() as f64;
-
-    sum / count
-}
-
-fn std_deviation(data: &[f64]) -> f64 {
-    let variance = data
-        .iter()
-        .map(|value| {
-            let diff = mean(data) - *value;
-
-            diff * diff
-        })
-        .sum::<f64>()
-        / data.len() as f64;
-
-    variance.sqrt()
-}
 
 fn main() {
     // let paths = fs::read_dir("test_data/dimacs_tsp/big").unwrap();
