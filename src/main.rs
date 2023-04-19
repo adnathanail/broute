@@ -186,7 +186,7 @@ impl Fairing for CORS {
 }
 
 async fn get_graph() -> ALDigraph {
-    let g = load_pbf_file("test_data/osm/central-london-latest.osm.pbf").unwrap();
+    let g = load_pbf_file("test_data/osm/monaco-latest.osm.pbf").unwrap();
 
     println!("Original graph {:} nodes", g.num_vertices());
 
