@@ -106,8 +106,7 @@ impl NodesData {
         lat_lngs
             .iter()
             .map(|lat_lng| {
-                self.get_node_id_by_index(&self.get_node_index_closest_to_lat_lng(*lat_lng))
-                    .clone()
+                *self.get_node_id_by_index(&self.get_node_index_closest_to_lat_lng(*lat_lng))
             })
             .collect()
     }

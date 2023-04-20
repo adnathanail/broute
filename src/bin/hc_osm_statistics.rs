@@ -1,9 +1,8 @@
-use broute::geography::datastructures::LatLng;
 use broute::graphs::algorithms::{form_abstracted_graph, tsp_with_repeats, ConnectedComponents};
 use broute::graphs::datastructures::{Digraph, NodeID};
 use broute::graphs::input::load_pbf_file;
 use broute::utils::{get_random_lat_lngs, mean, std_deviation};
-use rand::{Rng, SeedableRng};
+use rand::SeedableRng;
 use rand_pcg::Pcg64Mcg;
 use std::time::SystemTime;
 
@@ -48,7 +47,7 @@ fn main() {
 
             let tsp_durations_start = SystemTime::now();
             let best_path = tsp_with_repeats(&abstracted_graph, 5);
-            let p_node_ids: Vec<NodeID> = best_path
+            let _p_node_ids: Vec<NodeID> = best_path
                 .path
                 .iter()
                 .map(|node_index| {

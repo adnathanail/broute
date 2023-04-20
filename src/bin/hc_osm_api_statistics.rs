@@ -1,6 +1,5 @@
-use broute::geography::datastructures::LatLng;
 use broute::utils::{get_random_lat_lngs, mean, std_deviation};
-use rand::{Rng, SeedableRng};
+use rand::SeedableRng;
 use rand_pcg::Pcg64Mcg;
 use std::time::SystemTime;
 

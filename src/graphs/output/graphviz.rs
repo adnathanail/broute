@@ -144,11 +144,11 @@ mod tests {
 2
 3
 4
-0 -> 0[color="black",headlabel="1"]
-0 -> 1[color="black",headlabel="1"]
-1 -> 0[color="black",headlabel="1"]
-2 -> 0[color="black",headlabel="1"]
-3 -> 0[color="black",headlabel="1"]
+0 -> 2[color="black",headlabel="1.00"]
+0 -> 3[color="black",headlabel="1.00"]
+1 -> 0[color="black",headlabel="1.00"]
+2 -> 1[color="black",headlabel="1.00"]
+3 -> 4[color="black",headlabel="1.00"]
 "#
         );
     }
