@@ -11,7 +11,7 @@
 //! # Shortest path
 //! The shortest path API is available at
 //! ```text
-//! /shortest_path/<start_latitude>/<start_longitude>/<end_latitude>/<end_longitude>
+//! /shortest_path/<start_lat>/<start_lon>/<end_lat>/<end_lon>
 //! ```
 //! where the coordinates are in decimal degrees.
 //!
@@ -30,7 +30,7 @@
 //! ```text
 //! /route_optimisation/<points_str>
 //! ```
-//! Where `points_str` is a list of longitude and latitude pairs (`<lng>,<lat>`) separated by `|` characters, e.g. `52.432,-1.543|57.356,-3.425`
+//! Where `points_str` is a list of longitude and latitude pairs (`<lat>,<lon>`) separated by `|` characters, e.g. `52.432,-1.543|57.356,-3.425`
 //!
 //! ### Example response
 //! ```json
